@@ -1,0 +1,254 @@
+import 'package:flutter/material.dart';
+
+void main() => runApp(Home());
+
+class Home extends StatelessWidget {
+  const Home({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: HomePage(),
+    );
+  }
+}
+
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+
+  @override
+  Widget build(BuildContext context) {
+
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
+
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.teal,
+        title: Text(
+          "Shopping App",
+        ),
+        elevation: 0,
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: Icon(
+              Icons.search,
+            ),
+          ),
+        ],
+      ),
+
+      body: Container(
+        margin: EdgeInsets.all(10),
+        child: ListView(
+          children: [
+
+            Container(
+              height: height * 0.09,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: [
+
+                  Container(
+                    width: width * 0.2,
+                    child: ListView(
+                      children: [
+
+                        Container(
+                          height: height * 0.07,
+                          child: Image.network(
+                            'https://www.freeiconspng.com/thumbs/iphone-x-pictures/iphone-x-picture-image-19.png',
+                          ),
+                        ),
+
+                        Center(
+                          child: Text('Mobiles',),
+                        ),
+
+                      ],
+                    ),
+                  ),
+
+                  SizedBox(width: width * 0.03,),
+
+                  Container(
+                    width: width * 0.2,
+                    child: ListView(
+                      children: [
+
+                        Container(
+                          height: height * 0.07,
+                          child: Image.network(
+                            'https://images-na.ssl-images-amazon.com/images/G/31/img22/Fashion/Event/Autumnwinter/halo/New-season-Halo._SS300_QL85_.jpg',
+                          ),
+                        ),
+
+                        Center(
+                          child: Text('Fashion',),
+                        ),
+
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            SizedBox(height: height * 0.07,),
+
+            Container(
+              child: Text(
+                "Product Details",
+                style: TextStyle(
+                  fontSize: 18,
+                ),
+              ),
+            ),
+
+            Container(
+              height: height * 0.21,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: [
+
+                  Container(
+                    child: Card(
+                        elevation: 4,
+                        child: ListView(
+                          children: [
+
+                            Container(
+                              margin: EdgeInsets.all(10),
+                              child: Hero(
+                                tag: '',
+                                child: Image.network(
+                                  'https://cdn.shopify.com/s/files/1/0067/9903/2402/products/6g_5b9da31b-c60b-4e5a-9e30-545dfc8e684c_1024x1024.jpg?v=1640442068',
+                                ),
+                              ),
+                              height: height * 0.12,
+                            ),
+
+                            Column(
+                              children: [
+                                Text('Apple Iphone 6',),
+                                Text('Price: ₹4900.00',),
+                              ],
+                            ),
+
+                          ],
+                        )
+                    ),
+                    width: width * 0.43,
+                  ),
+
+                  SizedBox(
+                    width: width * 0.02,
+                  ),
+
+                  Container(
+                    child: Card(
+                        elevation: 4,
+                        child: ListView(
+                          children: [
+
+                            Container(
+                              margin: EdgeInsets.all(10),
+                              child: Image.network(
+                                'https://media.croma.com/image/upload/v1655189327/Croma%20Assets/Computers%20Peripherals/Laptop/Images/256712_bjdqif.png',
+                              ),
+                              height: height * 0.12,
+                            ),
+
+                            Column(
+                              children: [
+                                Text('Apple MacBook Air',),
+                                Text('Price: ₹99,900.00',),
+                              ],
+                            ),
+
+                          ],
+                        )
+                    ),
+                    width: width * 0.43,
+                  ),
+
+                  SizedBox(
+                    width: width * 0.02,
+                  ),
+
+                  Container(
+                    child: Card(
+                        elevation: 4,
+                        child: ListView(
+                          children: [
+
+                            Container(
+                              margin: EdgeInsets.all(10),
+                              child: Image.network(
+                                'https://www.reliancedigital.in/medias/Apple-12-Smartphones-491901531-i-1-1200Wx1200H?context=bWFzdGVyfGltYWdlc3wxMjg3NjN8aW1hZ2UvanBlZ3xpbWFnZXMvaDlmL2hmMC85NDA3NzIyMzIzOTk4LmpwZ3wwYTdlNGYxNTQ2MzMzZGViMGUyODQ0Yjk0NzQ3MmEyNjYxY2Q0MzZmNTkxMzI0NjFmYWM1M2Y0ZDkwZmVmYjI4',
+                              ),
+                              height: height * 0.12,
+                            ),
+
+                            Column(
+                              children: [
+                                Text('Apple Iphone 12',),
+                                Text('Price: ₹55,900.00',),
+                              ],
+                            ),
+
+                          ],
+                        )
+                    ),
+                    width: width * 0.43,
+                  ),
+
+                  SizedBox(
+                    width: width * 0.02,
+                  ),
+
+                  Container(
+                    child: Card(
+                        elevation: 4,
+                        child: ListView(
+                          children: [
+
+                            Container(
+                              margin: EdgeInsets.all(10),
+                              child: Image.network(
+                                'https://cdn.ivenus.in/wp-content/uploads/2020/09/iPad_Air_Cellular_Lineup_Screen__USEN-2.png',
+                              ),
+                              height: height * 0.12,
+                            ),
+
+                            Column(
+                              children: [
+                                Text('iPad Air (4th Generation)',),
+                                Text('Price: ₹49,410.00',),
+                              ],
+                            ),
+
+                          ],
+                        )
+                    ),
+                    width: width * 0.43,
+                  ),
+
+                ],
+              ),
+            ),
+
+          ],
+        ),
+      ),
+    );
+  }
+}
