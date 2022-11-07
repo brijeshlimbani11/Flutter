@@ -1,0 +1,290 @@
+import 'package:flutter_application_1/print.dart';
+import 'package:flutter/material.dart';
+
+class Home extends StatefulWidget {
+  const Home({Key? key}) : super(key: key);
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  // TextFields
+  TextEditingController _name = TextEditingController();
+  TextEditingController _email = TextEditingController();
+
+  // Gender
+  String? gender;
+
+  // DOB
+  DateTime date = DateTime(1901, 10, 10);
+
+  // Age
+  double sliderValue = 1;
+
+  // Time
+  String _selectedTime = 'Select';
+
+  // Switch
+  bool _switch = false;
+  String SwitchValue = "Not Send Mail";
+
+  // Remember Me
+  bool _isremember = false;
+  String remember = "";
+
+  @override
+  Widget build(BuildContext context) {
+    Future<void> _openTimePicker(BuildContext context) async {
+      final TimeOfDay? t = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.now(),
+      );
+
+      if (t != null) {
+        setState(() {
+          _selectedTime = t.format(context);
+        });
+      }
+    }
+
+    final size = MediaQuery.of(context).size;
+    final width = size.width;
+    final height = size.height;
+
+    return Scaffold(
+      backgroundColor: Colors.amber,
+      body: SafeArea(
+        child: Container(
+          padding: EdgeInsets.all(30),
+          child: ListView(
+            children: [
+              SizedBox(
+                height: height * 0.05,
+              ),
+
+              Text(
+                'Data Form',
+                style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold),
+              ),
+
+              SizedBox(
+                height: height * 0.04,
+              ),
+
+              TextField(
+                controller: _name,
+                decoration: InputDecoration(
+                  prefixIcon: Icon(Icons.drive_file_rename_outline),
+                  labelText: 'Name',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+
+              SizedBox(
+                height: height * 0.02,
+              ),
+
+              TextField(
+                controller: _email,
+                decoration: InputDecoration(
+                  prefixIcon: Icon(Icons.email_outlined),
+                  labelText: 'Email',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+
+              SizedBox(
+                height: height * 0.02,
+              ),
+
+              Text(
+                'Gender: ',
+                style: TextStyle(fontSize: 18),
+              ),
+
+              RadioListTile(
+                value: 'male',
+                groupValue: gender,
+                title: Text('male'),
+                onChanged: (value) {
+                  setState(() {
+                    gender = value.toString();
+                  });
+                },
+              ),
+
+              RadioListTile(
+                value: 'female',
+                groupValue: gender,
+                title: Text('female'),
+                onChanged: (value) {
+                  setState(() {
+                    gender = value.toString();
+                  });
+                },
+              ),
+
+              Row(
+                children: [
+                  Text(
+                    'Age: ',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  Expanded(
+                    child: Slider(
+                      min: 1,
+                      divisions: 100,
+                      max: 100,
+                      value: sliderValue,
+                      label: '${sliderValue.toInt()}',
+                      onChanged: (value) {
+                        setState(() {
+                          sliderValue = value;
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              ),
+
+              Row(
+                children: [
+                  Text(
+                    'DOB: ',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  SizedBox(
+                    width: width * 0.03,
+                  ),
+                  ElevatedButton(
+                    onPressed: () async {
+                      DateTime? newDate = await showDatePicker(
+                        context: context,
+                        initialDate: date,
+                        firstDate: DateTime(1900),
+                        lastDate: DateTime(2022),
+                      );
+
+                      if (newDate == null) return;
+                      setState(() {
+                        date = newDate;
+                      });
+                    },
+                    child: Text('${date.year}/${date.month}/${date.day}'),
+                  ),
+                ],
+              ),
+
+              // SELECT TIME PICKER
+              Row(
+                children: [
+                  Text(
+                    'Time: ',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  SizedBox(
+                    width: width * 0.02,
+                  ),
+                  ElevatedButton(
+                    child: Text(
+                      _selectedTime,
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    onPressed: () {
+                      _openTimePicker(context);
+                    },
+                  ),
+                ],
+              ),
+
+              // Switch
+              Row(
+                children: [
+                  Switch(
+                    value: _switch,
+                    onChanged: (value) {
+                      setState(() {
+                        _switch = value;
+                        if (value == true) {
+                          setState(() {
+                            SwitchValue = "Send Mail";
+                          });
+                        }
+                        if (value == false) {
+                          setState(() {
+                            SwitchValue = "Not Send Mail";
+                          });
+                        }
+                      });
+                    },
+                  ),
+                  Text('$SwitchValue'),
+                ],
+              ),
+
+              Row(
+                children: [
+                  Checkbox(
+                    value: _isremember,
+                    onChanged: (value) {
+                      setState(() {
+                        _isremember = value!;
+                        if (_isremember == true) {
+                          setState(() {
+                            remember = "Yes";
+                          });
+                        }
+                        if (_isremember == false) {
+                          setState(() {
+                            remember = "No";
+                          });
+                        }
+                      });
+                    },
+                  ),
+                  Text(
+                    'Remember Me',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ],
+              ),
+              // Remember Me
+
+              // Submit Button
+              Center(
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Print(
+                          name: _name.text,
+                          email: _email.text,
+                          gender: gender,
+                          dob: '${date.year}/${date.month}/${date.day}',
+                          age: '${sliderValue.toInt()}',
+                          time: _selectedTime,
+                          send_email: SwitchValue,
+                          remember: remember,
+                        ),
+                      ),
+                    );
+
+                    print(_selectedTime);
+                    print(SwitchValue);
+                    print(remember);
+                  },
+                  child: Text('SUBMIT'),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

@@ -1,0 +1,50 @@
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+class dashboard extends StatefulWidget {
+  const dashboard({Key? key}) : super(key: key);
+
+  @override
+  State<dashboard> createState() => _dashboardState();
+}
+
+class _dashboardState extends State<dashboard> {
+  var username = "";
+
+  void loginData() async {
+    var prefs = await SharedPreferences.getInstance();
+    var items = prefs.getStringList('item');
+    setState(() {
+      username = items![0];
+    });
+  }
+
+  @override
+  void initState() {
+    loginData();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Dashboard'),
+      ),
+      body: Container(
+        child: Center(
+          child: Text(
+            "Welcome ${username}",
+            style: TextStyle(
+              fontSize: 30,
+              color: Color.fromARGB(255, 255, 251, 3),
+              backgroundColor: Color.fromARGB(255, 4, 0, 0),
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+      drawer: Drawer(),
+    );
+  }
+}

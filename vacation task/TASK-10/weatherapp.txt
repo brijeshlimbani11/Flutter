@@ -1,0 +1,322 @@
+import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:intl/intl.dart';
+
+void main() => runApp(Main());
+
+class Main extends StatelessWidget {
+  const Main({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Home(),
+    );
+  }
+}
+
+class Home extends StatefulWidget {
+  const Home({Key? key}) : super(key: key);
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  var cityName = "", weather_desc = "";
+  var main_temp = "", main_pressure = "", main_humidity = "";
+  var wind_speed = "", wind_def = "", wind_gust = "";
+  var sys_country = "";
+
+  var _isLoading = false;
+  var _isData = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final width = size.width;
+    final height = size.height;
+
+    String time = DateFormat("hh:mm").format(DateTime.now());
+
+    return Scaffold(
+      backgroundColor: Colors.amber,
+      body: SafeArea(
+        child: Container(
+          padding: EdgeInsets.all(26),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: height * 0.03,
+              ),
+              Container(
+                width: width,
+                height: height * 0.07,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: TextField(
+                  style: TextStyle(fontSize: 20, color: Colors.black),
+                  cursorColor: Colors.black,
+                  cursorWidth: 1.5,
+                  onChanged: (value) {
+                    _getAPIData(value);
+                  },
+                  decoration: InputDecoration(
+                    hintText: 'Search...',
+                    prefixIcon: Icon(
+                      Icons.search,
+                      color: Colors.amber,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: BorderSide(color: Colors.white),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: BorderSide(color: Colors.white),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: BorderSide(color: Colors.white),
+                    ),
+                  ),
+                ),
+              ),
+              Visibility(
+                  visible: _isLoading,
+                  child: SizedBox(
+                    height: height * 0.20,
+                  )),
+              Visibility(
+                visible: _isLoading,
+                child: SpinKitCircle(
+                  size: 70.0,
+                  duration: Duration(seconds: 1),
+                  itemBuilder: (context, index) {
+                    final colors = [Colors.lightBlue, Colors.blueGrey];
+                    final color = colors[index % colors.length];
+                    return DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: color,
+                        shape: BoxShape.circle,
+                      ),
+                    );
+                  },
+                ),
+              ),
+              Visibility(
+                visible: _isData,
+                child: SizedBox(
+                  height: height * 0.05,
+                ),
+              ),
+              Visibility(
+                visible: _isData,
+                child: Flexible(
+                  child: ListView(
+                    shrinkWrap: true,
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Container(
+                              height: height * 0.13,
+                              decoration: BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.circular(35),
+                              ),
+                              child: Container(
+                                padding: EdgeInsets.all(20),
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        '${cityName}',
+                                        style: TextStyle(fontSize: 15),
+                                      ),
+                                      SizedBox(
+                                        height: height * 0.006,
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            '${main_temp}',
+                                            style: TextStyle(fontSize: 30),
+                                          ),
+                                          SizedBox(
+                                            width: width * 0.01,
+                                          ),
+                                          Text(
+                                            '*c',
+                                            style: TextStyle(fontSize: 25),
+                                          ),
+                                        ],
+                                      ),
+                                      Text('${weather_desc}'),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: width * 0.04,
+                          ),
+                          Container(
+                            height: height * 0.13,
+                            decoration: BoxDecoration(
+                              color: Colors.green,
+                              borderRadius: BorderRadius.circular(35),
+                            ),
+                            child: Container(
+                              padding: EdgeInsets.all(20),
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    SizedBox(
+                                      height: height * 0.025,
+                                    ),
+                                    Text(
+                                      time,
+                                      style: TextStyle(fontSize: 30),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: height * 0.02,
+                      ),
+                      Container(
+                        width: width * 0.07,
+                        height: height * 0.13,
+                        decoration: BoxDecoration(
+                          color: Colors.blue,
+                          borderRadius: BorderRadius.circular(35),
+                        ),
+                        child: Container(
+                          padding: EdgeInsets.all(20),
+                          child: SingleChildScrollView(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Wind',
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(
+                                  height: height * 0.006,
+                                ),
+                                Text(
+                                  'Speed: ${wind_speed}',
+                                ),
+                                Text(
+                                  'degree: ${wind_def}',
+                                ),
+                                Text('gust: ${wind_gust}'),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: height * 0.02,
+                      ),
+                      Container(
+                        width: width * 0.07,
+                        height: height * 0.13,
+                        decoration: BoxDecoration(
+                          color: Colors.purple,
+                          borderRadius: BorderRadius.circular(35),
+                        ),
+                        child: Container(
+                          padding: EdgeInsets.all(20),
+                          child: SingleChildScrollView(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Main',
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(
+                                  height: height * 0.006,
+                                ),
+                                Text(
+                                  'Pressure: ${main_pressure}',
+                                ),
+                                Text(
+                                  'Humidity: ${main_humidity} ',
+                                ),
+                                Text('country: ${sys_country}'),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _getAPIData(String city) async {
+    var url = Uri.parse(
+        'https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=431db9b06125bf0f24764a2e646f4214');
+    var response = await http.get(url);
+    var jsonData = jsonDecode(response.body);
+    var jsonStatus = jsonDecode('${response.statusCode}');
+
+    var apiCity = jsonData['name'];
+    if (jsonStatus == 200) {
+      Map<String, dynamic> map = jsonDecode(response.body);
+      var temp = map["main"]["temp"].toString();
+      var temp1 = (double.parse(temp) - 273.15).toStringAsFixed(2);
+      setState(() {
+        cityName = apiCity;
+        _isLoading = false;
+        _isData = true;
+
+        weather_desc = map["weather"][0]["description"];
+        main_temp = temp1;
+        main_pressure = map["main"]["pressure"].toString();
+        main_humidity = map["main"]["humidity"].toString();
+        wind_speed = map["wind"]["speed"].toString();
+        wind_def = map["wind"]["deg"].toString();
+        wind_gust = map["wind"]["gust"].toString();
+        sys_country = map["sys"]["country"].toString();
+      });
+    } else if (city.isEmpty && city == "") {
+      setState(() {
+        _isLoading = false;
+        _isData = false;
+      });
+    } else {
+      setState(() {
+        _isLoading = true;
+        _isData = false;
+      });
+    }
+  }
+}
