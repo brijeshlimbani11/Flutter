@@ -31,7 +31,8 @@ class Print extends StatelessWidget {
 
               SizedBox(height: height * 0.1,),
 
-              Text('Form Data', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
+              Text('Form Data', style: TextStyle(color: Colors.red,
+                    fontSize: 40, fontWeight: FontWeight.bold),),
 
               SizedBox(height: height * 0.06,),
 
