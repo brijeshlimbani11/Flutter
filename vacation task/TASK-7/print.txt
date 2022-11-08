@@ -23,6 +23,7 @@ class Print extends StatelessWidget {
 
     return SafeArea(
       child: Scaffold(
+      backgroundColor: Colors.amber,
         body: Container(
           padding: EdgeInsets.all(40),
           child: ListView(
