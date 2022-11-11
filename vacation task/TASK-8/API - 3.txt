@@ -1,0 +1,120 @@
+import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+void main() => runApp(Main());
+
+class Main extends StatelessWidget {
+  const Main({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Home(),
+    );
+  }
+}
+
+class Home extends StatefulWidget {
+  const Home({Key? key}) : super(key: key);
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+
+  var users = [];
+
+  @override
+  void initState() {
+    _getAPIData();
+    print(users);
+    super.initState();
+  }
+
+  void _getAPIData() async {
+    var url = Uri.parse('https://dummyjson.com/quotes');
+    var response = await http.get(url);
+    var jsonData = jsonDecode(response.body);
+    var quo = jsonData['quotes'];
+
+    for(var i in quo) {
+      quote_data q = quote_data(i['id'], i['quote'], i['author']);
+      setState(() {
+        users.add(q);
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    final size = MediaQuery.of(context).size;
+    final width = size.width;
+    final height = size.height;
+
+    return Scaffold(
+      body: Container(
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+               Color.fromARGB(255, 69, 188, 89),
+              Color.fromARGB(255, 247, 183, 5),
+              ],
+          ),
+        ),
+        padding: EdgeInsets.all(20),
+
+        child: SafeArea(
+          child: Column(
+            children: [
+
+              Container(
+                padding: EdgeInsets.only(left: 10, right: 10),
+                alignment: Alignment.topLeft,
+                child: Text('Quotes', style: TextStyle(fontSize: 24, color: Colors.white),),
+              ),
+
+              SizedBox(height: height * 0.02,),
+
+              Flexible(
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: users.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Card(
+                      child: ListTile(
+                        leading: Text('${users[index]._id}',),
+                        title: Text('${users[index]._quote}',),
+                        subtitle: Container(
+                          alignment: Alignment.bottomRight, child: Text('${users[index]._author}',)
+                        ),
+                      ),
+                    );
+                  }
+                ),
+              ),
+
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class quote_data {
+  var id;
+  var quote;
+  var author;
+
+  quote_data(this.id, this.quote, this.author);
+
+  get _id { return id; }
+  get _quote {return quote; }
+  get _author { return author; }
+}
