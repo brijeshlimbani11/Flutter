@@ -1,3 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PDF Merger</title>
+<style>
+    #drop_zone {
+        border: 2px dashed #ccc;
+        width: 100%;
+        height: 200px;
+        text-align: center;
+        padding: 50px 0;
+        cursor: pointer;
+    }
+    #file_input {
+        display: none;
+    }
+</style>
+</head>
+<body>
+
+<form id="form1" runat="server">
+    <div id="drop_zone" ondrop="dropHandler(event)" ondragover="dragOverHandler(event)">
+        <p>Drag & drop PDF files here</p>
+        <p>or</p>
+        <label for="file_input">Click here to select files</label>
+        <input type="file" id="file_input" multiple onchange="handleFiles(this.files)">
+    </div>
+
+    <!-- Use an HTML button for client-side action -->
+    <button id="merge_btn_html" onclick="mergePDFs()">Merge PDFs (Client-side)</button>
+
+    <!-- Use an ASP.NET button for server-side action -->
+    <asp:Button ID="merge_btn_asp" runat="server" Text="Merge PDFs (Server-side)" OnClick="merge_btn_Click" />
+    <asp:Label ID="lblMessage" runat="server" Text=""></asp:Label>
+
+    <div id="upload_info"></div>
+</form>
+
+<script>
+    function dragOverHandler(event) {
+        event.preventDefault();
+        event.dataTransfer.dropEffect = 'copy';
+    }
+
+    function dropHandler(event) {
+        event.preventDefault();
+        var files = event.dataTransfer.files;
+        handleFiles(files);
+    }
+
+    function handleFiles(files) {
+        var info = document.getElementById('upload_info');
+        info.innerHTML = ''; // Clear previous info
+        for (var i = 0; i < files.length; i++) {
+            if (files[i].type === 'application/pdf') {
+                // Handle PDF file
+                info.innerHTML += 'Uploaded PDF: ' + files[i].name + '<br>';
+            } else {
+                alert('Please select only PDF files.');
+            }
+        }
+        info.innerHTML += 'Total PDFs uploaded: ' + files.length;
+    }
+
+    function mergePDFs() {
+        // Send selected PDF files to server for merging
+        // Implement client-side logic to merge PDFs
+        alert('Merging PDFs (Client-side)...');
+    }
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
 Server Error in '/' Application.
 Control 'Button1' of type 'Button' must be placed inside a form tag with runat=server.
 Description: An unhandled exception occurred during the execution of the current web request. Please review the stack trace for more information about the error and where it originated in the code.
