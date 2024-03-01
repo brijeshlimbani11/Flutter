@@ -1,3 +1,48 @@
+Server Error in '/' Application.
+Control 'Button1' of type 'Button' must be placed inside a form tag with runat=server.
+Description: An unhandled exception occurred during the execution of the current web request. Please review the stack trace for more information about the error and where it originated in the code.
+
+Exception Details: System.Web.HttpException: Control 'Button1' of type 'Button' must be placed inside a form tag with runat=server.
+
+Source Error:
+
+An unhandled exception was generated during the execution of the current web request. Information regarding the origin and location of the exception can be identified using the exception stack trace below.
+
+Stack Trace:
+
+
+[HttpException (0x80004005): Control 'Button1' of type 'Button' must be placed inside a form tag with runat=server.]
+   System.Web.UI.Page.VerifyRenderingInServerForm(Control control) +9767915
+   System.Web.UI.WebControls.Button.AddAttributesToRender(HtmlTextWriter writer) +59
+   System.Web.UI.WebControls.WebControl.RenderBeginTag(HtmlTextWriter writer) +20
+   System.Web.UI.WebControls.WebControl.Render(HtmlTextWriter writer) +20
+   System.Web.UI.Control.RenderControlInternal(HtmlTextWriter writer, ControlAdapter adapter) +67
+   System.Web.UI.Control.RenderControl(HtmlTextWriter writer, ControlAdapter adapter) +101
+   System.Web.UI.Control.RenderControl(HtmlTextWriter writer) +27
+   System.Web.UI.Control.RenderChildrenInternal(HtmlTextWriter writer, ICollection children) +129
+   System.Web.UI.Control.RenderChildren(HtmlTextWriter writer) +14
+   System.Web.UI.Page.Render(HtmlTextWriter writer) +30
+   System.Web.UI.Control.RenderControlInternal(HtmlTextWriter writer, ControlAdapter adapter) +67
+   System.Web.UI.Control.RenderControl(HtmlTextWriter writer, ControlAdapter adapter) +101
+   System.Web.UI.Control.RenderControl(HtmlTextWriter writer) +27
+   System.Web.UI.Page.ProcessRequestMain(Boolean includeStagesBeforeAsyncPoint, Boolean includeStagesAfterAsyncPoint) +1342
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 private void GeneratePdfWithBookmarkAndTOC(string mergedPdfPath, string outputPath)
 {
     try
