@@ -95,3 +95,94 @@ namespace PDFMerge
 
 </body>
 </html>
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sample HTML with Bookmarks and TOC</title>
+</head>
+<body>
+    <h1 id="section1">Section 1</h1>
+    <p>This is the content of section 1.</p>
+
+    <h2 id="subSection1">Subsection 1.1</h2>
+    <p>This is the content of subsection 1.1.</p>
+
+    <h2 id="subSection2">Subsection 1.2</h2>
+    <p>This is the content of subsection 1.2.</p>
+
+    <h1 id="section2">Section 2</h1>
+    <p>This is the content of section 2.</p>
+
+    <h2 id="subSection3">Subsection 2.1</h2>
+    <p>This is the content of subsection 2.1.</p>
+
+    <h2 id="subSection4">Subsection 2.2</h2>
+    <p>This is the content of subsection 2.2.</p>
+</body>
+</html>
+
+using iText.Kernel.Pdf;
+using iText.Layout;
+using iText.Layout.Element;
+using iText.Layout.Properties;
+using iText.Html2pdf;
+
+namespace PdfWithBookmarkAndTOC
+{
+    public class PdfGenerator
+    {
+        public static void GeneratePdfWithBookmarkAndTOC(string htmlContent, string outputPath)
+        {
+            // Convert HTML to PDF
+            PdfDocument pdfDocument = new PdfDocument(new PdfWriter(outputPath));
+            ConverterProperties converterProperties = new ConverterProperties();
+            HtmlConverter.ConvertToPdf(htmlContent, pdfDocument, converterProperties);
+
+            // Access PDF document
+            Document document = new Document(pdfDocument);
+
+            // Add bookmarks and TOC
+            AddBookmarksAndTOC(document);
+
+            // Close the document
+            document.Close();
+        }
+
+        private static void AddBookmarksAndTOC(Document document)
+        {
+            // Iterate through document and add bookmarks for headings
+            foreach (IBlockElement element in document.GetRenderer().GetModelElement().GetChildren())
+            {
+                if (element is Paragraph paragraph && paragraph.GetFirstRenderer() is ParagraphRenderer renderer)
+                {
+                    if (renderer.GetPropertyAsBoolean(Property.FIRST_PARAGRAPH) && paragraph.HasOwnProperty(Property.TITLE))
+                    {
+                        string title = paragraph.GetProperty(Property.TITLE).ToString();
+                        document.Add(new Bookmark(title).AddDestinationPageOnly());
+                    }
+                }
+            }
+
+            // Generate table of contents
+            document.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
+            document.Add(new Paragraph("Table of Contents").SetTextAlignment(TextAlignment.CENTER).SetBold().SetFontSize(16));
+            foreach (IBlockElement element in document.GetRenderer().GetModelElement().GetChildren())
+            {
+                if (element is Paragraph paragraph && paragraph.GetFirstRenderer() is ParagraphRenderer renderer)
+                {
+                    if (renderer.GetPropertyAsBoolean(Property.FIRST_PARAGRAPH) && paragraph.HasOwnProperty(Property.TITLE))
+                    {
+                        string title = paragraph.GetProperty(Property.TITLE).ToString();
+                        document.Add(new Paragraph().Add(title).SetAction(PdfAction.CreateGoTo(title)));
+                    }
+                }
+            }
+        }
+    }
+}
