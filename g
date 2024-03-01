@@ -17,6 +17,69 @@ private void GeneratePdfWithBookmarkAndTOC(string mergedPdfPath, string outputPa
                 // Create a list to hold TOC entries
                 List<TocEntry> tocEntries = new List<TocEntry>();
 
+                // Get the root outline
+                PdfOutline root = stamper.Writer.DirectContent.RootOutline;
+
+                // Iterate through pages of the merged PDF
+                for (int i = 1; i <= totalPages; i++)
+                {
+                    // Add a bookmark for each page
+                    PdfDestination destination = new PdfDestination(PdfDestination.FITH);
+                    PdfOutline outline = new PdfOutline(root, destination, "Page " + i);
+
+                    // Create TOC entry
+                    TocEntry tocEntry = new TocEntry();
+                    tocEntry.Title = "Page " + i;
+                    tocEntry.PageNumber = i;
+                    tocEntries.Add(tocEntry);
+
+                    // Add page number to TOC page
+                    canvas = stamper.GetOverContent(i);
+                    ColumnText.ShowTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("Page " + i), 36, 770, 0);
+                }
+
+                // Add TOC entries to the TOC page
+                foreach (var entry in tocEntries)
+                {
+                    PdfOutline tocOutline = new PdfOutline(root, new PdfDestination(PdfDestination.FITH), entry.Title);
+                }
+            }
+        }
+
+        // Close the PdfReader
+        reader.Close();
+    }
+    catch (Exception ex)
+    {
+        // Handle any exceptions
+        lblMessage.Text = "An error occurred while generating PDF with bookmarks and TOC: " + ex.Message;
+    }
+}
+
+
+
+
+
+
+private void GeneratePdfWithBookmarkAndTOC(string mergedPdfPath, string outputPath)
+{
+    try
+    {
+        // Create a PdfReader instance to read the merged PDF
+        PdfReader reader = new PdfReader(mergedPdfPath);
+
+        // Create a PdfStamper instance to write modifications to the PDF
+        using (FileStream outputStream = new FileStream(outputPath, FileMode.Create))
+        {
+            using (PdfStamper stamper = new PdfStamper(reader, outputStream))
+            {
+                // Initialize variables for bookmark and TOC generation
+                int totalPages = reader.NumberOfPages;
+                PdfContentByte canvas;
+
+                // Create a list to hold TOC entries
+                List<TocEntry> tocEntries = new List<TocEntry>();
+
                 // Iterate through pages of the merged PDF
                 for (int i = 1; i <= totalPages; i++)
                 {
