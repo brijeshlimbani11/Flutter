@@ -1,3 +1,158 @@
+using System;
+using System.IO;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using iTextSharp.text.html.simpleparser;
+
+public partial class _Default : System.Web.UI.Page
+{
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        // Convert HTML to PDF
+        ConvertHtmlToPdf();
+    }
+
+    private void ConvertHtmlToPdf()
+    {
+        // Path to the HTML file
+        string htmlFilePath = Server.MapPath("~/YourHtmlFile.html");
+
+        // Path to the PDF file to be generated
+        string pdfFilePath = Server.MapPath("~/YourGeneratedPdfFile.pdf");
+
+        // Create a document
+        Document document = new Document();
+
+        try
+        {
+            // Initialize PDF writer
+            PdfWriter.GetInstance(document, new FileStream(pdfFilePath, FileMode.Create));
+
+            // Open the document
+            document.Open();
+
+            // Read the HTML file
+            using (TextReader reader = new StreamReader(htmlFilePath))
+            {
+                // Parse HTML and add it to the document
+                HTMLWorker worker = new HTMLWorker(document);
+                worker.Parse(reader);
+            }
+
+            // Add Table of Contents
+            AddTableOfContents(document);
+        }
+        catch (Exception ex)
+        {
+            // Handle any exceptions
+            Console.WriteLine("An error occurred: " + ex.Message);
+        }
+        finally
+        {
+            // Close the document
+            document.Close();
+        }
+    }
+
+    private void AddTableOfContents(Document document)
+    {
+        // Add a new page for the Table of Contents
+        document.NewPage();
+
+        // Add Table of Contents title
+        Paragraph tocTitle = new Paragraph("Table of Contents", new Font(Font.FontFamily.HELVETICA, 16, Font.BOLD));
+        document.Add(tocTitle);
+
+        // Add TOC entries
+        for (int i = 1; i <= document.PageSize.Height; i += 10)
+        {
+            Chunk chunk = new Chunk("Page " + i);
+            chunk.SetAction(new PdfAction(i));
+            Paragraph pageLink = new Paragraph(chunk);
+            document.Add(pageLink);
+        }
+    }
+}
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Management System</title>
+</head>
+<body>
+    <h1>School Management System</h1>
+    
+    <h2>Student Information</h2>
+    <p>Name: John Doe</p>
+    <p>Class: 10th Grade</p>
+    <p>Roll No: 123</p>
+    
+    <h2>Teacher Information</h2>
+    <p>Name: Jane Smith</p>
+    <p>Subject: Mathematics</p>
+    
+    <h2>Class Schedule</h2>
+    <table border="1">
+        <tr>
+            <th>Time</th>
+            <th>Monday</th>
+            <th>Tuesday</th>
+            <th>Wednesday</th>
+            <th>Thursday</th>
+            <th>Friday</th>
+        </tr>
+        <tr>
+            <td>8:00 AM - 9:00 AM</td>
+            <td>Math</td>
+            <td>Science</td>
+            <td>English</td>
+            <td>History</td>
+            <td>Physical Education</td>
+        </tr>
+        <tr>
+            <td>9:00 AM - 10:00 AM</td>
+            <td>Science</td>
+            <td>English</td>
+            <td>History</td>
+            <td>Physical Education</td>
+            <td>Math</td>
+        </tr>
+        <!-- Add more rows for other time slots -->
+    </table>
+    
+    <h2>Extracurricular Activities</h2>
+    <ul>
+        <li>Football Practice - Every Monday and Wednesday, 3:00 PM - 5:00 PM</li>
+        <li>Chess Club - Every Friday, 2:00 PM - 4:00 PM</li>
+    </ul>
+    
+    <h2>Library Information</h2>
+    <p>The library is open from Monday to Friday, 9:00 AM to 5:00 PM.</p>
+    
+    <h2>Upcoming Events</h2>
+    <p>1. Annual Sports Day - Date: March 15, 2024</p>
+    <p>2. Science Fair - Date: April 20, 2024</p>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
 protected void merge_btn_Click(object sender, EventArgs e)
 {
     // Check if any files were uploaded
