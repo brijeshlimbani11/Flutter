@@ -1,29 +1,25 @@
-	public bool GetSetProject()
-	{
 
-		string wStr = string.Empty;
-		string ParaMeters = string.Empty;
-		DataSet Ds = new DataSet();
+using iText.Kernel.Pdf;
+using iText.Kernel.Utils;
 
-		try
-		{
-			ParaMeters = Convert.ToString(this.Session[GeneralModule.S_UserID]);
-			if (!objHelp.Proc_SetProjectMatrix(ParaMeters,ref Ds,ref eStr_Retu))
-			{
-				objCommon.ShowAlert("Error While Proc_SetProjectMatrix", this.Page);
-			}
-			if (Ds.Tables.Count != 0 && Ds.Tables[0].Rows.Count > 0 && !string.IsNullOrEmpty(Convert.ToString(Ds.Tables[0].Rows[0]["WorkSpaceId"])) && !string.IsNullOrEmpty(Convert.ToString(Ds.Tables[0].Rows[0]["ProjectNo"])))
-			{
-				Session.Add(GeneralModule.S_ProjectName, Ds.Tables[0].Rows[0]["ProjectNo"]);
-				Session.Add(GeneralModule.S_ProjectId, Ds.Tables[0].Rows[0]["WorkSpaceId"]);
-			}
-			return true;
-		}
-		catch (Exception ex)
-		{
-            this.ShowErrorMessage(ex.Message, "Eroor While getSetProject....", ex);
-            objCommon.ShowAlert("Eroor While getSetProject....", this.Page);
-			return false;
-		}
-
-	}
+namespace PDFMerge
+{
+    public class PDFMerge
+    {
+        private static string FILE1 = "/uploads/first.pdf";
+        private static string FILE2 = "/uploads/second.pdf";
+        private static string OUTPUT_FOLDER = "/myfiles/";
+        
+        static void Main(string[] args)
+        {
+            PdfDocument pdfDocument = new PdfDocument(new PdfReader(FILE1), new PdfWriter(OUTPUT_FOLDER + "merged.pdf"));
+            PdfDocument pdfDocument2 = new PdfDocument(new PdfReader(FILE2));
+            
+            PdfMerger merger = new PdfMerger(pdfDocument);
+            merger.Merge(pdfDocument2, 1, pdfDocument2.GetNumberOfPages());
+            
+            pdfDocument2.Close();
+            pdfDocument.Close();
+        }
+    }
+}
