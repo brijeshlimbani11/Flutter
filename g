@@ -1,3 +1,52 @@
+private void ConvertHtmlToPdf()
+{
+    // Path to the HTML file
+    string htmlFilePath = Server.MapPath("~/YourHtmlFile.html");
+
+    // Path to the PDF file to be generated
+    string pdfFilePath = Server.MapPath("~/YourGeneratedPdfFile.pdf");
+
+    // Create a document
+    Document document = new Document();
+
+    try
+    {
+        // Initialize PDF writer
+        PdfWriter writer = PdfWriter.GetInstance(document, new FileStream(pdfFilePath, FileMode.Create));
+
+        // Open the document
+        document.Open();
+
+        // Read the HTML file
+        using (TextReader reader = new StreamReader(htmlFilePath))
+        {
+            // Parse HTML and add it to the document
+            HTMLWorker worker = new HTMLWorker(document);
+            worker.Parse(reader);
+        }
+
+        // Add Table of Contents
+        AddTableOfContents(document);
+    }
+    catch (Exception ex)
+    {
+        // Handle any exceptions
+        Console.WriteLine("An error occurred: " + ex.Message);
+    }
+    finally
+    {
+        // Close the document
+        document.Close();
+    }
+}
+
+
+
+
+
+
+
+
 Server Error in '/' Application.
 The document has no pages.
 Description: An unhandled exception occurred during the execution of the current web request. Please review the stack trace for more information about the error and where it originated in the code.
