@@ -186,3 +186,7 @@ namespace PdfWithBookmarkAndTOC
         }
     }
 }
+
+
+You tried signing in with a different authentication method than the one you used during signup. Please try again using your original authentication method.
+
