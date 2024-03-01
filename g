@@ -1,3 +1,31 @@
+Server Error in '/' Application.
+The document has no pages.
+Description: An unhandled exception occurred during the execution of the current web request. Please review the stack trace for more information about the error and where it originated in the code.
+
+Exception Details: System.IO.IOException: The document has no pages.
+
+Source Error:
+
+
+Line 59:             {
+Line 60:                 // Close the document
+Line 61:                 document.Close();
+Line 62:             }
+Line 63:         }
+
+Source File: c:\users\sspl1366\documents\visual studio 2015\Projects\practice6\practice6\PDFMerge.aspx.cs    Line: 61
+
+Stack Trace:
+
+
+
+
+
+
+
+
+
+
 using System;
 using System.IO;
 using iTextSharp.text;
