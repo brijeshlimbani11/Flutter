@@ -17,6 +17,60 @@ protected void merge_btn_Click(object sender, EventArgs e)
         // Merge uploaded PDF files
         string mergedPdfPath = MergePdfFiles(tempDirectory);
 
+        // Set response headers to trigger download
+        Response.Clear();
+        Response.ContentType = "application/pdf";
+        Response.AddHeader("content-disposition", "attachment; filename=output.pdf");
+
+        // Write the merged PDF file to the response output stream
+        Response.WriteFile(mergedPdfPath);
+        Response.Flush();
+
+        // End the response
+        Response.End();
+
+        // Display success message
+        lblMessage.Text = "PDF files merged successfully. Merged PDF is being downloaded.";
+    }
+    catch (Exception ex)
+    {
+        // Handle any exceptions and display error message
+        lblMessage.Text = "An error occurred: " + ex.Message;
+    }
+    finally
+    {
+        // Clean up temporary directory (delete uploaded files)
+        Directory.Delete(tempDirectory, true);
+    }
+}
+
+
+
+
+
+
+
+
+
+protected void merge_btn_Click(object sender, EventArgs e)
+{
+    // Check if any files were uploaded
+    if (Request.Files.Count == 0)
+    {
+        // No files uploaded, display error message
+        lblMessage.Text = "Please upload PDF files before merging.";
+        return;
+    }
+
+    // Create a temporary directory to store uploaded files
+    string tempDirectory = Server.MapPath("~/TempFiles/");
+    Directory.CreateDirectory(tempDirectory);
+
+    try
+    {
+        // Merge uploaded PDF files
+        string mergedPdfPath = MergePdfFiles(tempDirectory);
+
         // Save the merged PDF to the file manager output
         string outputFileName = Server.MapPath("~/Output/output.pdf");
         File.Copy(mergedPdfPath, outputFileName, true);
