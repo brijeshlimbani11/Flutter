@@ -1,3 +1,133 @@
+using System;
+using System.Drawing;
+using System.IO;
+using System.Web;
+using Winnovative.WnvHtmlConvert;
+
+protected void convertToPdfButton_Click(object sender, EventArgs e)
+{
+    // Split URLs by newline character and remove empty entries
+    string[] urls = firstUrlTextBox.Text.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+
+    // Create a PDF document for each URL
+    for (int i = 0; i < urls.Length; i++)
+    {
+        // Create the PDF document
+        Document pdfDocument = new Document();
+
+        // Set license key received after purchase to use the converter in licensed mode
+        // Leave it not set to use the converter in demo mode
+        pdfDocument.LicenseKey = "fvDh8eDx4fHg4P/h8eLg/+Dj/+jo6Og=";
+
+        // Create a PDF page
+        PdfPage pdfPage = pdfDocument.AddPage();
+
+        try
+        {
+            // Create the HTML to PDF element
+            HtmlToPdfElement htmlToPdfElement = new HtmlToPdfElement(0, 0, urls[i]);
+
+            // Optionally set a delay before conversion to allow asynchronous scripts to finish
+            htmlToPdfElement.ConversionDelay = 2;
+
+            // Add the HTML to PDF document
+            pdfPage.AddElement(htmlToPdfElement);
+
+            // Save the PDF document to a memory buffer
+            byte[] outPdfBuffer = pdfDocument.Save();
+
+            // Generate a unique file name for the PDF
+            string fileName = "ConvertedDocument_" + i + ".pdf";
+
+            // Write the PDF document buffer to a file
+            File.WriteAllBytes(Server.MapPath("~/PDFFiles/" + fileName), outPdfBuffer);
+        }
+        finally
+        {
+            // Close the PDF document
+            pdfDocument.Close();
+        }
+    }
+
+    // Provide a download link for the generated PDF files
+    Response.Redirect("~/DownloadPage.aspx");
+}
+
+
+
+
+
+
+
+
+
+
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="YourPageName.aspx.cs" Inherits="YourNamespace.YourPageName" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>HTML to PDF Conversion</title>
+    <style>
+        .form-container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: bold;
+        }
+        .form-group input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .form-group button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .form-group button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div class="form-container">
+            <div class="form-group">
+                <label for="firstUrlTextBox">URLs or HTML content (one per line):</label>
+                <asp:TextBox ID="firstUrlTextBox" runat="server" TextMode="MultiLine" Rows="5" CssClass="form-control"></asp:TextBox>
+            </div>
+            <div class="form-group">
+                <asp:Button ID="convertToPdfButton" runat="server" Text="Convert to PDF" OnClick="convertToPdfButton_Click" CssClass="btn btn-primary" />
+            </div>
+        </div>
+    </form>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
 <%@ Page Language="C#" AutoEventWireup="true" CodeBehind="YourPageName.aspx.cs" Inherits="YourNamespace.YourPageName" %>
 
 <!DOCTYPE html>
