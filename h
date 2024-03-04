@@ -1,3 +1,24 @@
+Server Error in '/' Application.
+A potentially dangerous Request.Form value was detected from the client (hfGridHtml="
+   <table cellspacing="...").
+Description: ASP.NET has detected data in the request that is potentially dangerous because it might include HTML markup or script. The data might represent an attempt to compromise the security of your application, such as a cross-site scripting attack. If this type of input is appropriate in your application, you can include code in a web page to explicitly allow it. For more information, see http://go.microsoft.com/fwlink/?LinkID=212874.
+
+Exception Details: System.Web.HttpRequestValidationException: A potentially dangerous Request.Form value was detected from the client (hfGridHtml="
+   <table cellspacing="...").
+
+Source Error:
+
+
+[No relevant source lines]
+
+Source File: C:\Windows\Microsoft.NET\Framework\v4.0.30319\Temporary ASP.NET Files\root\3abe6c24\2071dd7c\App_Web_h0uybqlo.2.cs    Line: 0
+
+
+
+
+
+
+
 protected void ExportToPDF(object sender, EventArgs e)
 {
     // Get the encoded content of hfGridHtml
