@@ -1,3 +1,115 @@
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="YourPageName.aspx.cs" Inherits="YourNamespace.YourPageName" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
+            <asp:TextBox ID="firstUrlTextBox" runat="server"></asp:TextBox>
+            <asp:TextBox ID="secondUrlTextBox" runat="server"></asp:TextBox>
+            <asp:CheckBox ID="startNewPageCheckBox" runat="server" Text="Start New Page" />
+            <asp:Button ID="convertToPdfButton" runat="server" Text="Convert to PDF" OnClick="convertToPdfButton_Click" />
+        </div>
+    </form>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+using System;
+using System.Drawing;
+using System.Web;
+using Winnovative.WnvHtmlConvert;
+
+protected void convertToPdfButton_Click(object sender, EventArgs e)
+{
+    // Create the PDF document where to add the HTML documents
+    Document pdfDocument = new Document();
+
+    // Set license key received after purchase to use the converter in licensed mode
+    // Leave it not set to use the converter in demo mode
+    pdfDocument.LicenseKey = "fvDh8eDx4fHg4P/h8eLg/+Dj/+jo6Og=";
+
+    // Create a PDF page where to add the first HTML
+    PdfPage firstPdfPage = pdfDocument.AddPage();
+
+    try
+    {
+        // Create the first HTML to PDF element
+        HtmlToPdfElement firstHtml = new HtmlToPdfElement(0, 0, firstUrlTextBox.Text);
+
+        // Optionally set a delay before conversion to allow asynchronous scripts to finish
+        firstHtml.ConversionDelay = 2;
+
+        // Add the first HTML to PDF document
+        AddElementResult firstAddResult = firstPdfPage.AddElement(firstHtml);
+
+        PdfPage secondPdfPage = null;
+        PointF secondHtmlLocation = Point.Empty;
+
+        if (startNewPageCheckBox.Checked)
+        {
+            // Create a PDF page where to add the second HTML
+            secondPdfPage = pdfDocument.AddPage();
+            secondHtmlLocation = PointF.Empty;
+        }
+        else
+        {
+            // Add the second HTML on the PDF page where the first HTML ended
+            secondPdfPage = firstAddResult.EndPdfPage;
+            secondHtmlLocation = new PointF(firstAddResult.EndPageBounds.Left, firstAddResult.EndPageBounds.Bottom);
+        }
+
+        // Create the second HTML to PDF element
+        HtmlToPdfElement secondHtml = new HtmlToPdfElement(secondHtmlLocation.X, secondHtmlLocation.Y, secondUrlTextBox.Text);
+
+        // Optionally set a delay before conversion to allow asynchronous scripts to finish
+        secondHtml.ConversionDelay = 2;
+
+        // Add the second HTML to PDF document
+        secondPdfPage.AddElement(secondHtml);
+
+        // Save the PDF document in a memory buffer
+        byte[] outPdfBuffer = pdfDocument.Save();
+
+        // Send the PDF as response to browser
+
+        // Set response content type
+        HttpContext.Current.Response.AddHeader("Content-Type", "application/pdf");
+
+        // Instruct the browser to open the PDF file as an attachment or inline
+        HttpContext.Current.Response.AddHeader("Content-Disposition", String.Format("attachment; filename=Merge_Multipe_HTML.pdf; size={0}", outPdfBuffer.Length.ToString()));
+
+        // Write the PDF document buffer to HTTP response
+        HttpContext.Current.Response.BinaryWrite(outPdfBuffer);
+
+        // End the HTTP response and stop the current page processing
+        HttpContext.Current.Response.End();
+    }
+    finally
+    {
+        // Close the PDF document
+        pdfDocument.Close();
+    }
+}
+
+
+
+
+
+
+
 protected void convertToPdfButton_Click(object sender, EventArgs e)
 {
     // Create the PDF document where to add the HTML documents
