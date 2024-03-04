@@ -1,3 +1,69 @@
+protected void mergePdfButton_Click(object sender, EventArgs e)
+{
+    // Create the merge result PDF document
+    Document mergeResultPdfDocument = new Document();
+
+    // Automatically close the merged documents when the document resulted after merge is closed
+    mergeResultPdfDocument.AutoCloseAppendedDocs = true;
+
+    // Set license key received after purchase to use the converter in licensed mode
+    // Leave it not set to use the converter in demo mode
+    mergeResultPdfDocument.LicenseKey = "fvDh8eDx4fHg4P/h8eLg/+Dj/+jo6Og=";
+
+    try
+    {
+        // The documents to merge must remain opened until the PDF document resulted after merge is saved
+        // The merged documents can be automatically closed when the document resulted after merge is closed
+        // if the AutoCloseAppendedDocs property of the PDF document resulted after merge is set on true like
+        // in this demo applcation
+
+        // Load the first PDF document to merge
+        string firstPdfFilePath = Server.MapPath("~/DemoAppFiles/Input/PDF_Files/Merge_Before_Conversion.pdf");
+        Document firstPdfDocumentToMerge = new Document(firstPdfFilePath);
+        // Merge the first PDF document
+        mergeResultPdfDocument.AppendDocument(firstPdfDocumentToMerge);
+
+        // Load the second PDF document to merge
+        string secondPdfFilePath = Server.MapPath("~/DemoAppFiles/Input/PDF_Files/Merge_After_Conversion.pdf");
+        Document secondPdfDocumentToMerge = new Document(secondPdfFilePath);
+        // Merge the second PDF document
+        mergeResultPdfDocument.AppendDocument(secondPdfDocumentToMerge);
+
+        // Save the merge result PDF document in a memory buffer
+        byte[] outPdfBuffer = mergeResultPdfDocument.Save();
+
+        // Send the PDF as response to browser
+
+        // Set response content type
+        Response.AddHeader("Content-Type", "application/pdf");
+
+        // Instruct the browser to open the PDF file as an attachment or inline
+        Response.AddHeader("Content-Disposition", String.Format("attachment; filename=Merge_PDF.pdf; size={0}", outPdfBuffer.Length.ToString()));
+
+        // Write the PDF document buffer to HTTP response
+        Response.BinaryWrite(outPdfBuffer);
+
+        // End the HTTP response and stop the current page processing
+        Response.End();
+    }
+    finally
+    {
+        // Close the PDF document resulted after merge
+        // When the AutoCloseAppendedDocs property is true the merged PDF documents will also be closed
+        mergeResultPdfDocument.Close();
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
 <%@ Page Language="C#" AutoEventWireup="true" CodeBehind="YourPageName.aspx.cs" Inherits="YourNamespace.YourPageName" %>
 
 <!DOCTYPE html>
