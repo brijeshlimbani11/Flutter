@@ -1,3 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HTML to PDF Conversion</title>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
+            <h2>Select PDF Standard:</h2>
+            <input type="radio" id="pdfStandard_Full" name="pdfStandard" value="Full" checked />
+            <label for="pdfStandard_Full">Full</label><br />
+            <input type="radio" id="pdfStandard_Pdf_A" name="pdfStandard" value="Pdf_A_1b" />
+            <label for="pdfStandard_Pdf_A">PDF/A-1b</label><br />
+            <input type="radio" id="pdfStandard_Pdf_X" name="pdfStandard" value="Pdf_X_1a" />
+            <label for="pdfStandard_Pdf_X">PDF/X-1a</label><br />
+
+            <h2>Select Color Space:</h2>
+            <input type="radio" id="colorSpace_RGB" name="colorSpace" value="RGB" checked />
+            <label for="colorSpace_RGB">RGB</label><br />
+            <input type="radio" id="colorSpace_Gray" name="colorSpace" value="Gray" />
+            <label for="colorSpace_Gray">Grayscale</label><br />
+            <input type="radio" id="colorSpace_CMYK" name="colorSpace" value="CMYK" />
+            <label for="colorSpace_CMYK">CMYK</label><br />
+
+            <!-- Other input fields such as margins, page size, etc. can be added here -->
+
+            <asp:Button ID="createPdfButton" runat="server" Text="Create PDF" OnClick="createPdfButton_Click" />
+        </div>
+    </form>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 protected void createPdfButton_Click(object sender, EventArgs e)
 {
     // Get the PDF Standard
