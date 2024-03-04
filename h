@@ -1,3 +1,41 @@
+CREATE TABLE Customer (
+    CustomerId INT PRIMARY KEY,
+    CustomerName VARCHAR(255),
+    City VARCHAR(255),
+    Email VARCHAR(255),
+    ContactNumber VARCHAR(20)
+);
+
+
+
+
+
+
+
+
+
+-- Inserting 10 entries into the Customer table
+INSERT INTO Customer (CustomerId, CustomerName, City, Email, ContactNumber) VALUES
+(1, 'Rahul Kumar', 'Delhi', 'rahul@example.com', '9876543210'),
+(2, 'Priya Sharma', 'Mumbai', 'priya@example.com', '8765432109'),
+(3, 'Amit Singh', 'Bangalore', 'amit@example.com', '7654321098'),
+(4, 'Anjali Gupta', 'Kolkata', 'anjali@example.com', '6543210987'),
+(5, 'Ravi Patel', 'Chennai', 'ravi@example.com', '5432109876'),
+(6, 'Sunita Verma', 'Hyderabad', 'sunita@example.com', '4321098765'),
+(7, 'Vikas Mishra', 'Pune', 'vikas@example.com', '3210987654'),
+(8, 'Neha Reddy', 'Ahmedabad', 'neha@example.com', '2109876543'),
+(9, 'Karan Gupta', 'Jaipur', 'karan@example.com', '1098765432'),
+(10, 'Pooja Singh', 'Lucknow', 'pooja@example.com', '9876543210');
+
+
+
+
+
+
+
+
+
+
 Server Error in '/' Application.
 A potentially dangerous Request.Form value was detected from the client (hfGridHtml="
    <table cellspacing="...").
