@@ -1,3 +1,106 @@
+using System;
+using System.Web;
+using Winnovative.WnvHtmlConvert;
+
+protected void createPdfButton_Click(object sender, EventArgs e)
+{
+    // Get the PDF Standard
+    // By default the Full PDF standard is used
+    PdfStandardSubset pdfStandard = PdfStandardSubset.Full;
+    if (pdfARadioButton.Checked)
+        pdfStandard = PdfStandardSubset.Pdf_A_1b;
+    else if (pdfXRadioButton.Checked)
+        pdfStandard = PdfStandardSubset.Pdf_X_1a;
+
+    // Get the Color Space
+    // By default the RGB color space is used
+    ColorSpace pdfColorSpace = ColorSpace.RGB;
+    if (grayScaleRadioButton.Checked)
+        pdfColorSpace = ColorSpace.Gray;
+    else if (cmykRadioButton.Checked)
+        pdfColorSpace = ColorSpace.CMYK;
+
+    // Create the PDF document
+    Document pdfDocument = null;
+
+    if (pdfStandard == PdfStandardSubset.Full && pdfColorSpace == ColorSpace.RGB)
+    {
+        // Create a PDF document with default standard and color space
+        pdfDocument = new Document();
+    }
+    else
+    {
+        // Create a PDF document with the selected standard and color space
+        pdfDocument = new Document(pdfStandard, pdfColorSpace);
+    }
+
+    // Set license key received after purchase to use the converter in licensed mode
+    // Leave it not set to use the converter in demo mode
+    pdfDocument.LicenseKey = "fvDh8eDx4fHg4P/h8eLg/+Dj/+jo6Og=";
+
+    // Get the selected PDF page size
+    PdfPageSize pdfPageSize = SelectedPdfPageSize();
+
+    // Get the selected PDF page orientation
+    PdfPageOrientation pdfPageOrientation = SelectedPdfPageOrientation();
+
+    // Get the PDF page margins
+    Margins pdfPageMargins = new Margins(float.Parse(leftMarginTextBox.Text), float.Parse(rightMarginTextBox.Text),
+            float.Parse(topMarginTextBox.Text), float.Parse(bottomMarginTextBox.Text));
+
+    // Create a PDF page in PDF document
+    PdfPage firstPdfPage = pdfDocument.AddPage(pdfPageSize, pdfPageMargins, pdfPageOrientation);
+
+    try
+    {
+        // The URL of the HTML page to convert to PDF
+        string urlToConvert = "http://www.winnovative-software.com";
+
+        // Create the HTML to PDF element
+        HtmlToPdfElement htmlToPdfElement = new HtmlToPdfElement(urlToConvert);
+
+        // Optionally set a delay before conversion to allow asynchronous scripts to finish
+        htmlToPdfElement.ConversionDelay = 2;
+
+        // Add the HTML to PDF element to PDF document
+        firstPdfPage.AddElement(htmlToPdfElement);
+
+        // Save the PDF document in a memory buffer
+        byte[] outPdfBuffer = pdfDocument.Save();
+
+        // Send the PDF as response to the browser
+
+        // Set response content type
+        HttpContext.Current.Response.AddHeader("Content-Type", "application/pdf");
+
+        // Instruct the browser to open the PDF file as an attachment or inline
+        HttpContext.Current.Response.AddHeader("Content-Disposition", String.Format("attachment; filename=Create_PDF_Documents.pdf; size={0}", outPdfBuffer.Length.ToString()));
+
+        // Write the PDF document buffer to HTTP response
+        HttpContext.Current.Response.BinaryWrite(outPdfBuffer);
+
+        // End the HTTP response and stop the current page processing
+        HttpContext.Current.Response.End();
+    }
+    finally
+    {
+        // Close the PDF document
+        pdfDocument.Close();
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 <!DOCTYPE html>
 <html>
 <head>
