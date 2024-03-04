@@ -1,3 +1,44 @@
+protected void ExportToPDF(object sender, EventArgs e)
+{
+    // Get the encoded content of hfGridHtml
+    string encodedContent = Server.HtmlEncode(Request.Form[hfGridHtml.UniqueID]);
+
+    // Create a StringReader to read the encoded content
+    StringReader sr = new StringReader(encodedContent);
+
+    // Create a new PDF document
+    Document pdfDoc = new Document(PageSize.A4, 10f, 10f, 10f, 0f);
+
+    // Set up the PdfWriter to write the PDF to the response stream
+    PdfWriter writer = PdfWriter.GetInstance(pdfDoc, Response.OutputStream);
+
+    // Open the PDF document
+    pdfDoc.Open();
+
+    // Parse the encoded HTML content and add it to the PDF document
+    XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, sr);
+
+    // Close the PDF document
+    pdfDoc.Close();
+
+    // Set the response content type and headers
+    Response.ContentType = "application/pdf";
+    Response.AddHeader("content-disposition", "attachment;filename=HTML.pdf");
+    Response.Cache.SetCacheability(HttpCacheability.NoCache);
+
+    // Write the PDF document to the response stream
+    Response.Write(pdfDoc);
+
+    // End the response
+    Response.End();
+}
+
+
+
+
+
+
+
 An exception of type 'System.Web.HttpRequestValidationException' occurred in System.Web.dll but was not handled in user code
 
 Additional information: A potentially dangerous Request.Form value was detected from the client (hfGridHtml="
