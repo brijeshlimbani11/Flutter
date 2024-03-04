@@ -1,3 +1,17 @@
+An exception of type 'Winnovative.HtmlConvertException' occurred in wnvhtmltopdf.dll but was not handled in user code
+
+Additional information: The URL to convert is null.
+
+
+
+
+
+
+
+
+
+
+
 protected void mergePdfButton_Click(object sender, EventArgs e)
 {
     // Create the merge result PDF document
