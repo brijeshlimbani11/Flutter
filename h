@@ -1,3 +1,77 @@
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="YourPageName.aspx.cs" Inherits="YourNamespace.YourPageName" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>HTML to PDF Conversion</title>
+    <style>
+        .form-container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: bold;
+        }
+        .form-group input[type="file"] {
+            margin-top: 5px;
+        }
+        .form-group input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .form-group input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        .file-names {
+            margin-top: 10px;
+        }
+        .file-names ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .file-names ul li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <form id="form1" runat="server" enctype="multipart/form-data">
+        <div class="form-container">
+            <div class="form-group">
+                <label for="fileUpload">Upload HTML files:</label>
+                <asp:FileUpload ID="fileUpload" runat="server" CssClass="form-control" Multiple="true" />
+            </div>
+            <div class="form-group">
+                <asp:Button ID="convertToPdfButton" runat="server" Text="Convert to PDF" OnClick="convertToPdfButton_Click" CssClass="btn btn-primary" />
+            </div>
+            <div class="file-names" runat="server" id="fileNamesDiv">
+                <ul>
+                    <!-- File names will be dynamically added here -->
+                </ul>
+            </div>
+        </div>
+    </form>
+</body>
+</html>
+
+
+
+
+
+
 using System;
 using System.IO;
 using System.Web.UI;
