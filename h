@@ -1,3 +1,59 @@
+protected void convertToPdfButton_Click(object sender, EventArgs e)
+{
+    // Check if URL is provided
+    if (!string.IsNullOrEmpty(firstUrlTextBox.Text))
+    {
+        // Create the PDF document
+        Document pdfDocument = new Document();
+
+        // Set license key received after purchase to use the converter in licensed mode
+        // Leave it not set to use the converter in demo mode
+        pdfDocument.LicenseKey = "fvDh8eDx4fHg4P/h8eLg/+Dj/+jo6Og=";
+
+        // Create a PDF page
+        PdfPage pdfPage = pdfDocument.AddPage();
+
+        try
+        {
+            // Create the HTML to PDF element
+            HtmlToPdfElement htmlToPdfElement = new HtmlToPdfElement(0, 0, firstUrlTextBox.Text);
+
+            // Optionally set a delay before conversion to allow asynchronous scripts to finish
+            htmlToPdfElement.ConversionDelay = 2;
+
+            // Add the HTML to PDF document
+            pdfPage.AddElement(htmlToPdfElement);
+
+            // Save the PDF document to a memory buffer
+            byte[] outPdfBuffer = pdfDocument.Save();
+
+            // Generate a unique file name for the PDF
+            string fileName = "ConvertedDocument.pdf";
+
+            // Write the PDF document buffer to a file
+            File.WriteAllBytes(Server.MapPath("~/PDFFiles/" + fileName), outPdfBuffer);
+        }
+        finally
+        {
+            // Close the PDF document
+            pdfDocument.Close();
+        }
+
+        // Provide a download link for the generated PDF file
+        Response.Redirect("~/DownloadPage.aspx");
+    }
+    else
+    {
+        // Handle error - URL is not provided
+    }
+}
+
+
+
+
+
+
+
 An exception of type 'Winnovative.HtmlConvertException' occurred in wnvhtmltopdf.dll but was not handled in user code
 
 Additional information: The URL to convert is null.
