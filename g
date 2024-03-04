@@ -4,6 +4,78 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
+    <title>HTML to PDF Conversion</title>
+    <style>
+        .form-container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: bold;
+        }
+        .form-group input[type="text"], .form-group input[type="url"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .form-group input[type="checkbox"] {
+            margin-top: 5px;
+        }
+        .form-group button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .form-group button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div class="form-container">
+            <div class="form-group">
+                <label for="firstUrlTextBox">URL or HTML content 1:</label>
+                <asp:TextBox ID="firstUrlTextBox" runat="server" CssClass="form-control" TextMode="Url"></asp:TextBox>
+            </div>
+            <div class="form-group">
+                <label for="secondUrlTextBox">URL or HTML content 2:</label>
+                <asp:TextBox ID="secondUrlTextBox" runat="server" CssClass="form-control" TextMode="Url"></asp:TextBox>
+            </div>
+            <div class="form-group">
+                <asp:CheckBox ID="startNewPageCheckBox" runat="server" Text="Start New Page" />
+            </div>
+            <div class="form-group">
+                <asp:Button ID="convertToPdfButton" runat="server" Text="Convert to PDF" OnClick="convertToPdfButton_Click" CssClass="btn btn-primary" />
+            </div>
+        </div>
+    </form>
+</body>
+</html>
+
+
+
+
+
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="YourPageName.aspx.cs" Inherits="YourNamespace.YourPageName" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
     <title></title>
 </head>
 <body>
