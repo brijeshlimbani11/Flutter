@@ -1,3 +1,32 @@
+An exception of type 'System.Web.HttpRequestValidationException' occurred in System.Web.dll but was not handled in user code
+
+Additional information: A potentially dangerous Request.Form value was detected from the client (hfGridHtml="
+
+    <table cellspacing="...").
+
+ protected void ExportToPDF(object sender, EventArgs e)
+        {
+            StringReader sr = new StringReader(Request.Form[hfGridHtml.UniqueID]);
+            Document pdfDoc = new Document(PageSize.A4, 10f, 10f, 10f, 0f);
+            PdfWriter writer = PdfWriter.GetInstance(pdfDoc, Response.OutputStream);
+            pdfDoc.Open();
+            XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, sr);
+            pdfDoc.Close();
+            Response.ContentType = "application/pdf";
+            Response.AddHeader("content-disposition", "attachment;filename=HTML.pdf");
+            Response.Cache.SetCacheability(HttpCacheability.NoCache);
+            Response.Write(pdfDoc);
+            Response.End();
+        }
+
+
+
+
+
+
+
+
+
 <%@ Page Language="C#" AutoEventWireup="true" CodeFile="YourPageName.aspx.cs" Inherits="YourNamespace.YourPageName" %>
 
 <!DOCTYPE html>
