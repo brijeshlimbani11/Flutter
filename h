@@ -5,6 +5,90 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 
+namespace PdfTableOfContents
+{
+    public partial class WebForm1 : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void btnGeneratePdf_Click(object sender, EventArgs e)
+        {
+            // Create a new PDF document
+            PdfDocument doc = new PdfDocument();
+
+            // Add a new page to the document
+            PdfPageBase page = doc.Pages.Add();
+
+            // Create a font for the title
+            PdfFont fontTitle = new PdfFont(PdfFontFamily.Helvetica, 16f, PdfFontStyle.Bold);
+
+            // Create a font for the table of contents entries
+            PdfFont fontTOC = new PdfFont(PdfFontFamily.Helvetica, 12f);
+
+            // Title
+            string title = "Sample Document";
+            PointF titlePosition = new PointF(50, 50);
+            page.Canvas.DrawString(title, fontTitle, PdfBrushes.Black, titlePosition);
+
+            // Generate some sample content with headings
+            List<string> headings = new List<string>
+            {
+                "Introduction",
+                "Section 1",
+                "Section 2",
+                "Conclusion"
+            };
+
+            // Store the page numbers of headings
+            Dictionary<string, int> tocEntries = new Dictionary<string, int>();
+
+            // Draw the headings and store their page numbers
+            float yOffset = 100;
+            foreach (string heading in headings)
+            {
+                yOffset += 20; // Adjust the vertical position for the next heading
+                page.Canvas.DrawString(heading, fontTOC, PdfBrushes.Black, new PointF(50, yOffset));
+                tocEntries.Add(heading, doc.Pages.Count); // Store the page number of the heading
+            }
+
+            // Create a new page for the table of contents
+            PdfPageBase tocPage = doc.Pages.Add();
+
+            // Draw the title for the table of contents
+            tocPage.Canvas.DrawString("Table of Contents", fontTitle, PdfBrushes.Black, new PointF(50, 50));
+
+            // Draw the table of contents entries
+            yOffset = 100;
+            foreach (var entry in tocEntries)
+            {
+                yOffset += 20;
+                tocPage.Canvas.DrawString(entry.Key + " - Page " + entry.Value, fontTOC, PdfBrushes.Black, new PointF(50, yOffset));
+            }
+
+            // Save the PDF document
+            doc.Save(Response, "TableOfContents.pdf", ContentDisposition.Attachment, HttpReadType.Open);
+            doc.Close();
+            Response.End();
+        }
+    }
+}
+
+
+
+
+
+
+
+using Spire.Pdf;
+using Spire.Pdf.Graphics;
+using Spire.Pdf.Tables;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+
 public partial class GeneratePdfWithToc : System.Web.UI.Page
 {
     protected void btnGeneratePdf_Click(object sender, EventArgs e)
