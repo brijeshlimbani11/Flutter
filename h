@@ -1,5 +1,99 @@
 using Spire.Pdf;
 using Spire.Pdf.HtmlConverter;
+using System;
+using System.Drawing;
+using System.IO;
+using System.Threading;
+
+namespace ConvertHtmlStringToPdfWithoutPlugin
+{
+    public partial class HtmlToPdf : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void btnConvert_Click(object sender, EventArgs e)
+        {
+            //Create a PdfDocument object
+            PdfDocument doc = new PdfDocument();
+
+            //Create a PdfPageSettings object
+            PdfPageSettings setting = new PdfPageSettings();
+
+            //Save page size and margins through the object
+            setting.Size = new SizeF(1000, 1000);
+            setting.Margins = new Spire.Pdf.Graphics.PdfMargins(20);
+
+            //Create a PdfHtmlLayoutFormat object
+            PdfHtmlLayoutFormat htmlLayoutFormat = new PdfHtmlLayoutFormat();
+
+            //Set IsWaiting property to true
+            htmlLayoutFormat.IsWaiting = true;
+
+            //Read html string from uploaded file
+            if (fileUploadHtml.HasFile)
+            {
+                string fileName = Path.GetFileName(fileUploadHtml.PostedFile.FileName);
+                string filePath = Server.MapPath("~/UploadedFiles/") + fileName;
+                fileUploadHtml.SaveAs(filePath);
+
+                //Load HTML from html string using LoadFromHTML method
+                string htmlString = File.ReadAllText(filePath);
+
+                //Load HTML from html string using LoadFromHTML method
+                Thread thread = new Thread(() =>
+                { doc.LoadFromHTML(htmlString, true, setting, htmlLayoutFormat); });
+                thread.SetApartmentState(ApartmentState.STA);
+                thread.Start();
+                thread.Join();
+
+                //Save to a PDF file
+                doc.SaveToFile(Server.MapPath("~/ConvertedFiles/HtmlToPdf.pdf"));
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="HtmlToPdf.aspx.cs" Inherits="ConvertHtmlStringToPdfWithoutPlugin.HtmlToPdf" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Convert HTML String to PDF</title>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
+            <asp:FileUpload ID="fileUploadHtml" runat="server" />
+            <asp:Button ID="btnConvert" runat="server" Text="Convert to PDF" OnClick="btnConvert_Click" />
+        </div>
+    </form>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+using Spire.Pdf;
+using Spire.Pdf.HtmlConverter;
 using System.IO;
 using System.Threading;
 using System.Drawing;
