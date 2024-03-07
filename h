@@ -1,3 +1,54 @@
+using Spire.Pdf;
+using Spire.Pdf.HtmlConverter;
+using System.IO;
+using System.Threading;
+using System.Drawing;
+
+namespace ConvertHtmlStringToPdfWithoutPlugin
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            //Create a PdfDocument object
+            PdfDocument doc = new PdfDocument();
+
+            //Create a PdfPageSettings object
+            PdfPageSettings setting = new PdfPageSettings();
+
+            //Save page size and margins through the object
+            setting.Size = new SizeF(1000, 1000);
+            setting.Margins = new Spire.Pdf.Graphics.PdfMargins(20);
+
+            //Create a PdfHtmlLayoutFormat object
+            PdfHtmlLayoutFormat htmlLayoutFormat = new PdfHtmlLayoutFormat();
+
+            //Set IsWaiting property to true
+            htmlLayoutFormat.IsWaiting = true;
+
+            //Read html string from a .html file
+            string htmlString = File.ReadAllText(@"C:\Users\Administrator\Desktop\Document\Html\Sample.html");
+
+            //Load HTML from html string using LoadFromHTML method
+            Thread thread = new Thread(() =>
+            { doc.LoadFromHTML(htmlString, true, setting, htmlLayoutFormat); });
+            thread.SetApartmentState(ApartmentState.STA);
+            thread.Start();
+            thread.Join();
+
+            //Save to a PDF file
+            doc.SaveToFile("HtmlStringToPdf.pdf");
+        }
+    }
+}
+
+
+
+
+
+
+
+
 using System;
 using Spire.Pdf;
 using System.Threading;
