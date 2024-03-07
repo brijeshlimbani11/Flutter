@@ -16,6 +16,76 @@ namespace ConvertHtmlStringToPdfWithoutPlugin
 
         protected void btnConvert_Click(object sender, EventArgs e)
         {
+            if (fileUploadHtml.HasFile)
+            {
+                string fileName = Path.GetFileName(fileUploadHtml.PostedFile.FileName);
+                string filePath = Server.MapPath("~/UploadedFiles/") + fileName;
+                string pdfFileName = Path.ChangeExtension(fileName, ".pdf");
+                string pdfFilePath = Server.MapPath("~/ConvertedFiles/") + pdfFileName;
+
+                // Save uploaded HTML file
+                fileUploadHtml.SaveAs(filePath);
+
+                // Create a PdfDocument object
+                PdfDocument doc = new PdfDocument();
+
+                // Create a PdfPageSettings object
+                PdfPageSettings setting = new PdfPageSettings();
+
+                // Save page size and margins through the object
+                setting.Size = new SizeF(1000, 1000);
+                setting.Margins = new Spire.Pdf.Graphics.PdfMargins(20);
+
+                // Create a PdfHtmlLayoutFormat object
+                PdfHtmlLayoutFormat htmlLayoutFormat = new PdfHtmlLayoutFormat();
+
+                // Set IsWaiting property to true
+                htmlLayoutFormat.IsWaiting = true;
+
+                // Read HTML string from uploaded file
+                string htmlString = File.ReadAllText(filePath);
+
+                // Load HTML from HTML string using LoadFromHTML method
+                Thread thread = new Thread(() =>
+                {
+                    doc.LoadFromHTML(htmlString, true, setting, htmlLayoutFormat);
+                });
+                thread.SetApartmentState(ApartmentState.STA);
+                thread.Start();
+                thread.Join();
+
+                // Save as a PDF file with the same name as uploaded HTML file
+                doc.SaveToFile(pdfFilePath);
+                doc.Close();
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+using Spire.Pdf;
+using Spire.Pdf.HtmlConverter;
+using System;
+using System.Drawing;
+using System.IO;
+using System.Threading;
+
+namespace ConvertHtmlStringToPdfWithoutPlugin
+{
+    public partial class HtmlToPdf : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void btnConvert_Click(object sender, EventArgs e)
+        {
             //Create a PdfDocument object
             PdfDocument doc = new PdfDocument();
 
