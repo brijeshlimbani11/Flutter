@@ -1,4 +1,110 @@
 using Spire.Pdf;
+using Spire.Pdf.Graphics;
+using Spire.Pdf.Tables;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+
+public partial class GeneratePdfWithToc : System.Web.UI.Page
+{
+    protected void btnGeneratePdf_Click(object sender, EventArgs e)
+    {
+        // Create a new PDF document
+        PdfDocument doc = new PdfDocument();
+
+        // Add a page
+        PdfPageBase page = doc.Pages.Add();
+
+        // Create a PdfTable for the table of contents
+        PdfTable tocTable = new PdfTable();
+        tocTable.Style.CellPadding = 2;
+        tocTable.Style.DefaultStyle.BackgroundBrush = PdfBrushes.LightGray;
+        tocTable.Style.DefaultStyle.Font = new PdfTrueTypeFont(new Font("Arial", 10f), true);
+        tocTable.Style.HeaderSource = PdfHeaderSource.Rows;
+        tocTable.Style.HeaderRowCount = 1;
+
+        // Define table headers
+        tocTable.Headers.Add(1);
+        tocTable.Headers[0].Cells[0].Value = "Table of Contents";
+
+        // Add table columns
+        tocTable.Columns.Add(200);
+
+        // Define table content
+        List<string> tocEntries = new List<string>();
+        tocEntries.Add("Chapter 1: Introduction");
+        tocEntries.Add("Chapter 2: Getting Started");
+        tocEntries.Add("Chapter 3: Advanced Techniques");
+
+        // Add TOC entries to the table
+        foreach (string entry in tocEntries)
+        {
+            PdfRow row = tocTable.Rows.Add();
+            row.Cells[0].Value = entry;
+        }
+
+        // Draw the TOC table on the page
+        tocTable.Draw(page, new PointF(50, 50));
+
+        // Add content after the TOC
+        PdfStringFormat format = new PdfStringFormat();
+        format.ParagraphIndent = 10;
+        PdfFont font = new PdfTrueTypeFont(new Font("Arial", 12f), true);
+        page.Canvas.DrawString("Chapter 1: Introduction", font, PdfBrushes.Black, new PointF(50, 200), format);
+        page.Canvas.DrawString("This is the content of Chapter 1.", font, PdfBrushes.Black, new PointF(70, 230), format);
+
+        // Save the PDF document
+        string filePath = Server.MapPath("~/GeneratedFiles/DocumentWithToc.pdf");
+        doc.SaveToFile(filePath);
+        doc.Close();
+
+        // Provide the generated PDF file for download
+        Response.ContentType = "application/pdf";
+        Response.AppendHeader("Content-Disposition", "attachment; filename=DocumentWithToc.pdf");
+        Response.TransmitFile(filePath);
+        Response.End();
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="GeneratePdfWithToc.aspx.cs" Inherits="GeneratePdfWithToc" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Generate PDF with Table of Contents</title>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
+            <asp:Button ID="btnGeneratePdf" runat="server" Text="Generate PDF with TOC" OnClick="btnGeneratePdf_Click" />
+        </div>
+    </form>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+using Spire.Pdf;
 using Spire.Pdf.HtmlConverter;
 using System;
 using System.Drawing;
