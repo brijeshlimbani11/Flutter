@@ -1,3 +1,65 @@
+	public bool GetBlankpage(ref Document d1, Document d2)
+	{
+		byte[] bytes = null;
+		string DocRemove = string.Empty;
+		string[] DocRemove_arry = null;
+		try
+		{
+			bytes = d2.Save();
+			iTextSharp.text.pdf.PdfReader oreader = new iTextSharp.text.pdf.PdfReader(bytes);
+
+			using (MemoryStream stream = new MemoryStream())
+			{
+				iTextSharp.text.pdf.PdfReader reader = new iTextSharp.text.pdf.PdfReader(bytes);
+				bytes = null;
+				using (iTextSharp.text.pdf.PdfStamper stamper = new iTextSharp.text.pdf.PdfStamper(reader, stream))
+				{
+					for (int i = 1; i <= reader.NumberOfPages; i++)
+					{
+						object sOut = "";
+						iTextSharp.text.pdf.parser.LocationTextExtractionStrategy its = new iTextSharp.text.pdf.parser.LocationTextExtractionStrategy();
+						sOut = iTextSharp.text.pdf.parser.PdfTextExtractor.GetTextFromPage(oreader, i, its);
+						if (Convert.ToString(sOut) == "")
+						{
+							DocRemove += (i - 1).ToString() + ",";
+						}
+					}
+				}
+				stream.Dispose();
+			}
+
+			if (DocRemove.Length > 0)
+			{
+				DocRemove_arry = DocRemove.Substring(0, DocRemove.Length - 1).Split(',');
+				for (int i = DocRemove_arry.Length - 1; i >= 0; i--)
+				{
+					d1.Pages.Remove(Convert.ToInt32(DocRemove_arry[i]));
+				}
+			}
+			return true;
+
+		}
+		catch (Exception ex)
+		{
+			this.ShowErrorMessage(ex.Message, "Error While Get Blank Page! ", ex);
+			return false;
+		}
+		finally
+		{
+		}
+	}
+
+
+
+
+
+
+
+
+
+
+
+
 create table of contents in html to pdf with links using asp.net spire.pdf
 
 
