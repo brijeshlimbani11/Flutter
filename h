@@ -1,3 +1,141 @@
+using Syncfusion.Pdf;
+using Syncfusion.Pdf.Graphics;
+using Syncfusion.Pdf.Interactive;
+using System.Drawing
+
+
+PdfDocument document = null;
+PdfFont font = null;
+PdfBrush brush = null;
+float yPos;
+private void button1_Click(object sender, EventArgs e)
+{
+    //Initialize a new instance for PdfDocuemnt
+    document = new PdfDocument();
+    //Set font for TOC and bookmark contents
+    font = new PdfStandardFont(PdfFontFamily.Helvetica, 10f);
+    //Set brush for TOC and bookmark contents
+    brush = new PdfSolidBrush(Color.Black);
+    //Add page for TOC
+    PdfSection SectionTOC = document.Sections.Add();
+    PdfPage pageTOC = SectionTOC.Pages.Add();
+    PdfStringFormat format = new PdfStringFormat(PdfTextAlignment.Center, PdfVerticalAlignment.Middle);
+    pageTOC.Graphics.DrawString("Table Of Contents", font, brush, new RectangleF(PointF.Empty, new SizeF(pageTOC.Graphics.ClientSize.Width, 20)), format);
+    //Draw contents, bookmarks, and table of contents
+    PdfSection SectionContent = document.Sections.Add();
+    yPos = 30;
+    for (int i = 1; i <= 2; i++)
+    {
+        PdfPage pageContent = SectionContent.Pages.Add();
+        //Add bookmark in PDF document
+        PdfBookmark bookmark = AddBookmark(pageContent, pageTOC, "Chapter " + i, new PointF(10, 30));
+        //Add sections to bookmark
+        PdfBookmark section1 = AddSection(bookmark, pageContent, pageTOC, "Section " + i + ".1", new PointF(30, 50), false);
+        //Add subsections to section
+        PdfBookmark subsection1 = AddSection(section1, pageContent, pageTOC, "Paragraph " + i + ".1.1", new PointF(50, 70), true);
+        PdfBookmark subsection2 = AddSection(section1, pageContent, pageTOC, "Paragraph " + i + ".1.2", new PointF(50, 170), true);
+        PdfBookmark subsection3 = AddSection(section1, pageContent, pageTOC, "Paragraph " + i + ".1.3", new PointF(50, 270), true);
+        PdfBookmark section2 = AddSection(bookmark, pageContent, pageTOC, "Section " + i + ".2", new PointF(30, 420), false);
+        PdfBookmark subsection4 = AddSection(section2, pageContent, pageTOC, "Paragraph " + i + ".2.1", new PointF(50, 440), true);
+        PdfBookmark subsection5 = AddSection(section2, pageContent, pageTOC, "Paragraph " + i + ".2.2", new PointF(50, 570), true);
+        PdfBookmark subsection6 = AddSection(section2, pageContent, pageTOC, "Paragraph " + i + ".2.3", new PointF(50, 680), true);
+    }
+    document.Save("TableOfContents.pdf");
+    document.Close(true);
+}
+public PdfBookmark AddBookmark(PdfPage page, PdfPage toc, string title, PointF point)
+{
+    PdfGraphics graphics = page.Graphics;
+    //Add bookmark in PDF document
+    PdfBookmark bookmarks = document.Bookmarks.Add(title);
+    //Draw the content in the PDF page
+    graphics.DrawString(title, font, brush, new PointF(point.X, point.Y));
+    //Add table of contents
+    AddTableOfcontents(page, toc, title, point);
+    //Adding bookmark with named destination
+    PdfNamedDestination namedDestination = new PdfNamedDestination(title);
+    namedDestination.Destination = new PdfDestination(page, new PointF(point.X, point.Y));
+    namedDestination.Destination.Mode = PdfDestinationMode.FitToPage;
+    document.NamedDestinationCollection.Add(namedDestination);
+    bookmarks.NamedDestination = namedDestination;
+    return bookmarks;
+}
+public PdfBookmark AddSection(PdfBookmark bookmark, PdfPage page, PdfPage toc, string title, PointF point, bool isSubSection)
+{
+    PdfGraphics graphics = page.Graphics;
+    //Add bookmark in PDF document
+    PdfBookmark bookmarks = bookmark.Add(title);
+    //Draw the content in the PDF page
+    graphics.DrawString(title, font, brush, new PointF(point.X, point.Y));
+    //Add table of contents
+    AddTableOfcontents(page, toc, title, point);
+    //Adding bookmark with named destination
+    PdfNamedDestination namedDestination = new PdfNamedDestination(title);
+    namedDestination.Destination = new PdfDestination(page, new PointF(point.X, point.Y));
+    if (isSubSection == true)
+        namedDestination.Destination.Zoom = 2f;
+    else
+        namedDestination.Destination.Zoom = 1f;
+    document.NamedDestinationCollection.Add(namedDestination);
+    bookmarks.NamedDestination = namedDestination;
+    return bookmarks;
+}
+public void AddTableOfcontents(PdfPage page, PdfPage toc, string title, PointF point)
+{
+    //Draw title in TOC
+    PdfTextElement element = new PdfTextElement(title, font, PdfBrushes.Blue);
+    //Set layout format for pagination of TOC
+    PdfLayoutFormat format = new PdfLayoutFormat();
+    format.Break = PdfLayoutBreakType.FitPage;
+    format.Layout = PdfLayoutType.Paginate;
+    PdfLayoutResult result = element.Draw(toc, new PointF(point.X, yPos), format);
+    //Draw page number in TOC
+    PdfTextElement pageNumber = new PdfTextElement(document.Pages.IndexOf(page).ToString(), font, brush);
+    pageNumber.Draw(toc, new PointF(toc.Graphics.ClientSize.Width - 40, yPos));
+    //Creates a new document link annotation
+    RectangleF bounds = result.Bounds;
+    bounds.Width = toc.Graphics.ClientSize.Width - point.X;
+    PdfDocumentLinkAnnotation documentLinkAnnotation = new PdfDocumentLinkAnnotation(bounds);
+    documentLinkAnnotation.AnnotationFlags = PdfAnnotationFlags.NoRotate;
+    documentLinkAnnotation.Text = title;
+    documentLinkAnnotation.Color = Color.Transparent;
+    //Sets the destination
+    documentLinkAnnotation.Destination = new PdfDestination(page);
+    documentLinkAnnotation.Destination.Location = point;
+    //Adds this annotation to a new page
+    toc.Annotations.Add(documentLinkAnnotation);
+    if (toc != result.Page)
+    {
+        yPos = result.Bounds.Height + 5;
+    }
+    else
+    {
+        yPos += result.Bounds.Height + 5;
+    }
+    toc = result.Page;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 using Spire.Pdf;
 using Spire.Pdf.Actions;
 using Spire.Pdf.Annotations;
