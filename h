@@ -1,3 +1,102 @@
+using Spire.Pdf;
+using Spire.Pdf.Actions;
+using Spire.Pdf.Annotations;
+using Spire.Pdf.General;
+using Spire.Pdf.Graphics;
+using System;
+using System.Drawing;
+
+namespace TableOfContents
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            //Initialize an instance of the PdfDocument class
+            PdfDocument doc = new PdfDocument();
+            //Load a PDF document
+            doc.LoadFromFile("Sample.PDF");
+
+            //Get the page count of the document
+            int pageCount = doc.Pages.Count;
+
+            //Insert a new page into the pdf document as the first page
+            PdfPageBase tocPage = doc.Pages.Insert(0);
+
+            //Draw TOC title on the new page
+            string title = "Table of Contents";
+            PdfTrueTypeFont titleFont = new PdfTrueTypeFont(new Font("Arial", 20, FontStyle.Bold));
+            PdfStringFormat centerAlignment = new PdfStringFormat(PdfTextAlignment.Center, PdfVerticalAlignment.Middle);
+            PointF location = new PointF(tocPage.Canvas.ClientSize.Width / 2, titleFont.MeasureString(title).Height + 10);
+            tocPage.Canvas.DrawString(title, titleFont, PdfBrushes.CornflowerBlue, location, centerAlignment);
+
+            //Draw TOC content on the new page
+            PdfTrueTypeFont titlesFont = new PdfTrueTypeFont(new Font("Arial", 14));
+            String[] titles = new String[pageCount];
+            for (int i = 0; i < titles.Length; i++)
+            {
+                titles[i] = string.Format("This is page {0}", i + 1);
+            }
+            float y = titleFont.MeasureString(title).Height + 10;
+            float x = 0;
+
+            //Draw page numbers of the target pages on the new page
+            for (int i = 1; i <= pageCount; i++)
+            {
+                string text = titles[i - 1];
+                SizeF titleSize = titlesFont.MeasureString(text);
+
+                PdfPageBase navigatedPage = doc.Pages[i];
+
+                string pageNumText = (i + 1).ToString();
+                SizeF pageNumTextSize = titlesFont.MeasureString(pageNumText);
+                tocPage.Canvas.DrawString(text, titlesFont, PdfBrushes.CadetBlue, 0, y);
+                float dotLocation = titleSize.Width + 2 + x;
+                float pageNumlocation = tocPage.Canvas.ClientSize.Width - pageNumTextSize.Width;
+                for (float j = dotLocation; j < pageNumlocation; j++)
+                {
+                    if (dotLocation >= pageNumlocation)
+                    {
+                        break;
+                    }
+                    tocPage.Canvas.DrawString(".", titlesFont, PdfBrushes.Gray, dotLocation, y);
+                    dotLocation += 3;
+                }
+                tocPage.Canvas.DrawString(pageNumText, titlesFont, PdfBrushes.CadetBlue, pageNumlocation, y);
+
+                //Add actions that will take you to the target pages when clicked on to the new page
+                location = new PointF(0, y);
+                RectangleF titleBounds = new RectangleF(location, new SizeF(tocPage.Canvas.ClientSize.Width, titleSize.Height));
+                PdfDestination Dest = new PdfDestination(navigatedPage, new PointF(-doc.PageSettings.Margins.Top, -doc.PageSettings.Margins.Left));
+                PdfActionAnnotation action = new PdfActionAnnotation(titleBounds, new PdfGoToAction(Dest));
+                action.Border = new PdfAnnotationBorder(0);
+                (tocPage as PdfNewPage).Annotations.Add(action);
+                y += titleSize.Height + 10;
+            }
+
+            //Save the result pdf document
+            doc.SaveToFile("AddTableOfContents.pdf");
+            doc.Close();
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 private bool CreateTOC(string SubjectNo, string foldername, string Subjectinitial)
 	{
 		FileInfo fInfo = null;
