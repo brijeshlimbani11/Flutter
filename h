@@ -1,3 +1,28 @@
+private void DrawBookmark(PdfPageBase contentPage, PdfPageBase tocPage, string title, PointF point)
+{
+    contentPage.Canvas.DrawString(title, new PdfFont(PdfFontFamily.Helvetica, 10f), new PdfSolidBrush(Color.Black), point);
+
+    PdfDestination dest = new PdfDestination(contentPage);
+    dest.Location = new PointF(0, contentPage.Size.Height - point.Y);
+
+    PdfBookmark bookmark = new PdfBookmark(title); // Use the constructor with title parameter
+    bookmark.Destination = dest;
+
+    // If the root bookmark (tocPage.Bookmarks.Count == 0)
+    if (tocPage.Bookmarks.Count == 0)
+    {
+        tocPage.Bookmarks.Add(bookmark);
+    }
+    else // Add as child to the last bookmark
+    {
+        tocPage.Bookmarks[tocPage.Bookmarks.Count - 1].SubBookmarks.Add(bookmark);
+    }
+}
+
+
+
+
+
 using Spire.Pdf;
 using System;
 using System.Drawing;
