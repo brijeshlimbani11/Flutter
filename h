@@ -55,6 +55,108 @@ namespace SpirePdfExample
 
         private void DrawChapter(PdfPageBase contentPage, PdfPageBase tocPage, int chapterNumber, ref float yPos)
         {
+            DrawBookmark(document, tocPage, "Chapter " + chapterNumber, contentPage, yPos);
+            yPos += 20;
+
+            for (int sectionNumber = 1; sectionNumber <= 2; sectionNumber++)
+            {
+                DrawSection(contentPage, tocPage, chapterNumber, sectionNumber, ref yPos);
+            }
+        }
+
+        private void DrawSection(PdfPageBase contentPage, PdfPageBase tocPage, int chapterNumber, int sectionNumber, ref float yPos)
+        {
+            DrawBookmark(document, tocPage, "Section " + chapterNumber + "." + sectionNumber, contentPage, yPos);
+            yPos += 20;
+
+            for (int paragraphNumber = 1; paragraphNumber <= 3; paragraphNumber++)
+            {
+                DrawParagraph(contentPage, tocPage, chapterNumber, sectionNumber, paragraphNumber, ref yPos);
+            }
+        }
+
+        private void DrawParagraph(PdfPageBase contentPage, PdfPageBase tocPage, int chapterNumber, int sectionNumber, int paragraphNumber, ref float yPos)
+        {
+            DrawBookmark(document, tocPage, "Paragraph " + chapterNumber + "." + sectionNumber + "." + paragraphNumber, contentPage, yPos);
+            yPos += 20;
+        }
+
+        private void DrawBookmark(PdfDocument document, PdfPageBase tocPage, string title, PdfPageBase contentPage, float yPos)
+        {
+            contentPage.Canvas.DrawString(title, new PdfTrueTypeFont(new Font("Helvetica", 10f), true), PdfBrushes.Black, new PointF(0, yPos));
+
+            PdfDestination dest = new PdfDestination(contentPage);
+            dest.Location = new PointF(0, contentPage.Size.Height - yPos);
+
+            PdfOutlineItem bookmark = new PdfOutlineItem(title);
+            bookmark.Destination = dest;
+            tocPage.Outlines.Add(bookmark);
+        }
+    }
+}
+
+
+
+
+
+
+using Spire.Pdf;
+using Spire.Pdf.Annotations;
+using Spire.Pdf.General;
+using Spire.Pdf.Graphics;
+using System;
+using System.Drawing;
+
+namespace SpirePdfExample
+{
+    public partial class Default : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void btnGeneratePDF_Click(object sender, EventArgs e)
+        {
+            PdfDocument document = new PdfDocument();
+            PdfPageBase tocPage = document.Pages.Add();
+            PdfPageBase contentPage = document.Pages.Add();
+
+            DrawTOCHeader(tocPage);
+            DrawContents(contentPage, tocPage);
+
+            string filePath = Server.MapPath("~/TableOfContents.pdf");
+            document.SaveToFile(filePath);
+            document.Close();
+
+            Response.Clear();
+            Response.ContentType = "application/pdf";
+            Response.AppendHeader("Content-Disposition", "attachment; filename=TableOfContents.pdf");
+            Response.TransmitFile(filePath);
+            Response.End();
+        }
+
+        private void DrawTOCHeader(PdfPageBase page)
+        {
+            PdfStringFormat format = new PdfStringFormat();
+            format.Alignment = PdfTextAlignment.Center;
+            format.LineAlignment = PdfVerticalAlignment.Middle;
+
+            page.Canvas.DrawString("Table Of Contents", new PdfTrueTypeFont(new Font("Helvetica", 10f), true), PdfBrushes.Black, new RectangleF(0, 0, page.Canvas.ClientSize.Width, 20), format);
+        }
+
+        private void DrawContents(PdfPageBase contentPage, PdfPageBase tocPage)
+        {
+            float yPos = 30;
+
+            for (int i = 1; i <= 2; i++)
+            {
+                DrawChapter(contentPage, tocPage, i, ref yPos);
+            }
+        }
+
+        private void DrawChapter(PdfPageBase contentPage, PdfPageBase tocPage, int chapterNumber, ref float yPos)
+        {
             DrawBookmark(contentPage, tocPage, "Chapter " + chapterNumber, new PointF(10, yPos));
             yPos += 20;
 
