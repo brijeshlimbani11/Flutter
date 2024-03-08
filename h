@@ -5,6 +5,32 @@ private void DrawBookmark(PdfPageBase contentPage, PdfPageBase tocPage, string t
     PdfDestination dest = new PdfDestination(contentPage);
     dest.Location = new PointF(0, contentPage.Size.Height - point.Y);
 
+    PdfOutline outline = new PdfOutline(title, dest); // Create PdfOutline with title and destination
+
+    // If the root outline (tocPage.Outlines.Count == 0)
+    if (tocPage.Outlines.Count == 0)
+    {
+        tocPage.Outlines.Add(outline);
+    }
+    else // Add as child to the last outline
+    {
+        tocPage.Outlines[tocPage.Outlines.Count - 1].SubPoints.Add(outline);
+    }
+}
+
+
+
+
+
+
+
+private void DrawBookmark(PdfPageBase contentPage, PdfPageBase tocPage, string title, PointF point)
+{
+    contentPage.Canvas.DrawString(title, new PdfFont(PdfFontFamily.Helvetica, 10f), new PdfSolidBrush(Color.Black), point);
+
+    PdfDestination dest = new PdfDestination(contentPage);
+    dest.Location = new PointF(0, contentPage.Size.Height - point.Y);
+
     PdfBookmark bookmark = new PdfBookmark(title); // Use the constructor with title parameter
     bookmark.Destination = dest;
 
