@@ -1,3 +1,44 @@
+// Assuming pdfConverter is an instance of Spire.Pdf.PdfDocument
+PdfDocument pdfDocument = new PdfDocument();
+pdfDocument.LoadFromFile("your_pdf_file_path.pdf");
+
+if (ddlPrinttype.SelectedValue.ToUpper() == "DRAFT")
+{
+    // Create a watermark template
+    PdfTemplate template = new PdfTemplate(300, 100);
+    PdfTrueTypeFont font = new PdfTrueTypeFont(new Font("Times New Roman", 75, FontStyle.Bold), true);
+    PdfBrush brush = PdfBrushes.Blue;
+    template.Graphics.SetTransparency(20); // Setting opacity
+
+    // Rotate the text element
+    template.Graphics.RotateTransform(45);
+
+    // Draw the text on the template
+    template.Graphics.DrawString(strProfileStatus + " Draft Copy", font, brush, PointF.Empty);
+
+    // Add the watermark to each page
+    foreach (PdfPageBase page in pdfDocument.Pages)
+    {
+        page.Canvas.Save();
+        page.Canvas.SetTransparency(20);
+        page.Canvas.RotateTransform(45);
+        page.Canvas.DrawTemplate(template, new PointF(50, 250));
+        page.Canvas.Restore();
+    }
+}
+
+// Save the modified PDF document
+pdfDocument.SaveToFile("output_pdf_file_path.pdf");
+pdfDocument.Close();
+
+
+
+
+
+
+
+
+
 d1 = pdfconverter.ConvertHtmlToPdfDocumentObject(htmlcontent, string.Empty);
                 if (this.ddlPrinttype.SelectedValue.ToUpper() == "DRAFT")
                 {
