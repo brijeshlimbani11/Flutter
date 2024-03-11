@@ -1,3 +1,19 @@
+d1 = pdfconverter.ConvertHtmlToPdfDocumentObject(htmlcontent, string.Empty);
+                if (this.ddlPrinttype.SelectedValue.ToUpper() == "DRAFT")
+                {
+                    watermarkTextFont = new System.Drawing.Font("Times New Roman", 75, FontStyle.Bold, GraphicsUnit.Point);
+                    watermarkTextElement = new TextElement(50, 250, strProfileStatus + " Draft Copy", watermarkTextFont);
+                    watermarkTextElement.ForeColor = System.Drawing.Color.Blue;
+                    watermarkTextElement.Opacity = 20;
+                    watermarkTextElement.TextAngle = 45;
+                    foreach (Winnovative.PdfPage PdfPage in d1.Pages)
+                    {
+                        PdfPage.AddElement(watermarkTextElement);
+                    }
+                }
+
+
+
 using Spire.Pdf;
 using Spire.Pdf.Graphics;
 using System;
