@@ -1,3 +1,71 @@
+PdfDocument pdfDocument = new PdfDocument();
+
+// Create a PDF page instance
+PdfPageBase page = pdfDocument.Pages.Add();
+
+// Create an HTML to PDF element for the header
+HtmlToPdfElement Header1 = new HtmlToPdfElement(headercontent, string.Empty);
+
+// Set the width of the HTML viewer based on selected orientation
+if (ddlOrientation.SelectedValue.ToString().ToUpper().ToString() == "A4")
+{
+    Header1.HtmlViewerWidth = 662; // Previous 750, 647
+}
+else if (ddlOrientation.SelectedValue.ToString().ToUpper().ToString() == "LETTER")
+{
+    Header1.HtmlViewerWidth = 684; // Previous 750, 647
+}
+
+// Disable fitting the width of the header to the page width
+Header1.FitWidth = false;
+
+// Add the header element to the PDF header
+page.Header = Header1;
+
+// Set up table of contents options
+pdfDocument.TableOfContents.Enabled = true;
+pdfDocument.TableOfContents.Title = "Table of Contents";
+
+// Set up table of contents styles for level 1
+PdfTocStyle tocStyle = pdfDocument.TableOfContents[0];
+tocStyle.Level1Style = new PdfTocTextStyle(new PdfFont(PdfFontFamily.Helvetica, 16), Color.Black, true, true);
+
+// Add authenticated information to PDF footer if available
+if (!string.IsNullOrEmpty(hdnSubSelection.Value.Trim()))
+{
+    PdfPageTemplateElement footer = new PdfPageTemplateElement(page.Graphics.ClientSize.Width, 30);
+    footer.Foreground = true;
+
+    // Add authenticated by and authenticated on information
+    PdfFont pdfFont = new PdfFont(PdfFontFamily.Helvetica, 10);
+    footer.Graphics.DrawString("[Authenticated By:" + (Session[VS_AuthenticatedBy] == null ? null : Convert.ToString(Session[VS_AuthenticatedBy])) + "]", pdfFont, PdfBrushes.Black, new PointF(0, 15));
+    footer.Graphics.DrawString("[Authenticated On:" + (Session[VS_AuthenticatedOn] == null ? null : Convert.ToString(Session[VS_AuthenticatedOn])) + "]", pdfFont, PdfBrushes.Black, new PointF(0, 28));
+
+    // Add footer text with disclaimer and placeholders for page numbers
+    PdfPageNumberField pageNumber = new PdfPageNumberField();
+    PdfPageCountField pageCount = new PdfPageCountField();
+    PdfCompositeField compositeField = new PdfCompositeField(pdfFont, PdfBrushes.Black, "*This is an electronically authenticated report.                                            Page {0} of {1}", pageNumber, pageCount);
+    compositeField.StringFormat = new PdfStringFormat(PdfTextAlignment.Right);
+    compositeField.Bounds = footer.Bounds;
+    compositeField.Draw(footer.Graphics);
+
+    // Add the footer to the PDF page
+    page.Footer = footer;
+}
+
+// Set htmlcontent to a value stored in HFHeaderLabel
+htmlcontent = this.HFHeaderLabel.Value.ToString();
+
+// Disable a button named BtnGeneratePdf
+BtnGeneratePdf.Enabled = false;
+
+
+
+
+
+
+
+
  HtmlToPdfElement Header1 = new HtmlToPdfElement(headercontent, string.Empty);
                 if (ddlOrientation.SelectedValue.ToString().ToUpper().ToString() == "A4")
                 {
