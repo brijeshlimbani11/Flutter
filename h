@@ -1,3 +1,36 @@
+ public bool FindBlankPage(ref string DocRemove, byte[] bytes)
+	{
+		try
+		{
+			iTextSharp.text.pdf.PdfReader oreader = new iTextSharp.text.pdf.PdfReader(bytes);
+			using (MemoryStream stream = new MemoryStream())
+			{
+				iTextSharp.text.pdf.PdfReader reader = new iTextSharp.text.pdf.PdfReader(bytes);
+				bytes = null;
+				for (int i = 1; i <= reader.NumberOfPages; i++)
+				{
+					object sOut = "";
+					iTextSharp.text.pdf.parser.LocationTextExtractionStrategy its = new iTextSharp.text.pdf.parser.LocationTextExtractionStrategy();
+					sOut = iTextSharp.text.pdf.parser.PdfTextExtractor.GetTextFromPage(oreader, i, its);
+					if (Convert.ToString(sOut) == "")
+					{
+						DocRemove += (i - 1).ToString() + ",";
+					}
+				}
+				stream.Dispose();
+			}
+			return true;
+		}
+		catch (Exception ex)
+		{
+			this.ShowErrorMessage(ex.Message, "Error While Get Blank Page! ", ex);
+			return false;
+		}
+		finally
+		{
+		}
+	}
+
 
 
 using Spire.Pdf;
