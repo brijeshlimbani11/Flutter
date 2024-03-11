@@ -1,3 +1,56 @@
+public bool GetBlankpage(ref Spire.Pdf.PdfDocument d1, Spire.Pdf.PdfDocument d2)
+{
+    byte[] bytes = null;
+    string DocRemove = string.Empty;
+    string[] DocRemove_arry = null;
+    try
+    {
+        using (MemoryStream stream = new MemoryStream())
+        {
+            d2.SaveToStream(stream);
+            bytes = stream.ToArray();
+
+            using (Spire.Pdf.PdfDocumentBase document = new Spire.Pdf.PdfDocument())
+            {
+                document.LoadFromStream(stream);
+
+                for (int i = 0; i < document.Pages.Count; i++)
+                {
+                    string sOut = "";
+                    sOut = document.Pages[i].ExtractText();
+                    if (string.IsNullOrEmpty(sOut.Trim()))
+                    {
+                        DocRemove += i.ToString() + ",";
+                    }
+                }
+            }
+        }
+
+        if (!string.IsNullOrEmpty(DocRemove))
+        {
+            DocRemove_arry = DocRemove.TrimEnd(',').Split(',');
+            for (int i = DocRemove_arry.Length - 1; i >= 0; i--)
+            {
+                d1.Pages.RemoveAt(Convert.ToInt32(DocRemove_arry[i]));
+            }
+        }
+        return true;
+
+    }
+    catch (Exception ex)
+    {
+        // Handle exception
+        return false;
+    }
+}
+
+
+
+
+
+
+
+
 using System;
 using System.Drawing;
 using System.Web;
