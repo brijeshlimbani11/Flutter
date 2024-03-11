@@ -1,3 +1,46 @@
+using Spire.Pdf;
+using Spire.Pdf.Graphics;
+using System;
+using System.IO;
+
+public bool FindBlankPage(ref string DocRemove, byte[] bytes)
+{
+    try
+    {
+        using (MemoryStream stream = new MemoryStream())
+        {
+            stream.Write(bytes, 0, bytes.Length);
+            PdfDocumentBase doc = new PdfDocument();
+            doc.LoadFromStream(stream);
+
+            for (int i = 0; i < doc.Pages.Count; i++)
+            {
+                PdfPageBase page = doc.Pages[i];
+                string text = page.ExtractText();
+
+                if (string.IsNullOrWhiteSpace(text))
+                {
+                    DocRemove += i.ToString() + ",";
+                }
+            }
+        }
+        return true;
+    }
+    catch (Exception ex)
+    {
+        // Handle exceptions
+        Console.WriteLine("Error: " + ex.Message);
+        return false;
+    }
+}
+
+
+
+
+
+
+
+
  public bool FindBlankPage(ref string DocRemove, byte[] bytes)
 	{
 		try
