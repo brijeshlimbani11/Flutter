@@ -40,6 +40,53 @@
 
 
 
+
+
+
+
+
+ HtmlToPdfElement Header1 = new HtmlToPdfElement(headercontent, string.Empty);
+                if (ddlOrientation.SelectedValue.ToString().ToUpper().ToString() == "A4")
+                {
+                    Header1.HtmlViewerWidth = 662; //'Previous 750, 647
+                }
+                else if (ddlOrientation.SelectedValue.ToString().ToUpper().ToString() == "LETTER")
+                {
+                    Header1.HtmlViewerWidth = 684; //'Previous 750, 647
+                }
+                Header1.FitWidth = false;
+                pdfconverter.PdfHeaderOptions.AddElement(Header1);
+
+                pdfconverter.TableOfContentsOptions.AutoTocItemsEnabled = true;
+                string level1TextStyle = "font-family:'Times New Roman'; font-size:16px; text-decoration: underline;";
+                pdfconverter.TableOfContentsOptions.SetItemStyle(1, level1TextStyle);
+
+                string level1PageNumberStyle = "padding-right:3px; font-family:'Times New Roman'; font-size:16px; text-decoration: underline; font-weight:bold";
+                pdfconverter.TableOfContentsOptions.SetPageNumberStyle(1, level1PageNumberStyle);
+
+                if (!string.IsNullOrEmpty(hdnSubSelection.Value.Trim()))
+                {
+                    pdfconverter.PdfFooterOptions.AddElement(new TextElement(0, 15, "[Authenticated By:" + (Session[VS_AuthenticatedBy] == null ? null : Convert.ToString(Session[VS_AuthenticatedBy])) + "]", pdfFont));
+                    pdfconverter.PdfFooterOptions.AddElement(new TextElement(0, 28, "[Authenticated On:" + (Session[VS_AuthenticatedOn] == null ? null : Convert.ToString(Session[VS_AuthenticatedOn])) + "]", pdfFont));
+                }
+
+                pdfconverter.PdfFooterOptions.PageNumberingStartIndex = 0;
+                pdfconverter.PdfFooterOptions.AddElement(new LineElement(0, 0, pdfconverter.PdfDocumentOptions.PdfPageSize.Width - pdfconverter.PdfDocumentOptions.LeftMargin - pdfconverter.PdfDocumentOptions.RightMargin, 0));
+                TextElement footerText = new TextElement(0, 1, "*This is an electronically authenticated report.                                            Page &p; of &P;                       ", new Font(new FontFamily("Times New Roman"), 12, GraphicsUnit.Point));
+                footerText.TextAlign = HorizontalTextAlign.Right;
+                footerText.ForeColor = Color.Navy;
+                footerText.EmbedSysFont = true;
+                pdfconverter.PdfFooterOptions.AddElement(footerText);
+
+                htmlcontent = this.HFHeaderLabel.Value.ToString();
+                BtnGeneratePdf.Enabled = false;
+
+
+
+
+
+
+
 string htmlcontent = string.Empty;
         string headercontent = string.Empty;
         string data = string.Empty;
