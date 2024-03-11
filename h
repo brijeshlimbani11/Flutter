@@ -1,5 +1,184 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using Spire.Pdf;
+using Spire.Pdf.Actions;
+using Spire.Pdf.Annotations;
+using Spire.Pdf.Bookmarks;
+using Spire.Pdf.General;
+using Spire.Pdf.Graphics;
+
+namespace practice6
+{
+    public partial class GeneratePdfWithToc : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void btnGeneratePdf_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Initialize an instance of the PdfDocument class
+                PdfDocument doc = new PdfDocument();
+                // Load a PDF document
+                //doc.LoadFromFile("table.PDF");
+                string fullPath = Server.MapPath("~/table.pdf");
+                doc.LoadFromFile(fullPath);
+
+
+                // Get the page count of the document
+                int pageCount = doc.Pages.Count;
+
+                // Insert a new page into the PDF document as the first page
+                PdfPageBase tocPage = doc.Pages.Insert(0);
+
+                // Draw TOC title on the new page
+                string title = "Table of Contents";
+                PdfTrueTypeFont titleFont = new PdfTrueTypeFont(new Font("Arial", 20, FontStyle.Bold));
+                PdfStringFormat centerAlignment = new PdfStringFormat(PdfTextAlignment.Center, PdfVerticalAlignment.Middle);
+                PointF location = new PointF(tocPage.Canvas.ClientSize.Width / 2, titleFont.MeasureString(title).Height + 10);
+                tocPage.Canvas.DrawString(title, titleFont, PdfBrushes.CornflowerBlue, location, centerAlignment);
+
+                // Draw TOC content on the new page
+                PdfTrueTypeFont titlesFont = new PdfTrueTypeFont(new Font("Arial", 14));
+                String[] titles = new String[pageCount];
+                for (int i = 0; i < titles.Length; i++)
+                {
+                    titles[i] = string.Format("This is page {0}", i + 1);
+                }
+                float y = titleFont.MeasureString(title).Height + 10;
+                float x = 0;
+
+                // Draw page numbers of the target pages on the new page
+                for (int i = 1; i <= pageCount; i++)
+                {
+                    string text = titles[i - 1];
+                    SizeF titleSize = titlesFont.MeasureString(text);
+
+                    PdfPageBase navigatedPage = doc.Pages[i];
+
+                    string pageNumText = (i + 1).ToString();
+                    SizeF pageNumTextSize = titlesFont.MeasureString(pageNumText);
+                    tocPage.Canvas.DrawString(text, titlesFont, PdfBrushes.CadetBlue, 0, y);
+                    float dotLocation = titleSize.Width + 2 + x;
+                    float pageNumLocation = tocPage.Canvas.ClientSize.Width - pageNumTextSize.Width;
+                    for (float j = dotLocation; j < pageNumLocation; j++)
+                    {
+                        if (dotLocation >= pageNumLocation)
+                        {
+                            break;
+                        }
+                        tocPage.Canvas.DrawString(".", titlesFont, PdfBrushes.Gray, dotLocation, y);
+                        dotLocation += 3;
+                    }
+                    tocPage.Canvas.DrawString(pageNumText, titlesFont, PdfBrushes.CadetBlue, pageNumLocation, y);
+
+                    // Add actions that will take you to the target pages when clicked on to the new page
+                    location = new PointF(0, y);
+                    RectangleF titleBounds = new RectangleF(location, new SizeF(tocPage.Canvas.ClientSize.Width, titleSize.Height));
+                    PdfDestination dest = new PdfDestination(navigatedPage, new PointF(-doc.PageSettings.Margins.Top, -doc.PageSettings.Margins.Left));
+                    PdfActionAnnotation action = new PdfActionAnnotation(titleBounds, new PdfGoToAction(dest));
+                    action.Border = new PdfAnnotationBorder(0);
+                    (tocPage as PdfNewPage).Annotations.Add(action);
+                    y += titleSize.Height + 10;
+                }
+
+                // Save the PDF document
+                string filePath = Server.MapPath("~/TableOfContents.pdf");
+                doc.SaveToFile(filePath);
+                doc.Close();
+                Response.Write("pdf are created sucssecfully!");
+            }
+            catch (Exception ex)
+            {
+                Response.Write("PDF are not created");
+            }
+
+        }
+    }
+}
+
+
+
+
+static void Main(string[] args)
+        {
+            //create a PDF document
+            PdfDocument doc = new PdfDocument();
+            doc.PageSettings.Size = PdfPageSize.A4;
+
+            //reset the default margins to 0
+            doc.PageSettings.Margins = new PdfMargins(0);
+
+            //create a PdfMargins object, the parameters indicate the page margins you want to set
+            PdfMargins margins = new PdfMargins(60, 60, 60, 60);
+
+            //create a header template with content and apply it to page template
+            doc.Template.Top = CreateHeaderTemplate(doc, margins);
+
+            //apply blank templates to other parts of page template
+            doc.Template.Bottom = new PdfPageTemplateElement(doc.PageSettings.Size.Width, margins.Bottom);
+            doc.Template.Left = new PdfPageTemplateElement(margins.Left, doc.PageSettings.Size.Height);
+            doc.Template.Right = new PdfPageTemplateElement(margins.Right, doc.PageSettings.Size.Height);
+        }
+        static PdfPageTemplateElement CreateHeaderTemplate(PdfDocument doc, PdfMargins margins)
+        {
+            //get page size
+            SizeF pageSize = doc.PageSettings.Size;
+
+            //create a PdfPageTemplateElement object as header space
+            PdfPageTemplateElement headerSpace = new PdfPageTemplateElement(pageSize.Width, margins.Top);
+            headerSpace.Foreground = false;
+
+            //declare two float variables
+            float x = margins.Left;
+            float y = 0;
+
+            //draw image in header space 
+            PdfImage headerImage = PdfImage.FromFile("logo.png");
+            float width = headerImage.Width / 3;
+            float height = headerImage.Height / 3;
+            headerSpace.Graphics.DrawImage(headerImage, x, margins.Top - height - 2, width, height);
+
+            //draw line in header space
+            PdfPen pen = new PdfPen(PdfBrushes.Gray, 1);
+            headerSpace.Graphics.DrawLine(pen, x, y + margins.Top - 2, pageSize.Width - x, y + margins.Top - 2);
+
+            //draw text in header space
+            PdfTrueTypeFont font = new PdfTrueTypeFont(new Font("Impact", 25f, FontStyle.Bold));
+            PdfStringFormat format = new PdfStringFormat(PdfTextAlignment.Left);
+            String headerText = "HEADER TEXT";
+            SizeF size = font.MeasureString(headerText, format);
+            headerSpace.Graphics.DrawString(headerText, font, PdfBrushes.Gray, pageSize.Width - x - size.Width - 2, margins.Top - (size.Height + 5), format);
+
+            //return headerSpace
+            return headerSpace;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
