@@ -1,3 +1,61 @@
+string htmlcontent = string.Empty;
+        string headercontent = string.Empty;
+        PdfDocument d1 = null;
+        string data = string.Empty;
+        ArrayList stylesheetarraylist = new ArrayList();
+        System.Drawing.Font watermarkTextFont = null;
+        TextElement watermarkTextElement = null;
+        string strProfileStatus = string.Empty;
+        string wStr = string.Empty;
+        string eStr = string.Empty;
+        System.Drawing.Font pdfFont = null;
+        DataSet ds_subject = new DataSet();
+        DataSet ds_header = new DataSet();
+        DataSet ds_SubSample = new DataSet();
+        DataTable dt_subjectMain = new DataTable();
+        DataView dv_subjectmain = null;
+        string ScreeningHdrNo = string.Empty;
+        string SubjId = "";
+        string SubNo = "";
+        string Initials = "";
+        int NodeID = 0;
+        string Gender = string.Empty;
+        int indexrpt = 0;
+        string StrRptNo = null;
+        string project = null;
+        string ProjectNo = null;
+        string SiteId = null;
+        string[] projects = null;
+        string SubjectNo = null;
+        string SubjectInitial = null;
+        StrRptNo = "";
+        SiteId = "";
+        SubjectNo = "_";
+        SubjectInitial = "_";
+        object dt_subjectcopy = new DataTable();
+        string strMappingRequired = "";
+        string strdatetime = "";
+        string[] DocumentsArray = null;
+        string[] DocumentsArray1 = null;
+        FileInfo fInfo = null;
+        FileInfo fInfo1 = null;
+        int ilabreport = 1;
+        string strfilelogopath = "";
+        string strsavelogopath = "";
+        PdfDocument d2 = null;
+        string SubIDForLab = string.Empty;
+        string[] DocumentsArrayForMissingSubject = null;
+        string[] DocumentsArrayZipFiles = null;
+        int ExecuteDataOnlyonce = 0;
+        int ExecuteDataOnlyonceMSR = 0;
+
+
+
+
+
+
+
+
 // Assuming pdfConverter is an instance of Spire.Pdf.PdfDocument
 PdfDocument pdfDocument = new PdfDocument();
 pdfDocument.LoadFromFile("your_pdf_file_path.pdf");
