@@ -1,3 +1,31 @@
+using System;
+using Spire.Pdf;
+
+namespace MergePDFs
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            //Get the paths of the documents to be merged
+            String[] files = new String[] {
+                "C:\\Users\\Administrator\\Desktop\\PDFs\\sample-1.pdf",
+                "C:\\Users\\Administrator\\Desktop\\PDFs\\sample-2.pdf",
+                "C:\\Users\\Administrator\\Desktop\\PDFs\\sample-3.pdf"};
+
+            //Merge these documents and return an object of PdfDocumentBase
+            PdfDocumentBase doc = PdfDocument.MergeFiles(files);
+
+            //Save the result to a PDF file
+            doc.Save("output.pdf", FileFormat.PDF);
+        }
+    }
+}
+
+
+
+
+
 #region Merge PDF
 
 private bool MergePdf(string SubjectNo, string foldername, string subjectinitials)
