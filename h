@@ -12,6 +12,109 @@ namespace YourNamespace
 
         protected void btnMerge_Click(object sender, EventArgs e)
         {
+            if (fileUpload.HasFiles)
+            {
+                try
+                {
+                    string tempFolderPath = Server.MapPath("~/Temp/");
+                    if (!Directory.Exists(tempFolderPath))
+                        Directory.CreateDirectory(tempFolderPath);
+
+                    foreach (var file in fileUpload.PostedFiles)
+                    {
+                        string fileName = Path.Combine(tempFolderPath, Path.GetFileName(file.FileName));
+                        file.SaveAs(fileName);
+                    }
+
+                    string[] pdfFiles = Directory.GetFiles(tempFolderPath, "*.pdf");
+                    string outputFilePath = Server.MapPath("~/MergedPDF.pdf");
+                    MergePDFs(pdfFiles, outputFilePath);
+
+                    lblMessage.Text = "PDF files merged successfully. <a href='MergedPDF.pdf'>Download Merged PDF</a>";
+                    lblMessage.Visible = true;
+                }
+                catch (Exception ex)
+                {
+                    lblMessage.Text = "Error: " + ex.Message;
+                    lblMessage.ForeColor = System.Drawing.Color.Red;
+                    lblMessage.Visible = true;
+                }
+            }
+            else
+            {
+                lblMessage.Text = "Please select PDF files to merge.";
+                lblMessage.ForeColor = System.Drawing.Color.Red;
+                lblMessage.Visible = true;
+            }
+        }
+
+        protected void MergePDFs(string[] pdfFiles, string outputFilePath)
+        {
+            PdfDocument mergedPdf = new PdfDocument();
+
+            foreach (string pdfFile in pdfFiles)
+            {
+                PdfDocument doc = new PdfDocument();
+                doc.LoadFromFile(pdfFile);
+
+                foreach (PdfPageBase page in doc.Pages)
+                {
+                    mergedPdf.Pages.Add(page.Clone() as PdfPageBase);
+                }
+
+                doc.Close();
+            }
+
+            mergedPdf.SaveToFile(outputFilePath);
+            mergedPdf.Close();
+        }
+    }
+}
+
+
+
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="MergePDF.aspx.cs" Inherits="YourNamespace.MergePDF" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Merge PDF Files</title>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
+            <h1>Merge PDF Files</h1>
+            <asp:FileUpload ID="fileUpload" runat="server" AllowMultiple="true" />
+            <br />
+            <asp:Button ID="btnMerge" runat="server" Text="Merge PDFs" OnClick="btnMerge_Click" />
+            <br />
+            <asp:Label ID="lblMessage" runat="server" ForeColor="Green" Visible="false"></asp:Label>
+        </div>
+    </form>
+</body>
+</html>
+
+
+
+
+
+
+
+using System;
+using System.IO;
+using Spire.Pdf;
+
+namespace YourNamespace
+{
+    public partial class MergePDF : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+        }
+
+        protected void btnMerge_Click(object sender, EventArgs e)
+        {
             if (fileInput.HasFiles)
             {
                 try
