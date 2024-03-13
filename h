@@ -1,5 +1,83 @@
 #region Merge PDF
 
+private bool MergePdf(string SubjectNo, string foldername, string subjectinitials)
+{
+    FileInfo fInfo = null;
+    string[] DocumentsArray = null;
+    string PathforLocal = string.Empty;
+    Spire.Pdf.PdfDocument document1 = new Spire.Pdf.PdfDocument();
+    Spire.Pdf.PdfDocument document2 = new Spire.Pdf.PdfDocument();
+
+    try
+    {
+        if (!Directory.Exists(Server.MapPath(ConfigurationManager.AppSettings["uploadfilepath"].Trim()) + "\\" + this.HProjectId.Value.ToString() + "\\" + foldername))
+        {
+            return true;
+        }
+
+        DocumentsArray = System.IO.Directory.GetFiles(Server.MapPath(ConfigurationManager.AppSettings["uploadfilepath"].Trim()) + "\\" + this.HProjectId.Value.ToString() + "\\" + foldername + "\\RptMerge");
+
+        if (DocumentsArray.Length == 0)
+        {
+            return true;
+        }
+
+        for (var i = 0; i < DocumentsArray.Length; i++)
+        {
+            fInfo = new FileInfo(DocumentsArray[i]);
+            if (fInfo.Exists)
+            {
+                if (i == 0)
+                {
+                    document1.LoadFromFile(DocumentsArray[i]);
+                }
+                else
+                {
+                    document2.LoadFromFile(DocumentsArray[i]);
+                    document1.AppendPage(document2.Pages);
+                }
+            }
+        }
+
+        if (DocumentsArray.Length > 0)
+        {
+            document1.SaveToFile(Server.MapPath(ConfigurationManager.AppSettings["uploadfilepath"].Trim()) + "\\" + this.HProjectId.Value.ToString() + "\\" + foldername + "\\Report\\02.pdf");
+            document1.Close();
+
+            for (var i = 0; i < DocumentsArray.Length; i++)
+            {
+                fInfo = new FileInfo(DocumentsArray[i]);
+                if (fInfo.Exists)
+                {
+                    fInfo.Delete();
+                }
+            }
+        }
+
+        if (!this.CreateTOC(SubjectNo, foldername, subjectinitials))
+        {
+            return false;
+        }
+
+        return true;
+    }
+    catch (Exception ex)
+    {
+        this.ShowErrorMessage(ex.Message, "....MergePdf", ex);
+        return false;
+    }
+}
+
+#endregion
+
+
+
+
+
+
+
+#region Merge PDF
+
 	private bool MergePdf(string SubjectNo, string foldername, string subjectinitials)
 	{
 		FileInfo fInfo = null;
