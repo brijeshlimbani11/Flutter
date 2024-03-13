@@ -1,3 +1,110 @@
+<%@ Page Language="C#" AutoEventWireup="true" CodeFile="GeneratePdf.aspx.cs" Inherits="GeneratePdf" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
+            <asp:Button ID="btnGeneratePdf" runat="server" Text="Generate PDF" OnClick="btnGeneratePdf_Click" />
+        </div>
+    </form>
+</body>
+</html>
+
+
+
+
+
+
+using Spire.Pdf;
+using Spire.Pdf.Graphics;
+using System;
+using System.Drawing;
+using System.IO;
+
+public partial class GeneratePdf : System.Web.UI.Page
+{
+    protected void Page_Load(object sender, EventArgs e)
+    {
+    }
+
+    protected void btnGeneratePdf_Click(object sender, EventArgs e)
+    {
+        // Create a PDF document
+        PdfDocument doc = new PdfDocument();
+        doc.PageSettings.Size = PdfPageSize.A4;
+
+        // Reset the default margins to 0
+        doc.PageSettings.Margins = new PdfMargins(0);
+
+        // Create a PdfMargins object, the parameters indicate the page margins you want to set
+        PdfMargins margins = new PdfMargins(60, 60, 60, 60);
+
+        // Create a header template with content and apply it to page template
+        doc.Template.Top = CreateHeaderTemplate(doc, margins);
+
+        // Apply blank templates to other parts of page template
+        doc.Template.Bottom = new PdfPageTemplateElement(doc.PageSettings.Size.Width, margins.Bottom);
+        doc.Template.Left = new PdfPageTemplateElement(margins.Left, doc.PageSettings.Size.Height);
+        doc.Template.Right = new PdfPageTemplateElement(margins.Right, doc.PageSettings.Size.Height);
+
+        // Save the file to a MemoryStream
+        MemoryStream stream = new MemoryStream();
+        doc.SaveToStream(stream);
+        stream.Position = 0;
+
+        // Send the PDF file to the client as a downloadable file
+        Response.Clear();
+        Response.ContentType = "application/pdf";
+        Response.AppendHeader("Content-Disposition", "attachment; filename=PdfHeader.pdf");
+        Response.BinaryWrite(stream.ToArray());
+        Response.End();
+    }
+
+    private PdfPageTemplateElement CreateHeaderTemplate(PdfDocument doc, PdfMargins margins)
+    {
+        // Get page size
+        SizeF pageSize = doc.PageSettings.Size;
+
+        // Create a PdfPageTemplateElement object as header space
+        PdfPageTemplateElement headerSpace = new PdfPageTemplateElement(pageSize.Width, margins.Top);
+        headerSpace.Foreground = false;
+
+        // Declare two float variables
+        float x = margins.Left;
+        float y = 0;
+
+        // Draw image in header space
+        PdfImage headerImage = PdfImage.FromFile(Server.MapPath("logo.png"));
+        float width = headerImage.Width / 3;
+        float height = headerImage.Height / 3;
+        headerSpace.Graphics.DrawImage(headerImage, x, margins.Top - height - 2, width, height);
+
+        // Draw line in header space
+        PdfPen pen = new PdfPen(PdfBrushes.Gray, 1);
+        headerSpace.Graphics.DrawLine(pen, x, y + margins.Top - 2, pageSize.Width - x, y + margins.Top - 2);
+
+        // Draw text in header space
+        PdfTrueTypeFont font = new PdfTrueTypeFont(new Font("Impact", 25f, FontStyle.Bold));
+        PdfStringFormat format = new PdfStringFormat(PdfTextAlignment.Left);
+        String headerText = "HEADER TEXT";
+        SizeF size = font.MeasureString(headerText, format);
+        headerSpace.Graphics.DrawString(headerText, font, PdfBrushes.Gray, pageSize.Width - x - size.Width - 2, margins.Top - (size.Height + 5), format);
+
+        // Return headerSpace
+        return headerSpace;
+    }
+}
+
+
+
+
+
+
 using Spire.Pdf;
 using Spire.Pdf.Graphics;
 using System;
