@@ -29,6 +29,80 @@ namespace YourNamespace
                             // Merge each page of the loaded PDF into the merged PDF
                             foreach (PdfPageBase page in doc.Pages)
                             {
+                                mergedPdf.Pages.Add(page);
+                            }
+                        }
+                    }
+
+                    // Specify the output file path including the desired folder
+                    string outputFolderPath = Server.MapPath("~/MergedPDFs/");
+                    string outputFilePath = Path.Combine(outputFolderPath, "MergedPDF.pdf");
+
+                    // Ensure the output folder exists
+                    Directory.CreateDirectory(outputFolderPath);
+
+                    // Save the merged PDF to the specified output file
+                    mergedPdf.SaveToFile(outputFilePath);
+
+                    lblMessage.Text = "PDF files merged successfully. <a href='MergedPDFs/MergedPDF.pdf'>Download Merged PDF</a>";
+                    lblMessage.Visible = true;
+                }
+                catch (Exception ex)
+                {
+                    lblMessage.Text = "Error: " + ex.Message;
+                    lblMessage.ForeColor = System.Drawing.Color.Red;
+                    lblMessage.Visible = true;
+                }
+                finally
+                {
+                    // Close the merged PDF document
+                    mergedPdf.Close();
+                }
+            }
+            else
+            {
+                lblMessage.Text = "Please select PDF files to merge.";
+                lblMessage.ForeColor = System.Drawing.Color.Red;
+                lblMessage.Visible = true;
+            }
+        }
+    }
+}
+
+
+
+
+using System;
+using System.IO;
+using Spire.Pdf;
+
+namespace YourNamespace
+{
+    public partial class MergePDF : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+        }
+
+        protected void btnMerge_Click(object sender, EventArgs e)
+        {
+            if (fileUpload.HasFiles)
+            {
+                try
+                {
+                    // Create a new PDF document to store merged pages
+                    PdfDocument mergedPdf = new PdfDocument();
+
+                    foreach (var file in fileUpload.PostedFiles)
+                    {
+                        // Load each uploaded PDF file
+                        using (Stream stream = file.InputStream)
+                        {
+                            PdfDocument doc = new PdfDocument(stream);
+
+                            // Merge each page of the loaded PDF into the merged PDF
+                            foreach (PdfPageBase page in doc.Pages)
+                            {
                                 PdfTemplate template = page.CreateTemplate();
                                 mergedPdf.Pages.Add(new PdfPage(template, PdfPageSize.A4));
                             }
