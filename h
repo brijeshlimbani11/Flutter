@@ -1,3 +1,100 @@
+headercontent += "<html><head></head><body>";
+				headercontent += "<table style=\"margin-top: 2px; margin: auto; border: solid 1px black; width: 100%; font-family:'Times New Roman'; font-size:12px; \"align=\"left\">";
+				headercontent += "<tr style=\" \">";
+				headercontent += "<td valign=\"top\">";
+				headercontent += "<table style=\"font-family: 'Times New Roman'; font-size:12px; \">";
+				headercontent += "<tr style=\" \">";
+				headercontent += "<td colspan=\"4\">";
+				headercontent += "<Label  for \"" + ConfigurationManager.AppSettings["Client"].ToString() + "\">" + ConfigurationManager.AppSettings["Client"].ToString() + "</asp:Label>";
+				headercontent += "</td>";
+				headercontent += "</tr>";
+				headercontent += "<tr style=\" \">";
+				headercontent += "<td colspan=\"4\">";
+				headercontent += "Sponsor Name:<Label  for \"" + ds_header.Tables[0].Rows[0]["vClientName"].ToString() + "\">" + ds_header.Tables[0].Rows[0]["vClientName"].ToString() + "</asp:Label>";
+				headercontent += "</td>";
+				headercontent += "</tr >";
+				headercontent += "<tr style=\" \">";
+				headercontent += "<td align=\"right\" colspan=\"4\" >";
+				headercontent += "<h4>";
+				headercontent += "CASE REPORT FORM</h4>";
+				headercontent += "</td>";
+				headercontent += "</tr>";
+				headercontent += "<tr style=\" \">";
+				headercontent += "<td align=\"right\">Project No:</td>";
+				headercontent += "<td style=\"border: thin solid #000000;\">";
+				headercontent += "<Label  for \"" + ProjectNo + "\">" + ProjectNo + "</asp:Label>";
+				headercontent += "</td>";
+				if (Convert.ToBoolean(this.ViewState[IsProjectCT]) == true)
+				{
+					headercontent += "<td align=\"right\">Site Id:</td>";
+					headercontent += "<td  style=\"border: thin solid #000000;\">";
+					headercontent += "<Label  for \"" + SiteId.ToString() + "\">" + SiteId.ToString() + "</asp:Label>";
+					headercontent += "</td>";
+				}
+				if (this.chkprotocolno.Checked == false)
+				{
+					if (ds_header.Tables[0].Rows[0]["ProtocolNo"].ToString().Trim().Length > 0)
+					{
+						headercontent += "<td align=\"right\">Protocol No:</td>";
+						headercontent += "<td  style=\"border: thin solid #000000;\">";
+						headercontent += "<Label  for \"" + ds_header.Tables[0].Rows[0]["ProtocolNo"].ToString().Trim() + "\">" + ds_header.Tables[0].Rows[0]["ProtocolNo"].ToString().Trim() + "</asp:Label>";
+						headercontent += "</td>";
+					}
+				}
+				headercontent += "</tr>";
+				headercontent += "<tr style=\" \">";
+				if (Convert.ToBoolean(this.ViewState[IsProjectCT]))
+				{
+					headercontent += "<td align=\"right\">Subject No:</td>";
+					headercontent += "<td style=\"border: thin solid #000000;\">";
+					headercontent += "<Label  for \"" + SubjectNo + "\">" + SubjectNo + "</asp:Label>";
+					headercontent += "</td>";
+					if (this.chkinitial.Checked == false)
+					{
+						headercontent += "<td align=\"right\">Subject Initials:</td>";
+						headercontent += "<td  style=\"border: thin solid #000000;\">";
+						headercontent += "<Label  for \"" + SubjectInitial + "\">" + SubjectInitial + "</asp:Label>";
+						headercontent += "</td>";
+					}
+				}
+				else
+				{
+					headercontent += "<td align=\"right\">Subject No:</td>";
+					headercontent += "<td style=\"border: thin solid #000000;\">";
+					headercontent += "<Label  for \"" + SubjectNo + "\">" + SubjectNo + "</asp:Label>";
+					headercontent += "</td>";
+					if (this.chkinitial.Checked == false)
+					{
+						headercontent += "<td align=\"right\">Subject Initials:</td>";
+						headercontent += "<td  style=\"border: thin solid #000000;\">";
+						headercontent += "<Label  for \"" + SubjectInitial + "\">" + SubjectInitial + "</asp:Label>";
+						headercontent += "</td>";
+					}
+				}
+				headercontent += "</tr>";
+				headercontent += "</table>";
+				headercontent += "</td>";
+				if (!string.IsNullOrEmpty(this.ViewState[vs_sponsorlogofilepath].ToString().Trim()))
+				{
+					headercontent += "<td valign=\"middle\">";
+					headercontent += "<img id=ctl00_CPHLAMBDA_ImgsponsorLogo alt=\"" + this.ViewState[vs_sponsorlogofilepath].ToString() + "\" src=\"" + this.ViewState[vs_sponsorlogofilepath].ToString() + "\"right\" alt=\"lambda\" style=\"width:120px; height:120px;\"/>";
+					headercontent += "</td>";
+				}
+				headercontent += "<td valign=\"middle\">";
+				headercontent += "<img id=ctl00_CPHLAMBDA_ImgLogo alt=\"" + Path.ToString() + "\" src=\"" + Path.ToString() + "\"right\" alt=\"lambda\" style=\"width:120px; height:120px;\"/>";
+				headercontent += "</td>";
+				headercontent += "</tr>";
+				headercontent += "</table>";
+				headercontent += "</body></html>";
+
+
+
+
+
+
+
+
+
 PdfDocument pdfDocument = new PdfDocument();
 
 // Create a PDF page instance
