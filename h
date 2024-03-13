@@ -9,6 +9,107 @@
 <body>
     <form id="form1" runat="server">
         <div>
+            <asp:FileUpload ID="fileUpload" runat="server" />
+            <asp:Button ID="btnGeneratePdf" runat="server" Text="Upload and Add Header" OnClick="btnGeneratePdf_Click" />
+        </div>
+    </form>
+</body>
+</html>
+
+
+
+
+using Spire.Pdf;
+using Spire.Pdf.Graphics;
+using System;
+using System.Drawing;
+using System.IO;
+
+public partial class GeneratePdf : System.Web.UI.Page
+{
+    protected void Page_Load(object sender, EventArgs e)
+    {
+    }
+
+    protected void btnGeneratePdf_Click(object sender, EventArgs e)
+    {
+        if (fileUpload.HasFile && Path.GetExtension(fileUpload.FileName).Equals(".pdf", StringComparison.InvariantCultureIgnoreCase))
+        {
+            try
+            {
+                // Read the uploaded PDF file
+                using (Stream inputStream = fileUpload.PostedFile.InputStream)
+                {
+                    // Create a new PDF document
+                    PdfDocument doc = new PdfDocument();
+
+                    // Load the uploaded PDF file
+                    doc.LoadFromStream(inputStream);
+
+                    // Add header to each page of the PDF
+                    foreach (PdfPageBase page in doc.Pages)
+                    {
+                        AddHeaderToPage(page);
+                    }
+
+                    // Save the modified PDF to a MemoryStream
+                    MemoryStream outputStream = new MemoryStream();
+                    doc.SaveToStream(outputStream);
+                    outputStream.Position = 0;
+
+                    // Send the modified PDF file to the client as a downloadable file
+                    Response.Clear();
+                    Response.ContentType = "application/pdf";
+                    Response.AppendHeader("Content-Disposition", "attachment; filename=PdfWithHeader.pdf");
+                    Response.BinaryWrite(outputStream.ToArray());
+                    Response.End();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions
+                Response.Write("Error: " + ex.Message);
+            }
+        }
+        else
+        {
+            Response.Write("Please select a PDF file.");
+        }
+    }
+
+    private void AddHeaderToPage(PdfPageBase page)
+    {
+        // Add header to the top of each page
+        PdfMargins margins = page.Document.PageSettings.Margins;
+        float x = margins.Left;
+        float y = 0;
+
+        // Draw your header content here, similar to the CreateHeaderTemplate method
+        // For example:
+        PdfTrueTypeFont font = new PdfTrueTypeFont(new Font("Arial", 12f, FontStyle.Bold));
+        PdfStringFormat format = new PdfStringFormat(PdfTextAlignment.Left);
+        String headerText = "HEADER TEXT";
+        SizeF size = font.MeasureString(headerText, format);
+        page.Canvas.DrawString(headerText, font, PdfBrushes.Gray, page.Size.Width - x - size.Width - 2, margins.Top - (size.Height + 5), format);
+    }
+}
+
+
+
+
+
+
+<%@ Page Language="C#" AutoEventWireup="true" CodeFile="GeneratePdf.aspx.cs" Inherits="GeneratePdf" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
             <asp:Button ID="btnGeneratePdf" runat="server" Text="Generate PDF" OnClick="btnGeneratePdf_Click" />
         </div>
     </form>
