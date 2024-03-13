@@ -1,3 +1,62 @@
+using Spire.Pdf;
+using System;
+using System.IO;
+
+namespace YourNamespace
+{
+    public partial class UploadPage : System.Web.UI.Page
+    {
+        protected void btnUpload_Click(object sender, EventArgs e)
+        {
+            // Create a PdfDocument instance to hold the merged PDF
+            PdfDocument mergedDocument = new PdfDocument();
+
+            foreach (HttpPostedFile uploadedFile in fileUpload.PostedFiles)
+            {
+                // Load each uploaded PDF file into a PdfDocument instance
+                using (Stream fileStream = uploadedFile.InputStream)
+                {
+                    PdfDocument pdfDocument = new PdfDocument();
+                    pdfDocument.LoadFromStream(fileStream);
+
+                    // Merge the loaded PDF document into the mergedDocument
+                    mergedDocument.AppendPage(pdfDocument);
+                }
+            }
+
+            // Save the merged PDF document to a file
+            string outputPath = Server.MapPath("~/Output/output.pdf");
+            mergedDocument.SaveToFile(outputPath, FileFormat.PDF);
+
+            // Provide a download link to the merged PDF file
+            downloadLink.NavigateUrl = "~/Output/output.pdf";
+            downloadLink.Visible = true;
+        }
+    }
+}
+
+
+
+
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="UploadPage.aspx.cs" Inherits="YourNamespace.UploadPage" %>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>File Upload</title>
+</head>
+<body>
+    <form id="form1" runat="server" enctype="multipart/form-data">
+        <input type="file" id="fileUpload" runat="server" multiple />
+        <asp:Button ID="btnUpload" runat="server" Text="Upload" OnClick="btnUpload_Click" />
+    </form>
+</body>
+</html>
+
+
+
+
+
 using System;
 using Spire.Pdf;
 
