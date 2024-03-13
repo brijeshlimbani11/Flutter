@@ -1,3 +1,97 @@
+
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="UploadPage.aspx.cs" Inherits="YourNamespace.UploadPage" %>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>File Upload</title>
+    <script>
+        function uploadFiles() {
+            var fileInput = document.getElementById('fileUpload');
+            var files = fileInput.files;
+
+            if (files.length === 0) {
+                alert('Please select at least one file.');
+                return;
+            }
+
+            var formData = new FormData();
+            for (var i = 0; i < files.length; i++) {
+                formData.append('files', files[i]);
+            }
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'UploadHandler.ashx', true);
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    // Handle successful upload response
+                    var downloadLink = document.getElementById('downloadLink');
+                    downloadLink.href = xhr.responseText;
+                    downloadLink.style.display = 'block';
+                } else {
+                    // Handle upload error
+                    alert('Upload failed. Please try again.');
+                }
+            };
+            xhr.send(formData);
+        }
+    </script>
+</head>
+<body>
+    <input type="file" id="fileUpload" multiple />
+    <button type="button" onclick="uploadFiles()">Upload</button>
+    <a id="downloadLink" href="#" style="display:none">Download Merged PDF</a>
+</body>
+</html>
+
+
+
+
+
+using Spire.Pdf;
+using System;
+using System.IO;
+
+namespace YourNamespace
+{
+    public partial class UploadPage : System.Web.UI.Page
+    {
+        protected void btnUpload_Click(object sender, EventArgs e)
+        {
+            // Create a PdfDocument instance to hold the merged PDF
+            PdfDocument mergedDocument = new PdfDocument();
+
+            foreach (HttpPostedFile uploadedFile in fileUpload.PostedFiles)
+            {
+                // Load each uploaded PDF file into a PdfDocument instance
+                using (Stream fileStream = uploadedFile.InputStream)
+                {
+                    PdfDocument pdfDocument = new PdfDocument();
+                    pdfDocument.LoadFromStream(fileStream);
+
+                    // Merge the loaded PDF document into the mergedDocument
+                    mergedDocument.AppendPage(pdfDocument);
+                }
+            }
+
+            // Save the merged PDF document to a file
+            string outputPath = Server.MapPath("~/Output/output.pdf");
+            mergedDocument.SaveToFile(outputPath, FileFormat.PDF);
+
+            // Provide a download link to the merged PDF file
+            downloadLink.NavigateUrl = "~/Output/output.pdf";
+            downloadLink.Visible = true;
+        }
+    }
+}
+
+
+
+
+
+
+
+
 using Spire.Pdf;
 using System;
 using System.IO;
