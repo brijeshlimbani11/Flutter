@@ -1,3 +1,79 @@
+using System;
+using System.IO;
+using System.Web;
+using System.Web.UI;
+using Spire.Pdf;
+
+public partial class UploadPage : Page
+{
+    protected void MergePDFs(string[] pdfFiles, string outputFilePath)
+    {
+        // Create a new PDF document
+        PdfDocument mergedPdf = new PdfDocument();
+
+        // Iterate through each PDF file to merge
+        foreach (string pdfFile in pdfFiles)
+        {
+            // Load each PDF file
+            PdfDocument doc = new PdfDocument();
+            doc.LoadFromFile(pdfFile);
+
+            // Merge each page of the loaded PDF into the merged PDF
+            foreach (PdfPageBase page in doc.Pages)
+            {
+                mergedPdf.Pages.Add(page.Clone() as PdfPageBase);
+            }
+
+            // Close the loaded PDF document
+            doc.Close();
+        }
+
+        // Save the merged PDF document to the specified output file
+        mergedPdf.SaveToFile(outputFilePath);
+
+        // Close the merged PDF document
+        mergedPdf.Close();
+    }
+
+    protected void btnMerge_Click(object sender, EventArgs e)
+    {
+        if (FileUpload1.HasFile)
+        {
+            // Specify the directory to save uploaded files
+            string uploadFolderPath = Server.MapPath("~/UploadedPDFs/");
+            if (!Directory.Exists(uploadFolderPath))
+            {
+                Directory.CreateDirectory(uploadFolderPath);
+            }
+
+            // Save uploaded file to the server
+            string fileName = Path.GetFileName(FileUpload1.PostedFile.FileName);
+            string filePath = Path.Combine(uploadFolderPath, fileName);
+            FileUpload1.SaveAs(filePath);
+
+            // Merge uploaded PDF files
+            string[] pdfFiles = Directory.GetFiles(uploadFolderPath, "*.pdf");
+            string mergedFilePath = Server.MapPath("~/MergedPDFs/merged.pdf");
+            MergePDFs(pdfFiles, mergedFilePath);
+
+            // Provide a download link for the merged PDF
+            lnkDownload.NavigateUrl = "~/MergedPDFs/merged.pdf";
+            lnkDownload.Visible = true;
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
 <%@ Page Language="C#" AutoEventWireup="true" CodeBehind="MergePDF.aspx.cs" Inherits="YourNamespace.MergePDF" %>
 
 <!DOCTYPE html>
