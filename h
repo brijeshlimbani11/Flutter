@@ -1,3 +1,106 @@
+#region Merge PDF
+
+	private bool MergePdf(string SubjectNo, string foldername, string subjectinitials)
+	{
+		FileInfo fInfo = null;
+		string[] DocumentsArray = null;
+		string PathforLocal = string.Empty;
+		Document document1 = new Document();
+		Document document2 = new Document();
+		int av = 1;
+		int ileft = 0;
+		int itop = 0;
+		int ipages = 0;
+		int splitchar = 0;
+		ileft = 0;
+		itop = 0;
+		splitchar = 0;
+		ipages = 1;
+		int i1 = 0;
+		List<string> strsub = new List<string>();
+
+		try
+		{
+
+			if (!Directory.Exists(Server.MapPath(ConfigurationManager.AppSettings["uploadfilepath"].Trim()) + "\\" + this.HProjectId.Value.ToString() + "\\" + foldername))
+			{
+				return true;
+			}
+
+			DocumentsArray = System.IO.Directory.GetFiles(Server.MapPath(ConfigurationManager.AppSettings["uploadfilepath"].Trim()) + "\\" + this.HProjectId.Value.ToString() + "\\" + foldername + "\\RptMerge");
+
+			if (DocumentsArray.Length == 0)
+			{
+				return true;
+			}
+
+			for (var i = 0; i < DocumentsArray.Length; i++)
+			{
+				fInfo = new FileInfo(DocumentsArray[i]);
+				if (fInfo.Exists)
+				{
+					if (i == 0)
+					{
+						document1 = new Document(DocumentsArray[i]);
+						document1.LicenseKey = "dfvo+uv66OPj6vrr6PTq+unr9Ovo9OPj4+P66g==";
+					}
+					else
+					{
+						document2 = new Document(DocumentsArray[i]);
+						document2.LicenseKey = "dfvo+uv66OPj6vrr6PTq+unr9Ovo9OPj4+P66g==";
+						document1.AppendDocument(document2);
+					}
+				}
+			}
+
+			document1.ViewerPreferences.PageMode = ViewerPageMode.UseOutlines;
+
+			if (DocumentsArray.Length > 0)
+			{
+				document1.Save(Server.MapPath(ConfigurationManager.AppSettings["uploadfilepath"].Trim()) + "\\" + this.HProjectId.Value.ToString() + "\\" + foldername + "\\Report\\02.pdf");
+				if (DocumentsArray.Length == 1)
+				{
+
+					document1.AutoCloseAppendedDocs = true;
+					document1.Close();
+
+				}
+				else
+				{
+					document1.AutoCloseAppendedDocs = true;
+					document1.Close();
+					document2.AutoCloseAppendedDocs = true;
+					document2.Close();
+
+				}
+				for (var i = 0; i < DocumentsArray.Length; i++)
+				{
+					fInfo = new FileInfo(DocumentsArray[i]);
+					if (fInfo.Exists)
+					{
+						fInfo.Delete();
+					}
+				}
+			}
+
+			if (!this.CreateTOC(SubjectNo, foldername, subjectinitials))
+			{
+				return false;
+			}
+
+			return true;
+		}
+		catch (Exception ex)
+		{
+			this.ShowErrorMessage(ex.Message, "....MergePdf", ex);
+			return false;
+		}
+	}
+
+#endregion
+
+
+
 using System;
 using System.IO;
 using Spire.Pdf;
