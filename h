@@ -29,6 +29,89 @@ private bool MergePdf(string SubjectNo, string foldername, string subjectinitial
             {
                 if (i == 0)
                 {
+                    document1 = new Spire.Pdf.PdfDocument(DocumentsArray[i]);
+                }
+                else
+                {
+                    document2 = new Spire.Pdf.PdfDocument(DocumentsArray[i]);
+                    document1.AppendDocument(document2);
+                }
+            }
+        }
+
+        if (DocumentsArray.Length > 0)
+        {
+            document1.Save(Server.MapPath(ConfigurationManager.AppSettings["uploadfilepath"].Trim()) + "\\" + this.HProjectId.Value.ToString() + "\\" + foldername + "\\Report\\02.pdf");
+            if (DocumentsArray.Length == 1)
+            {
+                document1.Close();
+            }
+            else
+            {
+                document1.Close();
+                document2.Close();
+            }
+            for (var i = 0; i < DocumentsArray.Length; i++)
+            {
+                fInfo = new FileInfo(DocumentsArray[i]);
+                if (fInfo.Exists)
+                {
+                    fInfo.Delete();
+                }
+            }
+        }
+
+        if (!this.CreateTOC(SubjectNo, foldername, subjectinitials))
+        {
+            return false;
+        }
+
+        return true;
+    }
+    catch (Exception ex)
+    {
+        this.ShowErrorMessage(ex.Message, "....MergePdf", ex);
+        return false;
+    }
+}
+
+#endregion
+
+
+
+
+
+#region Merge PDF
+
+private bool MergePdf(string SubjectNo, string foldername, string subjectinitials)
+{
+    FileInfo fInfo = null;
+    string[] DocumentsArray = null;
+    string PathforLocal = string.Empty;
+    Spire.Pdf.PdfDocument document1 = new Spire.Pdf.PdfDocument();
+    Spire.Pdf.PdfDocument document2 = new Spire.Pdf.PdfDocument();
+
+    try
+    {
+        if (!Directory.Exists(Server.MapPath(ConfigurationManager.AppSettings["uploadfilepath"].Trim()) + "\\" + this.HProjectId.Value.ToString() + "\\" + foldername))
+        {
+            return true;
+        }
+
+        DocumentsArray = System.IO.Directory.GetFiles(Server.MapPath(ConfigurationManager.AppSettings["uploadfilepath"].Trim()) + "\\" + this.HProjectId.Value.ToString() + "\\" + foldername + "\\RptMerge");
+
+        if (DocumentsArray.Length == 0)
+        {
+            return true;
+        }
+
+        for (var i = 0; i < DocumentsArray.Length; i++)
+        {
+            fInfo = new FileInfo(DocumentsArray[i]);
+            if (fInfo.Exists)
+            {
+                if (i == 0)
+                {
                     document1.LoadFromFile(DocumentsArray[i]);
                 }
                 else
