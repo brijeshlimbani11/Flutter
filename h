@@ -1,3 +1,79 @@
+using System;
+using System.IO;
+using Spire.Pdf;
+
+namespace YourNamespace
+{
+    public partial class MergePDF : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+        }
+
+        protected void btnMerge_Click(object sender, EventArgs e)
+        {
+            if (fileUpload.HasFiles)
+            {
+                try
+                {
+                    string tempFolderPath = Server.MapPath("~/Temp/");
+                    if (!Directory.Exists(tempFolderPath))
+                        Directory.CreateDirectory(tempFolderPath);
+
+                    foreach (var file in fileUpload.PostedFiles)
+                    {
+                        string fileName = Path.Combine(tempFolderPath, Path.GetFileName(file.FileName));
+                        file.SaveAs(fileName);
+                    }
+
+                    string[] pdfFiles = Directory.GetFiles(tempFolderPath, "*.pdf");
+                    string outputFilePath = Server.MapPath("~/MergedPDF.pdf");
+                    MergePDFs(pdfFiles, outputFilePath);
+
+                    lblMessage.Text = "PDF files merged successfully. <a href='MergedPDF.pdf'>Download Merged PDF</a>";
+                    lblMessage.Visible = true;
+                }
+                catch (Exception ex)
+                {
+                    lblMessage.Text = "Error: " + ex.Message;
+                    lblMessage.ForeColor = System.Drawing.Color.Red;
+                    lblMessage.Visible = true;
+                }
+            }
+            else
+            {
+                lblMessage.Text = "Please select PDF files to merge.";
+                lblMessage.ForeColor = System.Drawing.Color.Red;
+                lblMessage.Visible = true;
+            }
+        }
+
+        protected void MergePDFs(string[] pdfFiles, string outputFilePath)
+        {
+            PdfDocument mergedPdf = new PdfDocument();
+
+            foreach (string pdfFile in pdfFiles)
+            {
+                PdfDocument doc = new PdfDocument();
+                doc.LoadFromFile(pdfFile);
+
+                foreach (PdfPageBase page in doc.Pages)
+                {
+                    PdfPageBase newPage = mergedPdf.Pages.Add();
+                    newPage.CreateTemplate(page.Size.Width, page.Size.Height);
+                    newPage.DrawTemplate(page.CreateTemplate());
+                }
+
+                doc.Close();
+            }
+
+            mergedPdf.SaveToFile(outputFilePath);
+            mergedPdf.Close();
+        }
+    }
+}
+
+
 
 using System;
 using System.IO;
