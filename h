@@ -1,4 +1,85 @@
 using System;
+using System.IO;
+using System.Web.UI;
+using Spire.Pdf;
+
+namespace practice6
+{
+    public partial class UploadPage : System.Web.UI.Page
+    {
+        protected void btnUpload_Click(object sender, EventArgs e)
+        {
+            if (fileUpload.HasFile)
+            {
+                try
+                {
+                    // Get the file paths dynamically from the uploaded files
+                    string[] files = new string[fileUpload.PostedFiles.Count];
+                    int i = 0;
+                    foreach (HttpPostedFile uploadedFile in fileUpload.PostedFiles)
+                    {
+                        string filePath = Path.Combine(Server.MapPath("~/Uploads"), Path.GetFileName(uploadedFile.FileName));
+                        uploadedFile.SaveAs(filePath);
+                        files[i] = filePath;
+                        i++;
+                    }
+
+                    // Merge the uploaded PDF files
+                    PdfDocumentBase doc = PdfDocument.MergeFiles(files);
+
+                    // Save the merged PDF file
+                    string outputPath = Path.Combine(Server.MapPath("~/Output"), "output.pdf");
+                    doc.Save(outputPath, FileFormat.PDF);
+
+                    // Provide feedback to the user
+                    lblMessage.Text = "PDF files merged successfully. <a href='/Output/output.pdf'>Download merged PDF</a>";
+                }
+                catch (Exception ex)
+                {
+                    lblMessage.Text = "An error occurred: " + ex.Message;
+                }
+            }
+            else
+            {
+                lblMessage.Text = "Please select PDF files to upload.";
+            }
+        }
+    }
+}
+
+
+
+
+
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="UploadPage.aspx.cs" Inherits="practice6.UploadPage" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Upload PDF Files</title>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
+            <h1>Upload PDF Files</h1>
+            <asp:FileUpload ID="fileUpload" runat="server" AllowMultiple="true" />
+            <br />
+            <asp:Button ID="btnUpload" runat="server" Text="Merge PDFs" OnClick="btnUpload_Click" />
+            <br />
+            <asp:Label ID="lblMessage" runat="server" ForeColor="Green" EnableViewState="False"></asp:Label>
+        </div>
+    </form>
+</body>
+</html>
+
+
+
+
+
+
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
