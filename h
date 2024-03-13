@@ -1,3 +1,127 @@
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="MergePDF.aspx.cs" Inherits="YourNamespace.MergePDF" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Merge PDF Files</title>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
+            <h1>Merge PDF Files</h1>
+            <input type="file" id="fileInput" multiple />
+            <br />
+            <asp:Button ID="btnMerge" runat="server" Text="Merge PDFs" OnClick="btnMerge_Click" />
+            <br />
+            <asp:Label ID="lblMessage" runat="server" ForeColor="Green" Visible="false"></asp:Label>
+        </div>
+    </form>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+using System;
+using System.IO;
+using System.Web;
+using Spire.Pdf;
+
+namespace YourNamespace
+{
+    public partial class MergePDF : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+        }
+
+        protected void btnMerge_Click(object sender, EventArgs e)
+        {
+            if (fileInput.HasFiles)
+            {
+                try
+                {
+                    // Create a temporary folder to store uploaded files
+                    string tempFolderPath = Server.MapPath("~/Temp/");
+                    if (!Directory.Exists(tempFolderPath))
+                        Directory.CreateDirectory(tempFolderPath);
+
+                    // Save each uploaded file to the temporary folder
+                    foreach (HttpPostedFile file in fileInput.PostedFiles)
+                    {
+                        string fileName = Path.Combine(tempFolderPath, file.FileName);
+                        file.SaveAs(fileName);
+                    }
+
+                    // Merge the uploaded PDF files
+                    string[] pdfFiles = Directory.GetFiles(tempFolderPath, "*.pdf");
+                    string outputFilePath = Server.MapPath("~/MergedPDF.pdf");
+                    MergePDFs(pdfFiles, outputFilePath);
+
+                    // Provide a download link for the merged PDF
+                    lblMessage.Text = "PDF files merged successfully. <a href='MergedPDF.pdf'>Download Merged PDF</a>";
+                    lblMessage.Visible = true;
+                }
+                catch (Exception ex)
+                {
+                    lblMessage.Text = "Error: " + ex.Message;
+                    lblMessage.ForeColor = System.Drawing.Color.Red;
+                    lblMessage.Visible = true;
+                }
+            }
+            else
+            {
+                lblMessage.Text = "Please select PDF files to merge.";
+                lblMessage.ForeColor = System.Drawing.Color.Red;
+                lblMessage.Visible = true;
+            }
+        }
+
+        protected void MergePDFs(string[] pdfFiles, string outputFilePath)
+        {
+            PdfDocument mergedPdf = new PdfDocument();
+
+            foreach (string pdfFile in pdfFiles)
+            {
+                PdfDocument doc = new PdfDocument();
+                doc.LoadFromFile(pdfFile);
+
+                foreach (PdfPageBase page in doc.Pages)
+                {
+                    mergedPdf.Pages.Add(page.Clone() as PdfPageBase);
+                }
+
+                doc.Close();
+            }
+
+            mergedPdf.SaveToFile(outputFilePath);
+            mergedPdf.Close();
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </Table><Table style=" Width:100%; Font -family :'Times New Roman' !important;"><Tr data-bookmark-enabled="true" data-bookmark-level="1" data-bookmark-text="Visit1" width="100%" ALIGN=LEFT style="BACKGROUND-COLOR: #FFB895;  page-break-before:always;"><Td style="vertical-align:middle; text-align: center; font-family:'Times New Roman'; font-size:12px; font-weight:bold; ">&nbsp;Visit1</Td></Tr><Tr ALIGN=LEFT><Td style="vertical-align:top;"><Table width="100%" cellspacing='0' style="font-family:'Times New Roman' !Important; font-size:12px; border-collapse: collapse !Important;"><Tr data-bookmark-enabled="true" data-bookmark-level="2"  data-bookmark-text="DATE OF VISIT" width="100%" color:#FFFFFF; ALIGN=LEFT style="BACKGROUND-COLOR: #008ecd; page-break-inside:avoid;"><Td style="vertical-align:middle;color:#FFFFFF;  width: 80%;">&nbsp;DATE OF VISIT</Td></Tr></Table><Tr><td><Table width="100%" cellspacing='0' style="font-family:'Times New Roman' !Important; font-size:12px; border-collapse: collapse !Important;"><Tr ALIGN=LEFT style="page-break-inside:avoid;"><Td width="60%" style="  font-family:'Times New Roman' !Important; font-size:12px;  vertical-align:middle; border: solid 1px gray !important; " ALIGN=LEFT>&nbsp;<span id="Lnk0077700002912892R1111" style="word-wrap:break-word;white-space:;font-family:'Times New Roman' !Important;font-size:12px !Important;">Date of visit:</span></Td><Td width="40%" style="vertical-align:middle; font-family:'Times New Roman' !Important; font-size:12px; border: solid 1px gray !important;" ALIGN=LEFT>&nbsp;&nbsp;<span id="txtd2912892R1111" style="word-wrap:break-word;white-space:none;font-family:'Times New Roman' !Important;font-size:12px !Important;">25-Jun-2018</span></Td></Tr></Tr></Table></Td></Tr><Tr ALIGN=LEFT><Td style="vertical-align:top;"><Table width="100%" cellspacing='0' style="font-family:'Times New Roman' !Important; font-size:12px; border-collapse: collapse !Important;"><Tr data-bookmark-enabled="true" data-bookmark-level="2"  data-bookmark-text="INFORMED CONSENT FORM" width="100%" color:#FFFFFF; ALIGN=LEFT style="BACKGROUND-COLOR: #008ecd; page-break-inside:avoid;"><Td style="vertical-align:middle;color:#FFFFFF;  width: 80%;">&nbsp;INFORMED CONSENT FORM</Td></Tr></Table><Tr><td><Table width="100%" cellspacing='0' style="font-family:'Times New Roman' !Important; font-size:12px; border-collapse: collapse !Important;"><Tr ALIGN=LEFT style="page-break-inside:avoid;"><Td width="60%" style="  font-family:'Times New Roman' !Important; font-size:12px;  vertical-align:middle; border: solid 1px gray !important; " ALIGN=LEFT>&nbsp;<span id="Lnk0081700002746426R2112" style="word-wrap:break-word;white-space:;font-family:'Times New Roman' !Important;font-size:12px !Important;">Date of Informed consent form signed:</span></Td><Td width="40%" style="vertical-align:middle; font-family:'Times New Roman' !Important; font-size:12px; border: solid 1px gray !important;" ALIGN=LEFT>&nbsp;&nbsp;<span id="txtd2746426R2112" style="word-wrap:break-word;white-space:none;font-family:'Times New Roman' !Important;font-size:12px !Important;">25-Jun-2018</span></Td></Tr></Tr><Tr ALIGN=LEFT style="page-break-inside:avoid;"><Td width="60%" style="  font-family:'Times New Roman' !Important; font-size:12px;  vertical-align:middle; border: solid 1px gray !important; " ALIGN=LEFT>&nbsp;<span id="Lnk0081700002855326R2123" style="word-wrap:break-word;white-space:;font-family:'Times New Roman' !Important;font-size:12px !Important;">Has HIPAA been obtained?:</span></Td><Td width="40%" style="vertical-align:middle; font-family:'Times New Roman' !Important; font-size:12px; border: solid 1px gray !important;" ALIGN=LEFT><table id="rdo2855326R2123" border="0" style="font-family:'Times New Roman' !Important;font-size:12px !Important;">
 	<tr>
 		<td><input id="rdo2855326R2123_0" type="radio" name="rdo2855326R2123" value="YES" /><label for="rdo2855326R2123_0">Yes</label></td><td><input id="rdo2855326R2123_1" type="radio" name="rdo2855326R2123" value="NO" /><label for="rdo2855326R2123_1">No</label></td><td><input id="rdo2855326R2123_2" type="radio" name="rdo2855326R2123" value="NAP" checked="checked" /><label for="rdo2855326R2123_2">NAP</label></td>
