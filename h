@@ -1,3 +1,33 @@
+private void AddHeaderToPage(PdfPageBase page)
+{
+    // Add header to the top of each page
+    PdfMargins margins = page.Document.PageSettings.Margins;
+    float x = margins.Left;
+    float y = 0;
+
+    // Draw your header content here
+    PdfTrueTypeFont font = new PdfTrueTypeFont(new Font("Arial", 12f, FontStyle.Bold));
+    PdfStringFormat format = new PdfStringFormat(PdfTextAlignment.Left);
+    String headerText = "HEADER TEXT";
+    SizeF size = font.MeasureString(headerText, format);
+    page.Canvas.DrawString(headerText, font, PdfBrushes.Gray, page.Size.Width - x - size.Width - 2, margins.Top - (size.Height + 5), format);
+
+    // Load and draw image in the header
+    try
+    {
+        PdfImage headerImage = PdfImage.FromFile(Server.MapPath("your_image.jpg"));
+        float imageWidth = headerImage.Width / 3; // adjust as needed
+        float imageHeight = headerImage.Height / 3; // adjust as needed
+        page.Canvas.DrawImage(headerImage, x, margins.Top - imageHeight - 2, imageWidth, imageHeight);
+    }
+    catch (Exception ex)
+    {
+        // Handle any exceptions loading or drawing the image
+        Response.Write("Error loading image: " + ex.Message);
+    }
+}
+
+
 <%@ Page Language="C#" AutoEventWireup="true" CodeFile="GeneratePdf.aspx.cs" Inherits="GeneratePdf" %>
 
 <!DOCTYPE html>
