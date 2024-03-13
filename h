@@ -1,6 +1,94 @@
 using System;
 using System.IO;
 using Spire.Pdf;
+using Spire.Pdf.Graphics;
+
+namespace YourNamespace
+{
+    public partial class MergePDF : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+        }
+
+        protected void btnMerge_Click(object sender, EventArgs e)
+        {
+            if (fileUpload.HasFiles)
+            {
+                try
+                {
+                    string tempFolderPath = Server.MapPath("~/Temp/");
+                    if (!Directory.Exists(tempFolderPath))
+                        Directory.CreateDirectory(tempFolderPath);
+
+                    foreach (var file in fileUpload.PostedFiles)
+                    {
+                        string fileName = Path.Combine(tempFolderPath, Path.GetFileName(file.FileName));
+                        file.SaveAs(fileName);
+                    }
+
+                    string[] pdfFiles = Directory.GetFiles(tempFolderPath, "*.pdf");
+                    string outputFilePath = Server.MapPath("~/MergedPDF.pdf");
+                    MergePDFs(pdfFiles, outputFilePath);
+
+                    lblMessage.Text = "PDF files merged successfully. <a href='MergedPDF.pdf'>Download Merged PDF</a>";
+                    lblMessage.Visible = true;
+                }
+                catch (Exception ex)
+                {
+                    lblMessage.Text = "Error: " + ex.Message;
+                    lblMessage.ForeColor = System.Drawing.Color.Red;
+                    lblMessage.Visible = true;
+                }
+            }
+            else
+            {
+                lblMessage.Text = "Please select PDF files to merge.";
+                lblMessage.ForeColor = System.Drawing.Color.Red;
+                lblMessage.Visible = true;
+            }
+        }
+
+        protected void MergePDFs(string[] pdfFiles, string outputFilePath)
+        {
+            PdfDocument mergedPdf = new PdfDocument();
+            PdfDocumentBase firstDoc = null;
+
+            foreach (string pdfFile in pdfFiles)
+            {
+                PdfDocument doc = new PdfDocument();
+                doc.LoadFromFile(pdfFile);
+
+                if (firstDoc == null)
+                {
+                    firstDoc = doc;
+                }
+                else
+                {
+                    foreach (PdfPageBase page in doc.Pages)
+                    {
+                        PdfTemplate template = page.CreateTemplate();
+                        PdfPageBase newPage = firstDoc.Pages.Add(template.Size);
+                        newPage.Canvas.DrawTemplate(template, PointF.Empty);
+                    }
+                }
+
+                doc.Close();
+            }
+
+            firstDoc.SaveToFile(outputFilePath);
+            firstDoc.Close();
+        }
+    }
+}
+
+
+
+
+
+using System;
+using System.IO;
+using Spire.Pdf;
 
 namespace YourNamespace
 {
