@@ -1,5 +1,85 @@
 using System;
 using System.IO;
+using Spire.Pdf;
+
+namespace YourNamespace
+{
+    public partial class MergePDF : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+        }
+
+        protected void btnMerge_Click(object sender, EventArgs e)
+        {
+            if (fileInput.HasFiles)
+            {
+                try
+                {
+                    // Create a temporary folder to store uploaded files
+                    string tempFolderPath = Server.MapPath("~/Temp/");
+                    if (!Directory.Exists(tempFolderPath))
+                        Directory.CreateDirectory(tempFolderPath);
+
+                    // Save each uploaded file to the temporary folder
+                    foreach (HttpPostedFile file in fileInput.PostedFiles)
+                    {
+                        string fileName = Path.Combine(tempFolderPath, Path.GetFileName(file.FileName));
+                        file.SaveAs(fileName);
+                    }
+
+                    // Merge the uploaded PDF files
+                    string[] pdfFiles = Directory.GetFiles(tempFolderPath, "*.pdf");
+                    string outputFilePath = Server.MapPath("~/MergedPDF.pdf");
+                    MergePDFs(pdfFiles, outputFilePath);
+
+                    // Provide a download link for the merged PDF
+                    lblMessage.Text = "PDF files merged successfully. <a href='MergedPDF.pdf'>Download Merged PDF</a>";
+                    lblMessage.Visible = true;
+                }
+                catch (Exception ex)
+                {
+                    lblMessage.Text = "Error: " + ex.Message;
+                    lblMessage.ForeColor = System.Drawing.Color.Red;
+                    lblMessage.Visible = true;
+                }
+            }
+            else
+            {
+                lblMessage.Text = "Please select PDF files to merge.";
+                lblMessage.ForeColor = System.Drawing.Color.Red;
+                lblMessage.Visible = true;
+            }
+        }
+
+        protected void MergePDFs(string[] pdfFiles, string outputFilePath)
+        {
+            PdfDocument mergedPdf = new PdfDocument();
+
+            foreach (string pdfFile in pdfFiles)
+            {
+                PdfDocument doc = new PdfDocument();
+                doc.LoadFromFile(pdfFile);
+
+                foreach (PdfPageBase page in doc.Pages)
+                {
+                    mergedPdf.Pages.Add(page.Clone() as PdfPageBase);
+                }
+
+                doc.Close();
+            }
+
+            mergedPdf.SaveToFile(outputFilePath);
+            mergedPdf.Close();
+        }
+    }
+}
+
+
+
+
+using System;
+using System.IO;
 using System.Web;
 using System.Web.UI;
 using Spire.Pdf;
