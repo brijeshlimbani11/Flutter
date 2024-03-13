@@ -1,3 +1,33 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using Spire.Pdf;
+using System.Web.UI.WebControls;
+using System.IO;
+
+namespace practice6
+{
+    public partial class UploadPage : System.Web.UI.Page
+    {
+        protected void btnUpload_Click(object sender, EventArgs e)
+        {
+            //Get the paths of the documents to be merged
+            String[] files = new String[] {
+                "C:\\Users\\sspl1366\\Downloads\\sample1.pdf",
+                "C:\\Users\\sspl1366\\Downloads\\sample1.pdf",
+                "C:\\Users\\sspl1366\\Downloads\\HTML2.pdf"};
+
+            //Merge these documents and return an object of PdfDocumentBase
+            PdfDocumentBase doc = PdfDocument.MergeFiles(files);
+
+            //Save the result to a PDF file
+            doc.Save("output.pdf", FileFormat.PDF);
+        }
+    }
+}
+
 
 <%@ Page Language="C#" AutoEventWireup="true" CodeBehind="UploadPage.aspx.cs" Inherits="YourNamespace.UploadPage" %>
 
