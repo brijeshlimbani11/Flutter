@@ -1,3 +1,80 @@
+using Spire.Pdf;
+using Spire.Pdf.Graphics;
+using System;
+using System.Drawing;
+
+
+namespace AddPDFHeader
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            //create a PDF document
+            PdfDocument doc = new PdfDocument();
+            doc.PageSettings.Size = PdfPageSize.A4;
+
+            //reset the default margins to 0
+            doc.PageSettings.Margins = new PdfMargins(0);
+
+            //create a PdfMargins object, the parameters indicate the page margins you want to set
+            PdfMargins margins = new PdfMargins(60, 60, 60, 60);
+
+            //create a header template with content and apply it to page template
+            doc.Template.Top = CreateHeaderTemplate(doc, margins);
+
+            //apply blank templates to other parts of page template
+            doc.Template.Bottom = new PdfPageTemplateElement(doc.PageSettings.Size.Width, margins.Bottom);
+            doc.Template.Left = new PdfPageTemplateElement(margins.Left, doc.PageSettings.Size.Height);
+            doc.Template.Right = new PdfPageTemplateElement(margins.Right, doc.PageSettings.Size.Height);
+
+            //save the file
+            doc.SaveToFile("PdfHeader.pdf");
+        }
+        static PdfPageTemplateElement CreateHeaderTemplate(PdfDocument doc, PdfMargins margins)
+        {
+            //get page size
+            SizeF pageSize = doc.PageSettings.Size;
+
+            //create a PdfPageTemplateElement object as header space
+            PdfPageTemplateElement headerSpace = new PdfPageTemplateElement(pageSize.Width, margins.Top);
+            headerSpace.Foreground = false;
+
+            //declare two float variables
+            float x = margins.Left;
+            float y = 0;
+
+            //draw image in header space 
+            PdfImage headerImage = PdfImage.FromFile("logo.png");
+            float width = headerImage.Width / 3;
+            float height = headerImage.Height / 3;
+            headerSpace.Graphics.DrawImage(headerImage, x, margins.Top - height - 2, width, height);
+
+            //draw line in header space
+            PdfPen pen = new PdfPen(PdfBrushes.Gray, 1);
+            headerSpace.Graphics.DrawLine(pen, x, y + margins.Top - 2, pageSize.Width - x, y + margins.Top - 2);
+
+            //draw text in header space
+            PdfTrueTypeFont font = new PdfTrueTypeFont(new Font("Impact", 25f, FontStyle.Bold));
+            PdfStringFormat format = new PdfStringFormat(PdfTextAlignment.Left);
+            String headerText = "HEADER TEXT";
+            SizeF size = font.MeasureString(headerText, format);
+            headerSpace.Graphics.DrawString(headerText, font, PdfBrushes.Gray, pageSize.Width - x - size.Width - 2, margins.Top - (size.Height + 5), format);
+
+            //return headerSpace
+            return headerSpace;
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
 using System;
 using System.IO;
 using System.Web.UI;
