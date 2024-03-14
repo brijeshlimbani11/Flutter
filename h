@@ -1,4 +1,106 @@
 using System;
+using System.IO;
+using System.Web.UI;
+using Spire.Pdf;
+using Spire.Pdf.Bookmarks;
+using System.Text.RegularExpressions;
+
+namespace practice6
+{
+    public partial class HtmlToPdfConversion : Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void btnConvertToPdf_Click(object sender, EventArgs e)
+        {
+            // Create a new PDF document
+            PdfDocument document = new PdfDocument();
+
+            // Get the HTML content
+            string htmlContent = GetHtmlContent();
+
+            // Define a font for the bookmarks
+            PdfTrueTypeFont font = new PdfTrueTypeFont(new System.Drawing.Font("Arial", 12f));
+
+            // Create a bookmark for Table of Content
+            PdfBookmark tocBookmark = new PdfBookmark("Table of Contents");
+            tocBookmark.Color = System.Drawing.Color.Blue;
+            tocBookmark.Italic = true;
+            tocBookmark.Bold = true;
+            tocBookmark.Style = PdfBookmarkStyle.Italic;
+            tocBookmark.ForeColor = System.Drawing.Color.Blue;
+
+            // Add the TOC bookmark to the document
+            document.Bookmarks.Add(tocBookmark);
+
+            // Regular expression pattern to extract bookmark text and level
+            string pattern = @"<Tr\s+data-bookmark-enabled=""true""\s+data-bookmark-level=""(\d+)""\s+data-bookmark-text=""([^""]+)""";
+
+            // Match the pattern in the HTML content
+            MatchCollection matches = Regex.Matches(htmlContent, pattern);
+
+            // Loop through the matches and create bookmarks and TOC entries
+            foreach (Match match in matches)
+            {
+                int level = int.Parse(match.Groups[1].Value);
+                string bookmarkText = match.Groups[2].Value;
+                PdfBookmark bookmark = new PdfBookmark(bookmarkText);
+                bookmark.Color = System.Drawing.Color.Blue;
+                bookmark.Italic = true;
+                bookmark.Bold = true;
+                bookmark.Style = PdfBookmarkStyle.Italic;
+                bookmark.ForeColor = System.Drawing.Color.Blue;
+                bookmark.Level = level;
+
+                // Add bookmark to the document
+                document.Bookmarks.Add(bookmark);
+
+                // Add TOC entry
+                tocBookmark.Childs.Add(bookmark);
+            }
+
+            // Save the PDF document
+            MemoryStream ms = new MemoryStream();
+            document.SaveToStream(ms);
+            document.Close();
+
+            // Download the PDF file
+            Response.Clear();
+            Response.ContentType = "application/pdf";
+            Response.AddHeader("content-disposition", "attachment; filename=GeneratedPdf.pdf");
+            Response.BinaryWrite(ms.ToArray());
+            Response.End();
+        }
+
+        private string GetHtmlContent()
+        {
+            // This is your provided HTML string
+            return @"
+                <Table style="" Width:100%; Font -family :'Times New Roman' !important;"">
+                    <Tr data-bookmark-enabled=""true"" data-bookmark-level=""1"" data-bookmark-text=""LOG FORMS"" width=""100%"" ALIGN=LEFT style=""BACKGROUND-COLOR: #FFB895;  page-break-before:always;"">
+                        <Td style=""vertical-align:middle; text-align: center; font-family:'Times New Roman'; font-size:12px; font-weight:bold; "">&nbsp;LOG FORMS</Td>
+                    </Tr>
+                    <Tr ALIGN=LEFT>
+                        <Td style=""vertical-align:top;"">
+                            <Table width=""100%"" cellspacing='0' style=""font-family:'Times New Roman' !Important; font-size:12px; border-collapse: collapse !Important;"">
+                                <Tr data-bookmark-enabled=""true"" data-bookmark-level=""2""  data-bookmark-text=""FINAL STATUS FORM"" width=""100%"" color:#FFFFFF; ALIGN=LEFT style=""BACKGROUND-COLOR: #008ecd; page-break-inside:avoid;"">
+                                    <Td style=""vertical-align:middle;color:#FFFFFF;  width: 80%;"">&nbsp;FINAL STATUS FORM</Td>
+                                </Tr>
+                            </Table>
+                            <!-- Add more table rows as needed -->
+                        </Td>
+                    </Tr>
+                </Table>";
+        }
+    }
+}
+
+
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
