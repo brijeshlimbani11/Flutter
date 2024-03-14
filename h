@@ -1,3 +1,183 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text.RegularExpressions;
+using System.Web.UI;
+using Spire.Pdf;
+using Spire.Pdf.Bookmarks;
+using Spire.Pdf.Graphics;
+
+namespace HtmlToPdfConversion
+{
+    public partial class Default : Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            
+        }
+
+        protected void btnConvertToPdf_Click(object sender, EventArgs e)
+        {
+            // Get the HTML content from the page
+            string htmlContent = GetHtmlContent();
+
+            // Generate PDF from HTML content
+            GeneratePdf(htmlContent);
+        }
+
+        private string GetHtmlContent()
+        {
+            // You can fetch HTML content from your database or any other source
+            // For demonstration purposes, we're just returning a sample HTML string
+            return @"
+<Table style="" Width:100%; Font -family :'Times New Roman' !important;"">
+<Tr data-bookmark-enabled=""true"" data-bookmark-level=""1"" data-bookmark-text=""LOG FORMS"" width=""100%"" ALIGN=LEFT style=""BACKGROUND-COLOR: #FFB895;  page-break-before:always;"">
+<Td style=""vertical-align:middle; text-align: center; font-family:'Times New Roman'; font-size:12px; font-weight:bold; "">&nbsp;LOG FORMS</Td>
+</Tr>
+<Tr ALIGN=LEFT>
+<Td style=""vertical-align:top;"">
+<Table width=""100%"" cellspacing='0' style=""font-family:'Times New Roman' !Important; font-size:12px; border-collapse: collapse !Important;"">
+<Tr data-bookmark-enabled=""true"" data-bookmark-level=""2""  data-bookmark-text=""FINAL STATUS FORM"" width=""100%"" color:#FFFFFF; ALIGN=LEFT style=""BACKGROUND-COLOR: #008ecd; page-break-inside:avoid;"">
+<Td style=""vertical-align:middle;color:#FFFFFF;  width: 80%;"">&nbsp;FINAL STATUS FORM</Td>
+</Tr>
+</Table>
+</Td>
+</Tr>
+</Table>";
+        }
+
+        private void GeneratePdf(string htmlContent)
+        {
+            // Create a new PDF document
+            PdfDocument document = new PdfDocument();
+
+            // Parse the HTML content and extract headings as table of contents
+            var tocEntries = ExtractTableOfContentsFromHtml(htmlContent);
+
+            // Generate bookmarks from the table of contents
+            var bookmarks = GenerateBookmarks(tocEntries);
+
+            // Add bookmarks to the PDF document
+            foreach (var bookmark in bookmarks)
+            {
+                document.Bookmarks.Add(bookmark);
+            }
+
+            // Save the PDF document to a MemoryStream
+            using (MemoryStream stream = new MemoryStream())
+            {
+                document.SaveToStream(stream);
+
+                // Clear the response buffer
+                Response.Clear();
+                Response.ContentType = "application/pdf";
+                Response.AddHeader("content-disposition", "attachment;filename=GeneratedPdf.pdf");
+                Response.BinaryWrite(stream.ToArray());
+                Response.End();
+            }
+        }
+
+        private List<Tuple<string, int>> ExtractTableOfContentsFromHtml(string html)
+        {
+            // Regular expression to match headings in the HTML string
+            Regex regex = new Regex(@"data-bookmark-text=""(.*?)"".*?data-bookmark-level=""(\d+)""");
+
+            MatchCollection matches = regex.Matches(html);
+
+            List<Tuple<string, int>> tocEntries = new List<Tuple<string, int>>();
+
+            foreach (Match match in matches)
+            {
+                // Extract heading text and level
+                string text = match.Groups[1].Value;
+                int level = int.Parse(match.Groups[2].Value);
+
+                // Add heading to table of contents
+                tocEntries.Add(new Tuple<string, int>(text, level));
+            }
+
+            return tocEntries;
+        }
+
+        private List<PdfBookmark> GenerateBookmarks(List<Tuple<string, int>> tocEntries)
+        {
+            List<PdfBookmark> bookmarks = new List<PdfBookmark>();
+
+            PdfBookmark root = new PdfBookmark();
+            PdfBookmark parent = root;
+            foreach (var entry in tocEntries)
+            {
+                PdfBookmark bookmark = new PdfBookmark
+                {
+                    Title = entry.Item1,
+                    Color = new PdfRGBColor(0, 0, 255),
+                    Style = PdfBookmarkStyle.Regular,
+                    Destination = new PdfDestination(0, 0, 0),
+                    Action = new PdfGoToAction(entry.Item1)
+                };
+
+                if (entry.Item2 == 1)
+                {
+                    parent = root;
+                }
+                else
+                {
+                    while (entry.Item2 <= parent.Level)
+                    {
+                        parent = parent.Parent;
+                    }
+                }
+
+                parent.Childs.Add(bookmark);
+                parent = bookmark;
+            }
+
+            for (int i = 0; i < bookmarks.Count; i++)
+            {
+                PdfBookmark bm = bookmarks[i];
+                bm.Parent = null;
+                if (i > 0)
+                {
+                    bm.PrevSibling = bookmarks[i - 1];
+                }
+                if (i < bookmarks.Count - 1)
+                {
+                    bm.NextSibling = bookmarks[i + 1];
+                }
+            }
+
+            return root.Childs;
+        }
+    }
+}
+
+
+
+
+
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="HtmlToPdfConversion.Default" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>HTML to PDF Conversion</title>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
+            <!-- Your HTML content goes here -->
+            <asp:Button ID="btnConvertToPdf" runat="server" Text="Convert to PDF" OnClick="btnConvertToPdf_Click" />
+        </div>
+    </form>
+</body>
+</html>
+
+
+
+
+
+
 <Table style=" Width:100%; Font -family :'Times New Roman' !important;">
 <Tr data-bookmark-enabled="true" data-bookmark-level="1" data-bookmark-text="LOG FORMS" width="100%" ALIGN=LEFT style="BACKGROUND-COLOR: #FFB895;  page-break-before:always;">
 <Td style="vertical-align:middle; text-align: center; font-family:'Times New Roman'; font-size:12px; font-weight:bold; ">&nbsp;LOG FORMS</Td>
