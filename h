@@ -1,3 +1,212 @@
+<Table style=" Width:100%; Font -family :'Times New Roman' !important;">
+<Tr data-bookmark-enabled="true" data-bookmark-level="1" data-bookmark-text="LOG FORMS" width="100%" ALIGN=LEFT style="BACKGROUND-COLOR: #FFB895;  page-break-before:always;">
+<Td style="vertical-align:middle; text-align: center; font-family:'Times New Roman'; font-size:12px; font-weight:bold; ">&nbsp;LOG FORMS</Td>
+</Tr>
+<Tr ALIGN=LEFT>
+<Td style="vertical-align:top;">
+<Table width="100%" cellspacing='0' style="font-family:'Times New Roman' !Important; font-size:12px; border-collapse: collapse !Important;">
+<Tr data-bookmark-enabled="true" data-bookmark-level="2"  data-bookmark-text="FINAL STATUS FORM" width="100%" color:#FFFFFF; ALIGN=LEFT style="BACKGROUND-COLOR: #008ecd; page-break-inside:avoid;">
+<Td style="vertical-align:middle;color:#FFFFFF;  width: 80%;">&nbsp;FINAL STATUS FORM</Td>
+</Tr>
+</Table>
+<Tr>
+<td>
+<Table width="100%" cellspacing='0' style="font-family:'Times New Roman' !Important; font-size:12px; border-collapse: collapse !Important;">
+<Tr ALIGN=LEFT style="page-break-inside:avoid;">
+<Td width="60%" style="  font-family:'Times New Roman' !Important; font-size:12px;  vertical-align:middle; border: solid 1px gray !important; " ALIGN=LEFT>&nbsp;
+<span id="Lnk0046600002385548R111203" style="word-wrap:break-word;white-space:;font-family:'Times New Roman' !Important;font-size:12px !Important;">Subject Study Completion Status:</span>
+</Td>
+<Td width="40%" style="vertical-align:middle; font-family:'Times New Roman' !Important; font-size:12px; border: solid 1px gray !important;" ALIGN=LEFT>
+<table id="rdo2385548R111222" border="0" style="font-family:'Times New Roman' !Important;font-size:12px !Important;">
+	<tr>
+		<td>
+		<input id="rdo2385548R111222_0" type="radio" name="rdo2385548R111222" value="COMPLETED" />
+		<label for="rdo2385548R111222_0">Completed</label>
+		</td>
+		<td>
+		<input id="rdo2385548R111222_1" type="radio" name="rdo2385548R111222" value="SCREEN FAILURE" checked="checked" />
+		<label for="rdo2385548R111222_1">Screen Failure</label>
+		</td>
+		<td>
+		<input id="rdo2385548R111222_2" type="radio" name="rdo2385548R111222" value="PREMATURE DISCONTINUATION" />
+		<label for="rdo2385548R111222_2">Premature Discontinuation</label>
+		</td>
+	</tr>
+</table>
+</Td>
+</Tr>
+</Tr>
+<Tr ALIGN=LEFT style="page-break-inside:avoid;">
+<Td width="60%" style="  font-family:'Times New Roman' !Important; font-size:12px;  vertical-align:middle; border: solid 1px gray !important; " ALIGN=LEFT>&nbsp;
+<span id="Lnk0046600002746248R112204" style="word-wrap:break-word;white-space:;font-family:'Times New Roman' !Important;font-size:12px !Important;">Date of Completion or Premature Discontinuation:</span>
+</Td>
+<Td width="40%" style="vertical-align:middle; font-family:'Times New Roman' !Important; font-size:12px; border: solid 1px gray !important;" ALIGN=LEFT>&nbsp;&nbsp;
+<span id="txtd2746248R112223" style="word-wrap:break-word;white-space:none;font-family:'Times New Roman' !Important;font-size:12px !Important;"></span>
+</Td>
+</Tr>
+</Tr>
+<Tr ALIGN=LEFT style="page-break-inside:avoid;">
+<Td width="60%" style="  font-family:'Times New Roman' !Important; font-size:12px;  vertical-align:middle; border: solid 1px gray !important; " ALIGN=LEFT>&nbsp;
+<span id="Lnk0046600002746148R113205" style="word-wrap:break-word;white-space:;font-family:'Times New Roman' !Important;font-size:12px !Important;">Date of last study drug administration:</span>
+</Td>
+<Td width="40%" style="vertical-align:middle; font-family:'Times New Roman' !Important; font-size:12px; border: solid 1px gray !important;" ALIGN=LEFT>&nbsp;&nbsp;
+<span id="txtd2746148R113224" style="word-wrap:break-word;white-space:none;font-family:'Times New Roman' !Important;font-size:12px !Important;"></span>
+</Td>
+</Tr>
+</Tr>
+<Tr ALIGN=LEFT style="page-break-inside:avoid;"><Td width="60%" style="  font-family:'Times New Roman' !Important; font-size:12px;  vertical-align:middle; border: solid 1px gray !important; " ALIGN=LEFT>&nbsp;
+<span id="Lnk0046600002385748R114206" style="word-wrap:break-word;white-space:;font-family:'Times New Roman' !Important;font-size:12px !Important;">Reason for Discontinuation:</span>
+</Td>
+<Td width="40%" style="vertical-align:middle; font-family:'Times New Roman' !Important; font-size:12px; border: solid 1px gray !important;" ALIGN=LEFT>
+<span id="ddl2385748R114225" style="word-wrap:break-word;white-space:none;font-family:'Times New Roman' !Important;font-size:12px !Important;">Non-fulfillment of inclusion or exclusion criteria</span>
+</Td>
+</Tr>
+</Tr>
+<Tr ALIGN=LEFT style="page-break-inside:avoid;">
+<Td width="60%" style="  font-family:'Times New Roman' !Important; font-size:12px;  vertical-align:middle; border: solid 1px gray !important; " ALIGN=LEFT>&nbsp;
+<span id="Lnk0046600002385848R115207" style="word-wrap:break-word;white-space:;font-family:'Times New Roman' !Important;font-size:12px !Important;">If 'Other', 'Physician decision', 'Withdrawal by subject', ‘Adverse event’, please specify:</span>
+</Td>
+<Td width="40%" style="vertical-align:middle; font-family:'Times New Roman' !Important; font-size:12px; border: solid 1px gray !important;" ALIGN=LEFT>&nbsp;&nbsp;
+<span id="txt2385848R115226" disabled="disabled" style="word-wrap:break-word;white-space:none;font-family:'Times New Roman' !Important;font-size:12px !Important;"></span>
+</Td>
+</Tr>
+</Tr>
+<Tr ALIGN=LEFT style="page-break-inside:avoid;">
+<Td width="60%" style="  font-family:'Times New Roman' !Important; font-size:12px;  vertical-align:middle; border: solid 1px gray !important; " ALIGN=LEFT>&nbsp;
+<span id="Lnk0046600002592048R116208" style="word-wrap:break-word;white-space:;font-family:'Times New Roman' !Important;font-size:12px !Important;">If Non-fulfillment of inclusion or exclusion criteria, please specify:</span>
+</Td>
+<Td width="40%" style="vertical-align:middle; font-family:'Times New Roman' !Important; font-size:12px; border: solid 1px gray !important;" ALIGN=LEFT>&nbsp;&nbsp;
+<span id="txt2592048R116227" disabled="disabled" style="word-wrap:break-word;white-space:none;font-family:'Times New Roman' !Important;font-size:12px !Important;">Inclusion 03 and 04 Exclusion 02</span>
+</Td>
+</Tr>
+</Tr>
+<Tr ALIGN=LEFT style="page-break-inside:avoid;">
+<Td width="60%" style="  font-family:'Times New Roman' !Important; font-size:12px;  vertical-align:middle; border: solid 1px gray !important; " ALIGN=LEFT>&nbsp;
+<span id="Lnk0046600002591848R117209" style="word-wrap:break-word;white-space:;font-family:'Times New Roman' !Important;font-size:12px !Important;">If 'Protocol Violation, Please specify:</span>
+</Td>
+<Td width="40%" style="vertical-align:middle; font-family:'Times New Roman' !Important; font-size:12px; border: solid 1px gray !important;" ALIGN=LEFT>&nbsp;&nbsp;
+<span id="txt2591848R117228" disabled="disabled" style="word-wrap:break-word;white-space:none;font-family:'Times New Roman' !Important;font-size:12px !Important;"></span>
+</Td>
+</Tr>
+</Tr>
+<Tr ALIGN=LEFT style="page-break-inside:avoid;">
+<Td width="60%" style="  font-family:'Times New Roman' !Important; font-size:12px;  vertical-align:middle; border: solid 1px gray !important; " ALIGN=LEFT>&nbsp;
+<span id="Lnk0046600002746348R118210" style="word-wrap:break-word;white-space:;font-family:'Times New Roman' !Important;font-size:12px !Important;">If 'Death', Date of Death:</span>
+</Td>
+<Td width="40%" style="vertical-align:middle; font-family:'Times New Roman' !Important; font-size:12px; border: solid 1px gray !important;" ALIGN=LEFT>&nbsp;&nbsp;
+<span id="txtd2746348R118229" style="word-wrap:break-word;white-space:none;font-family:'Times New Roman' !Important;font-size:12px !Important;"></span>
+</Td>
+</Tr>
+</Tr>
+<Table width="100%" cellspacing='0' style="font-family:'Times New Roman' !Important; font-size:12px; border-collapse: collapse !Important;">
+<Tr data-bookmark-enabled="true" data-bookmark-level="2"  data-bookmark-text="FINAL STATUS FORM" width="100%" color:#FFFFFF; ALIGN=LEFT style="BACKGROUND-COLOR: #008ecd; page-break-inside:avoid;">
+<Td style="vertical-align:middle;color:#FFFFFF;  width: 80%;">&nbsp;FINAL STATUS FORM</Td>
+</Tr>
+</Table>
+<Tr>
+<td>
+<Table width="100%" cellspacing='0' style="font-family:'Times New Roman' !Important; font-size:12px; border-collapse: collapse !Important;">
+<Tr ALIGN=LEFT style="page-break-inside:avoid;">
+<Td width="60%" style="  font-family:'Times New Roman' !Important; font-size:12px;  vertical-align:middle; border: solid 1px gray !important; " ALIGN=LEFT>&nbsp;
+<span id="Lnk0046600002385548R111203" style="word-wrap:break-word;white-space:;font-family:'Times New Roman' !Important;font-size:12px !Important;">Subject Study Completion Status:</span>
+</Td>
+<Td width="40%" style="vertical-align:middle; font-family:'Times New Roman' !Important; font-size:12px; border: solid 1px gray !important;" ALIGN=LEFT>
+<table id="rdo2385548R111222" border="0" style="font-family:'Times New Roman' !Important;font-size:12px !Important;">
+	<tr>
+		<td>
+		<input id="rdo2385548R111222_0" type="radio" name="rdo2385548R111222" value="COMPLETED" />
+		<label for="rdo2385548R111222_0">Completed</label>
+		</td>
+		<td>
+		<input id="rdo2385548R111222_1" type="radio" name="rdo2385548R111222" value="SCREEN FAILURE" checked="checked" />
+		<label for="rdo2385548R111222_1">Screen Failure</label>
+		</td>
+		<td>
+		<input id="rdo2385548R111222_2" type="radio" name="rdo2385548R111222" value="PREMATURE DISCONTINUATION" />
+		<label for="rdo2385548R111222_2">Premature Discontinuation</label>
+		</td>
+	</tr>
+</table>
+</Td>
+</Tr>
+</Tr>
+<Tr ALIGN=LEFT style="page-break-inside:avoid;">
+<Td width="60%" style="  font-family:'Times New Roman' !Important; font-size:12px;  vertical-align:middle; border: solid 1px gray !important; " ALIGN=LEFT>&nbsp;
+<span id="Lnk0046600002746248R112204" style="word-wrap:break-word;white-space:;font-family:'Times New Roman' !Important;font-size:12px !Important;">Date of Completion or Premature Discontinuation:</span>
+</Td>
+<Td width="40%" style="vertical-align:middle; font-family:'Times New Roman' !Important; font-size:12px; border: solid 1px gray !important;" ALIGN=LEFT>&nbsp;&nbsp;
+<span id="txtd2746248R112223" style="word-wrap:break-word;white-space:none;font-family:'Times New Roman' !Important;font-size:12px !Important;"></span>
+</Td>
+</Tr>
+</Tr>
+<Tr ALIGN=LEFT style="page-break-inside:avoid;">
+<Td width="60%" style="  font-family:'Times New Roman' !Important; font-size:12px;  vertical-align:middle; border: solid 1px gray !important; " ALIGN=LEFT>&nbsp;
+<span id="Lnk0046600002746148R113205" style="word-wrap:break-word;white-space:;font-family:'Times New Roman' !Important;font-size:12px !Important;">Date of last study drug administration:</span>
+</Td>
+<Td width="40%" style="vertical-align:middle; font-family:'Times New Roman' !Important; font-size:12px; border: solid 1px gray !important;" ALIGN=LEFT>&nbsp;&nbsp;
+<span id="txtd2746148R113224" style="word-wrap:break-word;white-space:none;font-family:'Times New Roman' !Important;font-size:12px !Important;"></span>
+</Td>
+</Tr>
+</Tr>
+<Tr ALIGN=LEFT style="page-break-inside:avoid;"><Td width="60%" style="  font-family:'Times New Roman' !Important; font-size:12px;  vertical-align:middle; border: solid 1px gray !important; " ALIGN=LEFT>&nbsp;
+<span id="Lnk0046600002385748R114206" style="word-wrap:break-word;white-space:;font-family:'Times New Roman' !Important;font-size:12px !Important;">Reason for Discontinuation:</span>
+</Td>
+<Td width="40%" style="vertical-align:middle; font-family:'Times New Roman' !Important; font-size:12px; border: solid 1px gray !important;" ALIGN=LEFT>
+<span id="ddl2385748R114225" style="word-wrap:break-word;white-space:none;font-family:'Times New Roman' !Important;font-size:12px !Important;">Non-fulfillment of inclusion or exclusion criteria</span>
+</Td>
+</Tr>
+</Tr>
+<Tr ALIGN=LEFT style="page-break-inside:avoid;">
+<Td width="60%" style="  font-family:'Times New Roman' !Important; font-size:12px;  vertical-align:middle; border: solid 1px gray !important; " ALIGN=LEFT>&nbsp;
+<span id="Lnk0046600002385848R115207" style="word-wrap:break-word;white-space:;font-family:'Times New Roman' !Important;font-size:12px !Important;">If 'Other', 'Physician decision', 'Withdrawal by subject', ‘Adverse event’, please specify:</span>
+</Td>
+<Td width="40%" style="vertical-align:middle; font-family:'Times New Roman' !Important; font-size:12px; border: solid 1px gray !important;" ALIGN=LEFT>&nbsp;&nbsp;
+<span id="txt2385848R115226" disabled="disabled" style="word-wrap:break-word;white-space:none;font-family:'Times New Roman' !Important;font-size:12px !Important;"></span>
+</Td>
+</Tr>
+</Tr>
+<Tr ALIGN=LEFT style="page-break-inside:avoid;">
+<Td width="60%" style="  font-family:'Times New Roman' !Important; font-size:12px;  vertical-align:middle; border: solid 1px gray !important; " ALIGN=LEFT>&nbsp;
+<span id="Lnk0046600002592048R116208" style="word-wrap:break-word;white-space:;font-family:'Times New Roman' !Important;font-size:12px !Important;">If Non-fulfillment of inclusion or exclusion criteria, please specify:</span>
+</Td>
+<Td width="40%" style="vertical-align:middle; font-family:'Times New Roman' !Important; font-size:12px; border: solid 1px gray !important;" ALIGN=LEFT>&nbsp;&nbsp;
+<span id="txt2592048R116227" disabled="disabled" style="word-wrap:break-word;white-space:none;font-family:'Times New Roman' !Important;font-size:12px !Important;">Inclusion 03 and 04 Exclusion 02</span>
+</Td>
+</Tr>
+</Tr>
+<Tr ALIGN=LEFT style="page-break-inside:avoid;">
+<Td width="60%" style="  font-family:'Times New Roman' !Important; font-size:12px;  vertical-align:middle; border: solid 1px gray !important; " ALIGN=LEFT>&nbsp;
+<span id="Lnk0046600002591848R117209" style="word-wrap:break-word;white-space:;font-family:'Times New Roman' !Important;font-size:12px !Important;">If 'Protocol Violation, Please specify:</span>
+</Td>
+<Td width="40%" style="vertical-align:middle; font-family:'Times New Roman' !Important; font-size:12px; border: solid 1px gray !important;" ALIGN=LEFT>&nbsp;&nbsp;
+<span id="txt2591848R117228" disabled="disabled" style="word-wrap:break-word;white-space:none;font-family:'Times New Roman' !Important;font-size:12px !Important;"></span>
+</Td>
+</Tr>
+</Tr>
+<Tr ALIGN=LEFT style="page-break-inside:avoid;">
+<Td width="60%" style="  font-family:'Times New Roman' !Important; font-size:12px;  vertical-align:middle; border: solid 1px gray !important; " ALIGN=LEFT>&nbsp;
+<span id="Lnk0046600002746348R118210" style="word-wrap:break-word;white-space:;font-family:'Times New Roman' !Important;font-size:12px !Important;">If 'Death', Date of Death:</span>
+</Td>
+<Td width="40%" style="vertical-align:middle; font-family:'Times New Roman' !Important; font-size:12px; border: solid 1px gray !important;" ALIGN=LEFT>&nbsp;&nbsp;
+<span id="txtd2746348R118229" style="word-wrap:break-word;white-space:none;font-family:'Times New Roman' !Important;font-size:12px !Important;"></span>
+</Td>
+</Tr>
+</Tr>
+</Table>
+</Td>
+</Tr>
+
+
+
+
+
+
+
+
+
+
+
+
 //------------------For page number--------------------------
 int intPageNo = 0;
 string strBlank_PageNo = null;
