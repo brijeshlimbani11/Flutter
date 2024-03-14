@@ -1,3 +1,12 @@
+Severity	Code	Description	Project	File	Line	Suppression State
+Error	CS0246	The type or namespace name 'PdfTableOfContents' could not be found (are you missing a using directive or an assembly reference?)	practice6	C:\Users\sspl1366\Documents\Visual Studio 2015\Projects\practice6\practice6\HtmlToPdfConversion.aspx.cs	34	Active
+Severity	Code	Description	Project	File	Line	Suppression State
+Error	CS0103	The name 'PdfHtmlConverter' does not exist in the current context	practice6	C:\Users\sspl1366\Documents\Visual Studio 2015\Projects\practice6\practice6\HtmlToPdfConversion.aspx.cs	31	Active
+Severity	Code	Description	Project	File	Line	Suppression State
+Error	CS0246	The type or namespace name 'PdfDocumentBookmarkCollection' could not be found (are you missing a using directive or an assembly reference?)	practice6	C:\Users\sspl1366\Documents\Visual Studio 2015\Projects\practice6\practice6\HtmlToPdfConversion.aspx.cs	49	Active
+
+
+
 using System;
 using System.IO;
 using System.Web.UI;
