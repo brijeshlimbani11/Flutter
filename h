@@ -1,3 +1,101 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text.RegularExpressions;
+using Spire.Pdf;
+using Spire.Pdf.Bookmarks;
+
+namespace practice6
+{
+    public partial class HtmlToPdfConversion
+    {
+        protected void btnConvertToPdf_Click(object sender, EventArgs e)
+        {
+            // Create a new PDF document
+            PdfDocument document = new PdfDocument();
+
+            // Get the HTML content
+            string htmlContent = GetHtmlContent();
+
+            // Regular expression pattern to extract bookmark text and level
+            string pattern = @"data-bookmark-level=""(\d+)""\s+data-bookmark-text=""([^""]+)""";
+
+            // Match the pattern in the HTML content
+            MatchCollection matches = Regex.Matches(htmlContent, pattern);
+
+            // Create a dictionary to store bookmarks by their level
+            var bookmarksByLevel = new Dictionary<int, PdfBookmark>();
+
+            // Create a bookmark for Table of Content
+            PdfBookmark tocBookmark = new PdfBookmark("Table of Contents");
+            document.Bookmarks.Add(tocBookmark);
+
+            // Loop through the matches and create bookmarks and TOC entries
+            foreach (Match match in matches)
+            {
+                int level = int.Parse(match.Groups[1].Value);
+                string bookmarkText = match.Groups[2].Value;
+
+                // Create the bookmark
+                PdfBookmark bookmark = new PdfBookmark(bookmarkText);
+
+                // Add bookmark to the document
+                document.Bookmarks.Add(bookmark);
+
+                // Add bookmark to the appropriate level
+                if (!bookmarksByLevel.ContainsKey(level))
+                {
+                    bookmarksByLevel[level] = bookmark;
+                }
+                else
+                {
+                    bookmarksByLevel[level - 1].Add(bookmark); // Change 'Childs' to 'Add'
+                }
+
+                // Add TOC entry
+                tocBookmark.Childs.Add(bookmark);
+            }
+
+            // Save the PDF document
+            MemoryStream ms = new MemoryStream();
+            document.SaveToStream(ms);
+            document.Close();
+
+            // Download the PDF file
+            Response.Clear();
+            Response.ContentType = "application/pdf";
+            Response.AddHeader("content-disposition", "attachment; filename=GeneratedPdf.pdf");
+            Response.BinaryWrite(ms.ToArray());
+            Response.End();
+        }
+
+        private string GetHtmlContent()
+        {
+            // This is your provided HTML string
+            return @"
+                <Table style="" Width:100%; Font -family :'Times New Roman' !important;"">
+                    <Tr data-bookmark-enabled=""true"" data-bookmark-level=""1"" data-bookmark-text=""LOG FORMS"" width=""100%"" ALIGN=LEFT style=""BACKGROUND-COLOR: #FFB895;  page-break-before:always;"">
+                        <Td style=""vertical-align:middle; text-align: center; font-family:'Times New Roman'; font-size:12px; font-weight:bold; "">&nbsp;LOG FORMS</Td>
+                    </Tr>
+                    <Tr ALIGN=LEFT>
+                        <Td style=""vertical-align:top;"">
+                            <Table width=""100%"" cellspacing='0' style=""font-family:'Times New Roman' !Important; font-size:12px; border-collapse: collapse !Important;"">
+                                <Tr data-bookmark-enabled=""true"" data-bookmark-level=""2""  data-bookmark-text=""FINAL STATUS FORM"" width=""100%"" color:#FFFFFF; ALIGN=LEFT style=""BACKGROUND-COLOR: #008ecd; page-break-inside:avoid;"">
+                                    <Td style=""vertical-align:middle;color:#FFFFFF;  width: 80%;"">&nbsp;FINAL STATUS FORM</Td>
+                                </Tr>
+                            </Table>
+                            <!-- Add more table rows as needed -->
+                        </Td>
+                    </Tr>
+                </Table>";
+        }
+    }
+}
+
+
+
+
+
 Severity	Code	Description	Project	File	Line	Suppression State
 Error	CS1061	'PdfBookmark' does not contain a definition for 'Childs' and no extension method 'Childs' accepting a first argument of type 'PdfBookmark' could be found (are you missing a using directive or an assembly reference?)	practice6	C:\Users\sspl1366\Documents\Visual Studio 2015\Projects\practice6\practice6\HtmlToPdfConversion.aspx.cs	59	Active
 Severity	Code	Description	Project	File	Line	Suppression State
