@@ -1,4 +1,72 @@
 using System;
+using System.IO;
+using System.Web.UI;
+using Spire.Pdf;
+using Spire.Pdf.HtmlConverter;
+
+namespace YourNamespace
+{
+    public partial class ConvertToPDF : Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            // Not needed for this example, but you can add any logic here if required
+        }
+
+        protected void btnConvertToPdf_Click(object sender, EventArgs e)
+        {
+            // HTML content string provided
+            string htmlContent = @"<Table style='Width:100%; Font -family :&apos;Times New Roman&apos; !important;'>
+                                    <!-- Your provided HTML content here -->
+                                  </Table>";
+
+            // Initialize a new PDF document
+            PdfDocument doc = new PdfDocument();
+
+            // Convert HTML to PDF and add to the document
+            PdfPageBase page = doc.Pages.Add();
+            PdfHtmlLayoutFormat htmlLayoutFormat = new PdfHtmlLayoutFormat();
+            htmlLayoutFormat.IsWaiting = false;
+            PdfHtmlConverter.ConvertHtmlToPdf(htmlContent, doc, page, htmlLayoutFormat);
+
+            // Generate table of contents
+            PdfTableOfContents toc = new PdfTableOfContents("Table of Contents");
+            toc.TitleStyle = new PdfStringFormat(PdfTextAlignment.Center);
+            toc.TitleStyle.Font = new PdfFont(PdfFontFamily.Helvetica, 16f);
+            toc.LevelStyle.Font = new PdfFont(PdfFontFamily.Helvetica, 12f);
+            toc.LevelStyle.Font.Color = PdfRGBColor.DarkBlue;
+            toc.LevelStyle.Indent = 10;
+            toc.LevelStyle.Brush = PdfBrushes.Black;
+
+            toc.BeginPageIndex = 0;
+            toc.EndPageIndex = doc.Pages.Count - 1;
+
+            toc.GenerateAutomatic();
+            toc.SaveToFile(doc);
+
+            // Add bookmarks and connect with table of contents
+            PdfDocumentBookmarkCollection bookmarks = doc.Bookmarks;
+            // Add bookmarks as needed based on your HTML structure
+
+            // Save PDF document
+            string outputPath = Server.MapPath("~/Output/output.pdf");
+            doc.SaveToFile(outputPath);
+            doc.Close();
+
+            // Force the PDF file to download
+            Response.Clear();
+            Response.ContentType = "application/pdf";
+            Response.AppendHeader("Content-Disposition", "attachment; filename=output.pdf");
+            Response.TransmitFile(outputPath);
+            Response.End();
+        }
+    }
+}
+
+
+
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
