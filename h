@@ -1,3 +1,311 @@
+#region Create toc
+
+    private bool CreateTOC(string SubjectNo, string foldername, string Subjectinitial)
+	{
+		FileInfo fInfo = null;
+		string PathforLocal = string.Empty;
+		int av = 1;
+		int ileft = 0;
+		int itop = 0;
+		int ipages = 0;
+		int splitchar = 0;
+		ileft = 0;
+		itop = 0;
+		splitchar = 0;
+		ipages = 1;
+		object lst1 = null;
+		string strtitle = null;
+		string strpage = null;
+		string siteid = null;
+		int i1 = 0;
+		strtitle = "";
+		strpage = "";
+		siteid = "";
+		iTextSharp.text.Chunk c = new iTextSharp.text.Chunk();
+		iTextSharp.text.Chunk cPagenumber = new iTextSharp.text.Chunk();
+		iTextSharp.text.Chunk cPagenumberTest = new iTextSharp.text.Chunk();
+		iTextSharp.text.Chunk cDottedline = null;
+		List<string> strsub = new List<string>();
+		iTextSharp.text.pdf.PdfAction action = null;
+		string strcommand = "";
+
+		//Dim strdot As String = ".............................................................................................................................................................."
+		try
+		{
+			if (!Directory.Exists(Server.MapPath(ConfigurationManager.AppSettings["uploadfilepath"].Trim() + "\\" + this.HProjectId.Value.ToString() + "\\" + foldername + "\\FinalReport")))
+			{
+				Directory.CreateDirectory(Server.MapPath(ConfigurationManager.AppSettings["uploadfilepath"].Trim() + "\\" + this.HProjectId.Value.ToString() + "\\" + foldername + "\\FinalReport"));
+			}
+
+			byte[] downloadbytes = System.IO.File.ReadAllBytes(Server.MapPath(ConfigurationManager.AppSettings["uploadfilepath"].Trim()) + "\\" + this.HProjectId.Value.ToString() + "\\" + foldername + "\\Report\\02.pdf");
+			iTextSharp.text.pdf.PdfReader reader = new iTextSharp.text.pdf.PdfReader(downloadbytes);
+			//List<Dictionary<string, object>> lst = iTextSharp.text.pdf.SimpleBookmark.GetBookmark(reader);
+            var lst = iTextSharp.text.pdf.SimpleBookmark.GetBookmark(reader);
+            iTextSharp.text.pdf.PdfStamper stamper = new iTextSharp.text.pdf.PdfStamper(reader, new FileStream(Server.MapPath(ConfigurationManager.AppSettings["uploadfilepath"].Trim()) + "\\" + this.HProjectId.Value.ToString() + "\\" + foldername + "\\FinalReport\\" + SubjectNo + ".pdf", FileMode.Create), '4');
+			stamper.Writer.SetPdfVersion(iTextSharp.text.pdf.PdfWriter.PDF_VERSION_1_4); //'Added By ketan
+			stamper.InsertPage(1, reader.GetPageSize(1));
+
+			string pagewidth = (reader.GetPageSize(1).Width).ToString();
+			itop = Convert.ToInt32(reader.GetPageSize(1).Height - 27);
+			iTextSharp.text.pdf.PdfContentByte canvas = stamper.GetOverContent(1);
+			string fontpath = Server.MapPath("Reports") + "\\times.ttf";
+			iTextSharp.text.pdf.BaseFont customfont = iTextSharp.text.pdf.BaseFont.CreateFont(fontpath, iTextSharp.text.pdf.BaseFont.CP1252, iTextSharp.text.pdf.BaseFont.EMBEDDED);
+			iTextSharp.text.Font font1 = new iTextSharp.text.Font(customfont, 12, 1, iTextSharp.text.BaseColor.BLACK);
+			iTextSharp.text.Font font2 = new iTextSharp.text.Font(customfont, 12, 0, iTextSharp.text.BaseColor.BLUE);
+			iTextSharp.text.Font font3 = new iTextSharp.text.Font(customfont, 12, 1, iTextSharp.text.BaseColor.BLUE);
+			iTextSharp.text.Font Whitefont = new iTextSharp.text.Font(customfont, 12, 1, iTextSharp.text.BaseColor.WHITE);
+			if (!this.AddHeader(canvas, stamper, reader, itop, 1, SubjectNo, Subjectinitial))
+			{
+				return false;
+			}
+
+			itop -= 140;
+
+			if (lst.Count > 0)
+			{
+				c = new iTextSharp.text.Chunk("TABLE OF CONTENTS");
+				c.Font = font1;
+				iTextSharp.text.pdf.ColumnText.ShowTextAligned(canvas, iTextSharp.text.Element.ALIGN_CENTER, new iTextSharp.text.Phrase(c), Convert.ToSingle(Convert.ToSingle(pagewidth) / 2), itop, 0);
+				Dictionary<string, object> Hashtable1 = new Dictionary<string, object>();
+				Hashtable1.Add("Title", "TABLE OF CONTENTS");
+				Hashtable1.Add("Page", "1 XYZ 0 685 .00");
+				Hashtable1.Add("Action", "GoTo");
+				lst.Insert(0, Hashtable1);
+			}
+
+			int j2 = 0;
+			int ipage = 1;
+			int itopcount = itop;
+			if (!this.PagesCount(lst, c, ref ileft, ref pagewidth, ref itopcount, ref ipage, ref reader, ref font2, ref font3))
+			{
+				throw new Exception();
+			}
+			else
+			{
+				j2 = ipage;
+			}
+
+			for (int i = 0; i < lst.Count; i++)
+			{
+				strsub.Clear();
+				itop -= 20;
+				if (itop < 72)
+				{
+					ipages += 1;
+					stamper.InsertPage(ipages, reader.GetPageSize(1));
+					canvas = stamper.GetOverContent(ipages);
+					itop = Convert.ToInt32(reader.GetPageSize(1).Height - 27);
+					if (!this.AddHeader(canvas, stamper, reader, itop, ipages, SubjectNo, Subjectinitial))
+					{
+						return false;
+					}
+					itop -= 160;
+				}
+				else
+				{
+					canvas = stamper.GetOverContent(ipages);
+				}
+
+				ileft = 72;
+				dynamic lst2 = lst[i];
+				i1 += 1;
+				action = new iTextSharp.text.pdf.PdfAction();
+
+				if (lst2.TryGetValue("Title", strtitle))
+				{
+					c = new iTextSharp.text.Chunk(strtitle);
+					c.Font = font3;
+					c.SetBackground(iTextSharp.text.BaseColor.WHITE);
+					if (c.GetWidthPoint() + ileft > Convert.ToInt32(Convert.ToInt32(pagewidth) - 47))
+					{
+						if (ileft == 82)
+						{
+							splitchar = 66;
+						}
+						else if (ileft == 92)
+						{
+							splitchar = 65;
+						}
+						else if (ileft == 102)
+						{
+							splitchar = 64;
+						}
+						else if (ileft == 72)
+						{
+							splitchar = 67;
+						}
+
+						string strtemp = Convert.ToString(strtitle.Length / (double)splitchar);
+						if (strtitle.Length <= splitchar)
+						{
+							strtemp = "0";
+						}
+//INSTANT C# NOTE: The ending condition of VB 'For' loops is tested only on entry to the loop. Instant C# has created a temporary variable in order to use the initial value of Convert.ToInt16(strtemp.Split(".")(0)) for every iteration:
+						int tempVar = Convert.ToInt16(strtemp.Split('.')[0]);
+						for (int i2 = 0; i2 <= tempVar; i2++)
+						{
+							if (i2 == 0)
+							{
+								if (Convert.ToInt16(strtemp.Split('.')[0]) == 0)
+								{
+									strsub.Add(strtitle.Substring(i2 * splitchar, strtitle.Length));
+								}
+								else
+								{
+									strsub.Add(strtitle.Substring(i2 * splitchar, splitchar));
+								}
+							}
+							else
+							{
+								strsub.Add(strtitle.Substring(i2 * splitchar - 1, strtitle.Length - (i2 * splitchar - 1)));
+							}
+						}
+					}
+					else
+					{
+						strsub.Add(strtitle.Substring(0, strtitle.Length));
+					}
+				}
+
+				//------------------For Text------------------------------
+				action.Put(iTextSharp.text.pdf.PdfName.S, iTextSharp.text.pdf.PdfName.GOTO);
+				if (lst2.TryGetValue("Page", strpage))
+				{
+					strpage = strpage.Replace("XYZ", "/XYZ");
+
+					if (strsub[0].ToUpper() == "TABLE OF CONTENTS")
+					{
+						action.Put(iTextSharp.text.pdf.PdfName.D, new iTextSharp.text.pdf.PdfLiteral("[" + "0" + " " + strpage.Split(' ')[1] + " " + strpage.Split(' ')[2] + " " + strpage.Split(' ')[3] + " " + strpage.Split(' ')[4] + "]"));
+					}
+					else
+					{
+						action.Put(iTextSharp.text.pdf.PdfName.D, new iTextSharp.text.pdf.PdfLiteral("[" + Convert.ToInt32(Convert.ToInt32(strpage.Split(' ')[0]) + j2 - 1).ToString() + " " + strpage.Split(' ')[1] + " " + strpage.Split(' ')[2] + " " + strpage.Split(' ')[3] + " " + strpage.Split(' ')[4] + "]"));
+					}
+				}
+
+				cDottedline = new iTextSharp.text.Chunk(new iTextSharp.text.pdf.draw.DottedLineSeparator());
+				cDottedline.Font = font3;
+				// cDottedline.SetAction(action)
+				if (strsub.Count == 1)
+				{
+					//-------------------For Dotted line-------------------------
+					iTextSharp.text.pdf.ColumnText.ShowTextAligned(canvas, iTextSharp.text.Element.ALIGN_LEFT, new iTextSharp.text.Phrase(cDottedline), ileft, itop, 0);
+					//-----------------------------------------------------------
+				}
+				else
+				{
+					iTextSharp.text.pdf.ColumnText.ShowTextAligned(canvas, iTextSharp.text.Element.ALIGN_LEFT, new iTextSharp.text.Phrase(cDottedline), ileft, itop - ((strsub.Count - 1) * 20), 0);
+				}
+				for (int i3 = 0; i3 < strsub.Count; i3++)
+				{
+					if (i3 > 0)
+					{
+						itop -= 20;
+					}
+					c = new iTextSharp.text.Chunk(strsub[i3]);
+					c.Font = font3;
+					c.SetBackground(iTextSharp.text.BaseColor.WHITE);
+					c.SetAction(action);
+					iTextSharp.text.pdf.ColumnText.ShowTextAligned(canvas, iTextSharp.text.Element.ALIGN_LEFT, new iTextSharp.text.Phrase(c), ileft, itop, 0);
+				}
+				//-----------------------------------------------------------
+				//------------------For page number--------------------------
+				int intPageNo = 0;
+				string strBlank_PageNo = null;
+				if (lst2.TryGetValue("Page", strpage))
+				{
+					strpage = strpage.Replace("XYZ", "/XYZ");
+					if (strsub[0].ToUpper() != "TABLE OF CONTENTS")
+					{
+						//cPagenumber = New iTextSharp.text.Chunk(Convert.ToString(Convert.ToInt32(strpage.Split(" ")(0)) + j2))
+						intPageNo = Convert.ToInt32(strpage.Split(' ')[0]) + j2;
+						strBlank_PageNo = "   " + intPageNo;
+						cPagenumber = new iTextSharp.text.Chunk(strBlank_PageNo);
+					}
+					else
+					{
+						//cPagenumber = New iTextSharp.text.Chunk(Convert.ToString(Convert.ToInt32(strpage.Split(" ")(0))))
+						intPageNo = Convert.ToInt32(strpage.Split(' ')[0]);
+						strBlank_PageNo = "   " + intPageNo;
+						cPagenumber = new iTextSharp.text.Chunk(strBlank_PageNo);
+					}
+					cPagenumber.Font = font3;
+					cPagenumber.SetBackground(iTextSharp.text.BaseColor.WHITE);
+				}
+				//cPagenumber.SetAction(action)
+				iTextSharp.text.pdf.ColumnText.ShowTextAligned(canvas, iTextSharp.text.Element.ALIGN_LEFT, new iTextSharp.text.Phrase(cPagenumber), Convert.ToSingle(Convert.ToInt32(pagewidth) - 49), itop, 0);
+
+				int intRemoveExtraWidth = 37;
+				intRemoveExtraWidth = intRemoveExtraWidth - (intPageNo.ToString().Length * 5);
+				cPagenumberTest = new iTextSharp.text.Chunk(new iTextSharp.text.pdf.draw.DottedLineSeparator());
+				cPagenumberTest.Font = Whitefont;
+				cPagenumberTest.SetBackground(iTextSharp.text.BaseColor.WHITE);
+				//cPagenumberTest.SetAction(action)
+				iTextSharp.text.pdf.ColumnText.ShowTextAligned(canvas, iTextSharp.text.Element.ALIGN_LEFT, new iTextSharp.text.Phrase(cPagenumberTest), Convert.ToSingle(Convert.ToInt32(pagewidth) - intRemoveExtraWidth), itop, 0);
+				//-----------------------------------------------------------
+				if (strsub[0].ToUpper() != "TABLE OF CONTENTS")
+				{
+					lst[i]["Page"] = Convert.ToInt32(strpage.Split(' ')[0] + j2).ToString() + " " + strpage.Split(' ')[1].ToString() + " " + strpage.Split(' ')[2].ToString() + " " + strpage.Split(' ')[3].ToString() + " " + strpage.Split(' ')[4].ToString();
+				}
+
+				if (lst2.TryGetValue("Kids", lst1))
+				{
+					if (!Recursive1(SubjectNo, Subjectinitial, (IList<Dictionary<string, object>>)lst1, ref itop, ref ileft, ref ipages, stamper, reader, canvas, ref j2, ref font2, ref i1))
+					{
+						throw new Exception();
+					}
+				}
+			}
+
+			stamper.Outlines = lst;
+			reader.ViewerPreferences = iTextSharp.text.pdf.PdfWriter.PageModeUseOutlines;
+
+			stamper.Close();
+			reader.Close();
+
+			//'Enable if security needs.
+			//Dim DocSecurity As Document = New Document(Server.MapPath(ConfigurationManager.AppSettings.Item("uploadfilepath").Trim()) + "\" + Me.HProjectId.Value.ToString() + "\" + foldername + "\Report\" + SubjectNo + "_1" + ".pdf")
+			//DocSecurity.LicenseKey = "dfvo+uv66OPj6vrr6PTq+unr9Ovo9OPj4+P66g=="
+			//DocSecurity.Security.CanEditContent = False
+			//DocSecurity.Save(Server.MapPath(ConfigurationManager.AppSettings.Item("uploadfilepath").Trim()) + "\" + Me.HProjectId.Value.ToString() + "\" + foldername + "\FinalReport\" + SubjectNo + ".pdf")
+			//DocSecurity.AutoCloseAppendedDocs = True
+			//DocSecurity.Close()
+
+			//====================Set pdf fast web view to yes================
+			strcommand = Server.MapPath(ConfigurationManager.AppSettings["QPdfPath"].Trim()) + " --linearize " + "\"" + Server.MapPath(ConfigurationManager.AppSettings["uploadfilepath"].Trim()) + "\\" + this.HProjectId.Value.ToString() + "\\" + foldername + "\\FinalReport\\" + SubjectNo + ".pdf\" " + "\"" + Server.MapPath(ConfigurationManager.AppSettings["uploadfilepath"].Trim()) + "\\" + this.HProjectId.Value.ToString() + "\\" + foldername + "\\FinalReportLinear\\" + SubjectNo + ".pdf\" ";
+
+			if (!Directory.Exists(Server.MapPath(ConfigurationManager.AppSettings["uploadfilepath"].Trim() + "\\" + this.HProjectId.Value.ToString() + "\\" + foldername + "\\FinalReportLinear")))
+			{
+				Directory.CreateDirectory(Server.MapPath(ConfigurationManager.AppSettings["uploadfilepath"].Trim() + "\\" + this.HProjectId.Value.ToString() + "\\" + foldername + "\\FinalReportLinear"));
+			}
+
+			System.Diagnostics.Process.Start("CMD", "/C" + strcommand);
+			System.Diagnostics.Process proc = System.Diagnostics.Process.Start("CMD", "/C" + strcommand);
+			proc.WaitForExit();
+			proc.Close();
+			proc.Dispose();
+			//===========================================================
+
+			return true;
+		}
+		catch (Exception ex)
+		{
+			this.ShowErrorMessage(ex.Message, "....CreateTOC", ex);
+			return false;
+		}
+	}
+
+#endregion
+
+
+
+
+
+
+
+
+
+
 Severity	Code	Description	Project	File	Line	Suppression State
 Error	CS0246	The type or namespace name 'PdfTableOfContents' could not be found (are you missing a using directive or an assembly reference?)	practice6	C:\Users\sspl1366\Documents\Visual Studio 2015\Projects\practice6\practice6\HtmlToPdfConversion.aspx.cs	34	Active
 Severity	Code	Description	Project	File	Line	Suppression State
