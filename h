@@ -1,3 +1,227 @@
+//------------------For page number--------------------------
+int intPageNo = 0;
+string strBlank_PageNo = null;
+if (lst2.TryGetValue("Page", out strpage))
+{
+    strpage = strpage.Replace("XYZ", "/XYZ");
+    if (strsub[0].ToUpper() != "TABLE OF CONTENTS")
+    {
+        intPageNo = Convert.ToInt32(strpage.Split(' ')[0]) + j2;
+        strBlank_PageNo = "   " + intPageNo;
+    }
+    else
+    {
+        intPageNo = Convert.ToInt32(strpage.Split(' ')[0]);
+        strBlank_PageNo = "   " + intPageNo;
+    }
+    canvas.DrawString(strBlank_PageNo, font3, PdfBrushes.Black, new PointF(Convert.ToInt32(pagewidth) - 49, itop));
+
+    int intRemoveExtraWidth = 37;
+    intRemoveExtraWidth = intRemoveExtraWidth - (intPageNo.ToString().Length * 5);
+    PdfLineSeparator dottedLine = new PdfLineSeparator();
+    dottedLine.LineWidth = 1f;
+    dottedLine.LineColor = Color.White;
+    dottedLine.Pattern = LinePattern.Dot;
+    canvas.DrawLine(dottedLine, Convert.ToInt32(pagewidth) - intRemoveExtraWidth, itop, Convert.ToInt32(pagewidth) - 12, itop);
+}
+//-----------------------------------------------------------
+if (strsub[0].ToUpper() != "TABLE OF CONTENTS")
+{
+    lst[i]["Page"] = (Convert.ToInt32(strpage.Split(' ')[0]) + j2).ToString() + " " + strpage.Split(' ')[1].ToString() + " " + strpage.Split(' ')[2].ToString() + " " + strpage.Split(' ')[3].ToString() + " " + strpage.Split(' ')[4].ToString();
+}
+
+if (lst2.TryGetValue("Kids", out lst1))
+{
+    if (!Recursive1(SubjectNo, Subjectinitial, (IList<Dictionary<string, object>>)lst1, ref itop, ref ileft, ref ipages, stamper, reader, canvas, ref j2, ref font2, ref i1))
+    {
+        throw new Exception();
+    }
+}
+
+//-----------------------------------------------------------
+
+stamper.Outlines = lst;
+// Set PDF viewer preferences
+reader.ViewerPreferences = PdfViewerPreferences.PageModeUseOutlines;
+
+stamper.Close();
+reader.Close();
+
+//====================Set pdf fast web view to yes================
+string strcommand = ConfigurationManager.AppSettings["QPdfPath"].Trim() + " --linearize \"" + Server.MapPath(filePath) + "\\" + this.HProjectId.Value.ToString() + "\\" + foldername + "\\FinalReport\\" + SubjectNo + ".pdf\" \"" + Server.MapPath(filePath) + "\\" + this.HProjectId.Value.ToString() + "\\" + foldername + "\\FinalReportLinear\\" + SubjectNo + ".pdf\" ";
+
+if (!Directory.Exists(Server.MapPath(filePath) + "\\" + this.HProjectId.Value.ToString() + "\\" + foldername + "\\FinalReportLinear"))
+{
+    Directory.CreateDirectory(Server.MapPath(filePath) + "\\" + this.HProjectId.Value.ToString() + "\\" + foldername + "\\FinalReportLinear");
+}
+
+System.Diagnostics.Process.Start("CMD", "/C " + strcommand).WaitForExit();
+//===========================================================
+
+return true;
+
+
+
+
+//------------------For Text------------------------------
+if (lst2.TryGetValue("Page", out strpage))
+{
+    strpage = strpage.Replace("XYZ", "/XYZ");
+
+    PdfGoToAction goToAction = new PdfGoToAction();
+    goToAction.DestinationType = DestinationType.Location;
+    goToAction.DestinationLocation = strpage;
+
+    PdfAction action = goToAction;
+    if (strsub[0].ToUpper() == "TABLE OF CONTENTS")
+    {
+        action.DestinationPageNumber = 0;
+    }
+    else
+    {
+        action.DestinationPageNumber = Convert.ToInt32(strpage.Split(' ')[0]) + j2 - 1;
+    }
+
+    PdfLineSeparator dottedLine = new PdfLineSeparator();
+    dottedLine.LineWidth = 1f;
+    dottedLine.LineColor = Color.Blue;
+    dottedLine.Pattern = LinePattern.Dot;
+    
+    if (strsub.Count == 1)
+    {
+        //-------------------For Dotted line-------------------------
+        canvas.DrawLine(dottedLine, ileft, itop, ileft + 200, itop);
+        //-----------------------------------------------------------
+    }
+    else
+    {
+        canvas.DrawLine(dottedLine, ileft, itop - ((strsub.Count - 1) * 20), ileft + 200, itop - ((strsub.Count - 1) * 20));
+    }
+    
+    for (int i3 = 0; i3 < strsub.Count; i3++)
+    {
+        if (i3 > 0)
+        {
+            itop -= 20;
+        }
+        string text = strsub[i3];
+        PdfStringLayouter layouter = new PdfStringLayouter();
+        PdfStringFormat format = new PdfStringFormat();
+        format.Alignment = PdfTextAlignment.Left;
+        PdfStringLayoutResult result = layouter.Layout(text, font3, format, new SizeF(500, 20));
+        canvas.DrawString(text, font3, PdfBrushes.Black, new PointF(ileft, itop));
+    }
+}
+
+
+
+private bool CreateTOC(string SubjectNo, string foldername, string Subjectinitial)
+{
+    string filePath = ConfigurationManager.AppSettings["uploadfilepath"].Trim();
+    string fullPath = Path.Combine(Server.MapPath(filePath), this.HProjectId.Value.ToString(), foldername, "FinalReport");
+
+    try
+    {
+        if (!Directory.Exists(fullPath))
+        {
+            Directory.CreateDirectory(fullPath);
+        }
+
+        string reportPath = Path.Combine(Server.MapPath(filePath), this.HProjectId.Value.ToString(), foldername, "Report", "02.pdf");
+        byte[] downloadBytes = File.ReadAllBytes(reportPath);
+        PdfDocument document = new PdfDocument(downloadBytes);
+        PdfBookmarkCollection bookmarks = document.Bookmarks;
+
+        PdfDocument finalDocument = new PdfDocument();
+        finalDocument.PageSettings.Size = document.PageSettings.Size;
+        PdfPageBase page = finalDocument.Pages.Add();
+        PdfCanvas canvas = page.Canvas;
+
+        string pagewidth = document.PageSettings.Size.Width.ToString();
+        int itop = Convert.ToInt32(document.PageSettings.Size.Height - 27);
+        string fontpath = Path.Combine(Server.MapPath("Reports"), "times.ttf");
+        PdfTrueTypeFont customfont = new PdfTrueTypeFont(fontpath, 12f);
+        PdfTrueTypeFont font1 = new PdfTrueTypeFont(fontpath, 12f, PdfFontStyle.Bold);
+        PdfTrueTypeFont font2 = new PdfTrueTypeFont(fontpath, 12f);
+        PdfTrueTypeFont font3 = new PdfTrueTypeFont(fontpath, 12f, PdfFontStyle.Bold, PdfBrushes.Blue);
+        PdfTrueTypeFont whiteFont = new PdfTrueTypeFont(fontpath, 12f, PdfFontStyle.Bold, PdfBrushes.White);
+
+        if (!AddHeader(canvas, page, document, itop, 1, SubjectNo, Subjectinitial))
+        {
+            return false;
+        }
+
+        itop -= 140;
+
+        if (bookmarks.Count > 0)
+        {
+            canvas.DrawString("TABLE OF CONTENTS", font1, PdfBrushes.Black, new PointF(float.Parse(pagewidth) / 2, itop));
+            PdfBookmark tocBookmark = new PdfBookmark();
+            tocBookmark.Title = "TABLE OF CONTENTS";
+            tocBookmark.Destination = new PdfDestination(page);
+            tocBookmark.Action = new PdfGoToAction(page);
+            bookmarks.Insert(0, tocBookmark);
+        }
+
+        int ipages = 1;
+        int j2 = 0;
+        int ipage = 1;
+        int itopcount = itop;
+        if (!PagesCount(bookmarks, canvas, font2, font3, ref itopcount, ref ipage, document))
+        {
+            throw new Exception();
+        }
+        else
+        {
+            j2 = ipage;
+        }
+
+        for (int i = 0; i < bookmarks.Count; i++)
+        {
+            itop -= 20;
+            if (itop < 72)
+            {
+                ipages += 1;
+                finalDocument.Pages.Add(document.PageSettings.Size);
+                page = finalDocument.Pages[ipages];
+                canvas = page.Canvas;
+                itop = Convert.ToInt32(document.PageSettings.Size.Height - 27);
+                if (!AddHeader(canvas, page, document, itop, ipages, SubjectNo, Subjectinitial))
+                {
+                    return false;
+                }
+                itop -= 160;
+            }
+            else
+            {
+                canvas = finalDocument.Pages[ipages].Canvas;
+            }
+
+            PdfBookmark bookmark = bookmarks[i];
+            PdfAction action = bookmark.Action;
+            if (bookmark.Title != null)
+            {
+                string strtitle = bookmark.Title;
+                PdfStringLayouter layouter = new PdfStringLayouter();
+                PdfStringFormat format = new PdfStringFormat();
+                format.Alignment = PdfTextAlignment.Left;
+                PdfStringLayoutResult result = layouter.Layout(strtitle, font3, format, new SizeF(500, 20));
+                canvas.DrawString(strtitle, font3, PdfBrushes.Black, new PointF(72, itop));
+            }
+        }
+
+        string finalFilePath = Path.Combine(fullPath, $"{SubjectNo}.pdf");
+        finalDocument.SaveToFile(finalFilePath);
+        finalDocument.Close();
+
+        return true;
+    }
+
+
+
+
+
+
     private bool CreateTOC(string SubjectNo, string foldername, string Subjectinitial)
     {
         FileInfo fInfo = null;
