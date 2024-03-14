@@ -1,3 +1,38 @@
+Severity	Code	Description	Project	File	Line	Suppression State
+Error	CS0103	The name 'PdfBookmarkStyle' does not exist in the current context	practice6	C:\Users\sspl1366\Documents\Visual Studio 2015\Projects\practice6\practice6\HtmlToPdfConversion.aspx.cs	116	Active
+Severity	Code	Description	Project	File	Line	Suppression State
+Error	CS1503	Argument 2: cannot convert from 'int' to 'System.Drawing.PointF'	practice6	C:\Users\sspl1366\Documents\Visual Studio 2015\Projects\practice6\practice6\HtmlToPdfConversion.aspx.cs	117	Active
+Severity	Code	Description	Project	File	Line	Suppression State
+Error	CS1503	Argument 1: cannot convert from 'string' to 'Spire.Pdf.General.PdfDestination'	practice6	C:\Users\sspl1366\Documents\Visual Studio 2015\Projects\practice6\practice6\HtmlToPdfConversion.aspx.cs	118	Active
+Severity	Code	Description	Project	File	Line	Suppression State
+Error	CS1503	Argument 1: cannot convert from 'Spire.Pdf.Bookmarks.PdfBookmark' to 'string'	practice6	C:\Users\sspl1366\Documents\Visual Studio 2015\Projects\practice6\practice6\HtmlToPdfConversion.aspx.cs	65	Active
+Severity	Code	Description	Project	File	Line	Suppression State
+Error	CS0122	'PdfBookmark.Parent' is inaccessible due to its protection level	practice6	C:\Users\sspl1366\Documents\Visual Studio 2015\Projects\practice6\practice6\HtmlToPdfConversion.aspx.cs	140	Active
+Severity	Code	Description	Project	File	Line	Suppression State
+Error	CS0122	'PdfBookmark.Parent' is inaccessible due to its protection level	practice6	C:\Users\sspl1366\Documents\Visual Studio 2015\Projects\practice6\practice6\HtmlToPdfConversion.aspx.cs	129	Active
+Severity	Code	Description	Project	File	Line	Suppression State
+Error	CS0117	'PdfBookmark' does not contain a definition for 'Style'	practice6	C:\Users\sspl1366\Documents\Visual Studio 2015\Projects\practice6\practice6\HtmlToPdfConversion.aspx.cs	116	Active
+Severity	Code	Description	Project	File	Line	Suppression State
+Error	CS1061	'PdfBookmark' does not contain a definition for 'PrevSibling' and no extension method 'PrevSibling' accepting a first argument of type 'PdfBookmark' could be found (are you missing a using directive or an assembly reference?)	practice6	C:\Users\sspl1366\Documents\Visual Studio 2015\Projects\practice6\practice6\HtmlToPdfConversion.aspx.cs	143	Active
+Severity	Code	Description	Project	File	Line	Suppression State
+Error	CS1061	'PdfBookmark' does not contain a definition for 'NextSibling' and no extension method 'NextSibling' accepting a first argument of type 'PdfBookmark' could be found (are you missing a using directive or an assembly reference?)	practice6	C:\Users\sspl1366\Documents\Visual Studio 2015\Projects\practice6\practice6\HtmlToPdfConversion.aspx.cs	147	Active
+Severity	Code	Description	Project	File	Line	Suppression State
+Error	CS1061	'PdfBookmark' does not contain a definition for 'Level' and no extension method 'Level' accepting a first argument of type 'PdfBookmark' could be found (are you missing a using directive or an assembly reference?)	practice6	C:\Users\sspl1366\Documents\Visual Studio 2015\Projects\practice6\practice6\HtmlToPdfConversion.aspx.cs	127	Active
+Severity	Code	Description	Project	File	Line	Suppression State
+Error	CS1061	'PdfBookmark' does not contain a definition for 'Childs' and no extension method 'Childs' accepting a first argument of type 'PdfBookmark' could be found (are you missing a using directive or an assembly reference?)	practice6	C:\Users\sspl1366\Documents\Visual Studio 2015\Projects\practice6\practice6\HtmlToPdfConversion.aspx.cs	151	Active
+Severity	Code	Description	Project	File	Line	Suppression State
+Error	CS1061	'PdfBookmark' does not contain a definition for 'Childs' and no extension method 'Childs' accepting a first argument of type 'PdfBookmark' could be found (are you missing a using directive or an assembly reference?)	practice6	C:\Users\sspl1366\Documents\Visual Studio 2015\Projects\practice6\practice6\HtmlToPdfConversion.aspx.cs	133	Active
+Severity	Code	Description	Project	File	Line	Suppression State
+Error	CS1729	'PdfBookmark' does not contain a constructor that takes 0 arguments	practice6	C:\Users\sspl1366\Documents\Visual Studio 2015\Projects\practice6\practice6\HtmlToPdfConversion.aspx.cs	112	Active
+Severity	Code	Description	Project	File	Line	Suppression State
+Error	CS1729	'PdfBookmark' does not contain a constructor that takes 0 arguments	practice6	C:\Users\sspl1366\Documents\Visual Studio 2015\Projects\practice6\practice6\HtmlToPdfConversion.aspx.cs	108	Active
+
+
+
+
+
+
+
 using System;
 using System.Collections.Generic;
 using System.IO;
