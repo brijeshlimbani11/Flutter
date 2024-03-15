@@ -1,3 +1,110 @@
+using System;
+using System.IO;
+using System.Text;
+using System.Web.UI;
+using Spire.Pdf;
+using Spire.Pdf.HtmlConverter;
+
+namespace YourNamespace
+{
+    public partial class GeneratePdf : Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void btnGeneratePdf_Click(object sender, EventArgs e)
+        {
+            // HTML string to be converted to PDF
+            string htmlString = @"
+                <Table style="" Width:100%; Font -family :'Times New Roman' !important;"">
+                    <!-- Your HTML content here -->
+                </Table>
+            ";
+
+            // Convert HTML string to PDF
+            ConvertHtmlStringToPdf(htmlString, "output.pdf");
+        }
+
+        private void ConvertHtmlStringToPdf(string htmlString, string outputPath)
+        {
+            try
+            {
+                // Create a new PDF document
+                PdfDocument doc = new PdfDocument();
+
+                // Convert HTML string to PDF
+                using (MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(htmlString)))
+                {
+                    PdfHtmlLayoutFormat htmlLayoutFormat = new PdfHtmlLayoutFormat();
+                    htmlLayoutFormat.IsWaiting = true;
+                    PdfConverter.ConvertHtml(ms, doc, htmlLayoutFormat);
+                }
+
+                // Add bookmarks to the PDF
+                AddBookmarks(doc);
+
+                // Save the PDF document
+                doc.SaveToFile(outputPath);
+                doc.Close();
+
+                // Download the generated PDF file
+                Response.Clear();
+                Response.ContentType = "application/pdf";
+                Response.AppendHeader("Content-Disposition", "attachment; filename=output.pdf");
+                Response.TransmitFile(outputPath);
+                Response.End();
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions
+                // For simplicity, you may want to display the error message on the page
+                Response.Write("An error occurred: " + ex.Message);
+            }
+        }
+
+        private void AddBookmarks(PdfDocument doc)
+        {
+            // Add bookmarks based on data-bookmark attributes in the HTML
+            foreach (PdfPageBase page in doc.Pages)
+            {
+                foreach (PdfBookmarkBase bookmark in page.Bookmarks)
+                {
+                    string level = bookmark.ExtraOptions["Level"];
+                    string text = bookmark.ExtraOptions["Text"];
+                    int pageNum = doc.Pages.IndexOf(page) + 1;
+                    doc.Bookmarks.Add(text, pageNum, int.Parse(level));
+                }
+            }
+        }
+    }
+}
+
+
+
+
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="GeneratePdf.aspx.cs" Inherits="YourNamespace.GeneratePdf" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Generate PDF with Spire.Pdf</title>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
+            <asp:Button ID="btnGeneratePdf" runat="server" Text="Generate PDF" OnClick="btnGeneratePdf_Click" />
+        </div>
+    </form>
+</body>
+</html>
+
+
+
+
+
 <Table style=" Width:100%; Font -family :'Times New Roman' !important;">
 <Tr data-bookmark-enabled="true" data-bookmark-level="1" data-bookmark-text="LOG FORMS" width="100%" ALIGN=LEFT style="BACKGROUND-COLOR: #FFB895;  page-break-before:always;">
 <Td style="vertical-align:middle; text-align: center; font-family:'Times New Roman'; font-size:12px; font-weight:bold; ">&nbsp;LOG FORMS</Td>
