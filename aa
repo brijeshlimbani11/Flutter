@@ -1,3 +1,95 @@
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="GeneratePdf.aspx.cs" Inherits="YourNamespace.GeneratePdf" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Generate PDF</title>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
+            <h2>Generate PDF from HTML</h2>
+            <asp:FileUpload ID="FileUpload1" runat="server" />
+            <br />
+            <asp:Button ID="btnGeneratePdf" runat="server" Text="Generate PDF" OnClick="btnGeneratePdf_Click" />
+            <br />
+            <asp:Label ID="lblMessage" runat="server" Text=""></asp:Label>
+        </div>
+    </form>
+</body>
+</html>
+
+
+
+
+
+using System;
+using System.IO;
+using System.Threading;
+using System.Web.UI;
+using Spire.Pdf;
+using Spire.Pdf.Graphics;
+
+namespace YourNamespace
+{
+    public partial class GeneratePdf : Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void btnGeneratePdf_Click(object sender, EventArgs e)
+        {
+            // Check if a file is uploaded
+            if (FileUpload1.HasFile)
+            {
+                // Get the uploaded file's content
+                string htmlString = "";
+                using (StreamReader reader = new StreamReader(FileUpload1.PostedFile.InputStream))
+                {
+                    htmlString = reader.ReadToEnd();
+                }
+
+                // Execute PDF generation code in a new thread with STA apartment state
+                Thread thread = new Thread(() =>
+                {
+                    // Create a new PDF document
+                    PdfDocument pdfDocument = new PdfDocument();
+
+                    // Load HTML string into PDF document
+                    pdfDocument.LoadFromHTML(htmlString, true, true, true);
+
+                    // Add bookmarks, header, footer, and table of contents
+                    // (Your existing PDF generation code goes here)
+
+                    // Save the PDF document
+                    pdfDocument.SaveToFile(Server.MapPath("~/GeneratedPdf.pdf"));
+
+                    // Close the PDF document
+                    pdfDocument.Close();
+                });
+                thread.SetApartmentState(ApartmentState.STA);
+                thread.Start();
+                thread.Join();
+
+                // Optionally, provide feedback to the user
+                lblMessage.Text = "PDF generated successfully!";
+            }
+            else
+            {
+                // If no file is uploaded, show an error message
+                lblMessage.Text = "Please select a file to upload.";
+            }
+        }
+    }
+}
+
+
+
+
+
 An unhandled exception of type 'System.ArgumentException' occurred in System.Windows.Forms.dll
 
 Additional information: Value does not fall within the expected range.
