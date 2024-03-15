@@ -1,3 +1,83 @@
+
+using Spire.Pdf;
+using Spire.Pdf.Actions;
+using Spire.Pdf.Annotations;
+using Spire.Pdf.Bookmarks;
+using Spire.Pdf.General;
+using Spire.Pdf.Graphics;
+using Spire.Pdf.HtmlConverter;
+using System;
+using System.Drawing;
+
+namespace YourNamespace
+{
+    public partial class GeneratePdf : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void btnGeneratePdf_Click(object sender, EventArgs e)
+        {
+            // Your HTML string
+            string htmlString = @"
+                <Table style='Width:100%; Font-family:Times New Roman !important;'>
+                    <!-- Your HTML table content here -->
+                </Table>
+            ";
+
+            // Create a new PDF document
+            PdfDocument pdfDocument = new PdfDocument();
+
+            // Load HTML string into PDF document
+            PdfHtmlLayoutFormat htmlLayoutFormat = new PdfHtmlLayoutFormat();
+            pdfDocument.LoadFromHTML(htmlString, true, true, true, htmlLayoutFormat);
+
+            // Add bookmarks
+            for (int i = 0; i < pdfDocument.Pages.Count; i++)
+            {
+                PdfPageBase page = pdfDocument.Pages[i];
+                PdfBookmark bookmark = pdfDocument.Bookmarks.Add(string.Format("Bookmark-{0}", i + 1));
+                PdfDestination destination = new PdfDestination(page, new PointF(0, 0));
+                bookmark.Action = new PdfGoToAction(destination);
+                bookmark.Color = new PdfRGBColor(Color.Black);
+                bookmark.DisplayStyle = PdfTextStyle.Bold;
+            }
+
+            // Add header
+            PdfPageTemplateElement header = new PdfPageTemplateElement(new SizeF(pdfDocument.PageSettings.Size.Width, 50));
+            PdfTrueTypeFont headerFont = new PdfTrueTypeFont(new Font("Arial", 10));
+            header.Graphics.DrawString("Header Text", headerFont, PdfBrushes.Black, new PointF(10, 10));
+            pdfDocument.Template.Top = header;
+
+            // Add footer
+            PdfPageTemplateElement footer = new PdfPageTemplateElement(new SizeF(pdfDocument.PageSettings.Size.Width, 50));
+            PdfTrueTypeFont footerFont = new PdfTrueTypeFont(new Font("Arial", 10));
+            footer.Graphics.DrawString("Footer Text", footerFont, PdfBrushes.Black, new PointF(10, 10));
+            pdfDocument.Template.Bottom = footer;
+
+            // Add table of contents
+            PdfPageBase tocPage = pdfDocument.Pages.Insert(0);
+            string tocTitle = "Table of Contents";
+            PdfTrueTypeFont tocTitleFont = new PdfTrueTypeFont(new Font("Arial", 20, FontStyle.Bold));
+            PdfStringFormat centerAlignment = new PdfStringFormat(PdfTextAlignment.Center, PdfVerticalAlignment.Middle);
+            PointF tocLocation = new PointF(tocPage.Canvas.ClientSize.Width / 2, tocTitleFont.MeasureString(tocTitle).Height + 10);
+            tocPage.Canvas.DrawString(tocTitle, tocTitleFont, PdfBrushes.CornflowerBlue, tocLocation, centerAlignment);
+            // Add TOC content here
+
+            // Save the PDF document
+            pdfDocument.SaveToFile(Server.MapPath("~/GeneratedPdf.pdf"));
+
+            // Close the PDF document
+            pdfDocument.Close();
+        }
+    }
+}
+
+
+
+
 Severity	Code	Description	Project	File	Line	Suppression State
 Error	CS1503	Argument 5: cannot convert from 'Spire.Pdf.HtmlConverter.PdfHtmlLayoutFormat' to 'Spire.Pdf.PdfPageSettings'	practice6	C:\Users\sspl1366\Documents\Visual Studio 2015\Projects\practice6\practice6\HtmlToPdfConversion.aspx.cs	34	Active
 
