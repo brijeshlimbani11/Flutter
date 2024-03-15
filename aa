@@ -1,3 +1,9 @@
+An unhandled exception of type 'System.ArgumentException' occurred in System.Windows.Forms.dll
+
+Additional information: Value does not fall within the expected range.
+
+
+
 using System;
 using System.Threading;
 using System.Drawing;
