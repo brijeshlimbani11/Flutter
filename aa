@@ -1,0 +1,76 @@
+using Spire.Pdf;
+using Spire.Pdf.AutomaticFields;
+using Spire.Pdf.Graphics;
+using System;
+using System.Drawing;
+
+
+namespace AddPDFFooter
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            //create a PDF document
+            PdfDocument doc = new PdfDocument();
+            doc.PageSettings.Size = PdfPageSize.A4;
+
+            //reset the default margins to 0
+            doc.PageSettings.Margins = new PdfMargins(0);
+
+            //create a PdfMargins object, the parameters indicate the page margins you want to set
+            PdfMargins margins = new PdfMargins(60, 60, 60, 60);
+
+            //create a footer template with content and apply it to page template
+            doc.Template.Bottom = CreateFooterTemplate(doc, margins);
+
+            //apply blank templates to other parts of page template
+            doc.Template.Top = new PdfPageTemplateElement(doc.PageSettings.Size.Width, margins.Top);
+            doc.Template.Left = new PdfPageTemplateElement(margins.Left, doc.PageSettings.Size.Height);
+            doc.Template.Right = new PdfPageTemplateElement(margins.Right, doc.PageSettings.Size.Height);
+
+            //add two pages in the document
+            doc.Pages.Add();
+            doc.Pages.Add();
+
+            //save the file
+            doc.SaveToFile("PdfFooter.pdf");
+        }
+        static PdfPageTemplateElement CreateFooterTemplate(PdfDocument doc, PdfMargins margins)
+        {
+            //get page size
+            SizeF pageSize = doc.PageSettings.Size;
+
+            //create a PdfPageTemplateElement object which works as footer space
+            PdfPageTemplateElement footerSpace = new PdfPageTemplateElement(pageSize.Width, margins.Bottom);
+            footerSpace.Foreground = false;
+
+            //declare two float variables
+            float x = margins.Left;
+            float y = 0;
+
+            //draw line in footer space
+            PdfPen pen = new PdfPen(PdfBrushes.Gray, 1);
+            footerSpace.Graphics.DrawLine(pen, x, y, pageSize.Width - x, y);
+
+            //draw text in footer space
+            y = y + 5;
+            PdfTrueTypeFont font = new PdfTrueTypeFont(new Font("Impact", 10f), true);
+            PdfStringFormat format = new PdfStringFormat(PdfTextAlignment.Left);
+            String footerText = "E-iceblue Technology Co., Ltd.\nTel:028-81705109\nWebsite:http://www.e-iceblue.com";
+            footerSpace.Graphics.DrawString(footerText, font, PdfBrushes.Gray, x, y, format);
+
+            //draw dynamic field in footer space
+            PdfPageNumberField number = new PdfPageNumberField();
+            PdfPageCountField count = new PdfPageCountField();
+            PdfCompositeField compositeField = new PdfCompositeField(font, PdfBrushes.Gray, "Page {0} of {1}", number, count);
+            compositeField.StringFormat = new PdfStringFormat(PdfTextAlignment.Right, PdfVerticalAlignment.Top);
+            SizeF size = font.MeasureString(compositeField.Text);
+            compositeField.Bounds = new RectangleF(pageSize.Width - x, y, size.Width, size.Height);
+            compositeField.Draw(footerSpace.Graphics);
+
+            //return footerSpace
+            return footerSpace;
+        }
+    }
+}
