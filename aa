@@ -1,3 +1,11 @@
+
+An exception of type 'System.Threading.ThreadStateException' occurred in System.Windows.Forms.dll but was not handled in user code
+Additional information: ActiveX control '8856f961-340a-11d0-a96b-00c04fd705a2' cannot be instantiated because the current thread is not in a single-threaded apartment.
+
+
+
+
+
 string htmlString = @"
     <Table style='Width:100%; Font-family:Times New Roman !important;'>
         <Tr data-bookmark-enabled='true' data-bookmark-level='1' data-bookmark-text='LOG FORMS' width='100%' ALIGN='LEFT' style='BACKGROUND-COLOR: #FFB895; page-break-before:always;'>
