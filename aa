@@ -1,3 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sample HTML</title>
+</head>
+<body>
+    <table style="width:100%; font-family:'Times New Roman' !important;">
+        <tr data-bookmark-enabled="true" data-bookmark-level="1" data-bookmark-text="LOG FORMS" width="100%" align="left" style="background-color: #FFB895; page-break-before:always;">
+            <td style="vertical-align:middle; text-align: center; font-family:'Times New Roman'; font-size:12px; font-weight:bold;">&nbsp;LOG FORMS</td>
+        </tr>
+        <tr align="left">
+            <td style="vertical-align:top;">
+                <table width="100%" cellspacing="0" style="font-family:'Times New Roman' !important; font-size:12px; border-collapse: collapse !important;">
+                    <tr data-bookmark-enabled="true" data-bookmark-level="2" data-bookmark-text="FINAL STATUS FORM" width="100%" style="background-color: #008ecd; page-break-inside:avoid;">
+                        <td style="vertical-align:middle; color:#FFFFFF; width: 80%;">&nbsp;FINAL STATUS FORM</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <table width="100%" cellspacing="0" style="font-family:'Times New Roman' !important; font-size:12px; border-collapse: collapse !important;">
+                    <tr align="left" style="page-break-inside:avoid;">
+                        <td width="60%" style="font-family:'Times New Roman' !important; font-size:12px; vertical-align:middle; border: solid 1px gray !important;" align="left">&nbsp;
+                            <span id="Lnk0046600002385548R111203" style="word-wrap:break-word; white-space:; font-family:'Times New Roman' !important; font-size:12px !important;">Subject Study Completion Status:</span>
+                        </td>
+                        <td width="40%" style="vertical-align:middle; font-family:'Times New Roman' !important; font-size:12px; border: solid 1px gray !important;" align="left">
+                            <table id="rdo2385548R111222" border="0" style="font-family:'Times New Roman' !important; font-size:12px !important;">
+                                <tr>
+                                    <td>
+                                        <input id="rdo2385548R111222_0" type="radio" name="rdo2385548R111222" value="COMPLETED" />
+                                        <label for="rdo2385548R111222_0">Completed</label>
+                                    </td>
+                                    <td>
+                                        <input id="rdo2385548R111222_1" type="radio" name="rdo2385548R111222" value="SCREEN FAILURE" checked="checked" />
+                                        <label for="rdo2385548R111222_1">Screen Failure</label>
+                                    </td>
+                                    <td>
+                                        <input id="rdo2385548R111222_2" type="radio" name="rdo2385548R111222" value="PREMATURE DISCONTINUATION" />
+                                        <label for="rdo2385548R111222_2">Premature Discontinuation</label>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <!-- Add more rows as needed -->
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
+
+
+
 <%@ Page Language="C#" AutoEventWireup="true" CodeBehind="GeneratePdf.aspx.cs" Inherits="YourNamespace.GeneratePdf" %>
 
 <!DOCTYPE html>
