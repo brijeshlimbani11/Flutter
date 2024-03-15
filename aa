@@ -1,3 +1,7 @@
+Severity	Code	Description	Project	File	Line	Suppression State
+Error	CS1503	Argument 5: cannot convert from 'Spire.Pdf.HtmlConverter.PdfHtmlLayoutFormat' to 'Spire.Pdf.PdfPageSettings'	practice6	C:\Users\sspl1366\Documents\Visual Studio 2015\Projects\practice6\practice6\HtmlToPdfConversion.aspx.cs	34	Active
+
+
 using Spire.Pdf;
 using Spire.Pdf.Actions;
 using Spire.Pdf.Annotations;
