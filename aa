@@ -1,3 +1,63 @@
+using Spire.Pdf;
+using System;
+using System.IO;
+using System.Web.UI;
+
+namespace YourNamespace
+{
+    public partial class GeneratePdf : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void btnGeneratePdf_Click(object sender, EventArgs e)
+        {
+            // Check if a file is uploaded
+            if (FileUpload1.HasFile)
+            {
+                try
+                {
+                    // Read the uploaded HTML file content
+                    string htmlString;
+                    using (StreamReader reader = new StreamReader(FileUpload1.PostedFile.InputStream))
+                    {
+                        htmlString = reader.ReadToEnd();
+                    }
+
+                    // Create a new PDF document
+                    PdfDocument pdfDocument = new PdfDocument();
+
+                    // Load HTML string into PDF document
+                    pdfDocument.LoadFromHTML(htmlString, false, true, true);
+
+                    // Add bookmarks, table of contents, header, footer, etc. (as needed)
+                    // (Your existing PDF generation code goes here)
+
+                    // Save the PDF document
+                    pdfDocument.SaveToFile(Server.MapPath("~/GeneratedPdf.pdf"));
+
+                    // Close the PDF document
+                    pdfDocument.Close();
+
+                    // Provide feedback to the user
+                    lblMessage.Text = "PDF generated successfully!";
+                }
+                catch (Exception ex)
+                {
+                    // Handle any exceptions
+                    lblMessage.Text = "An error occurred: " + ex.Message;
+                }
+            }
+            else
+            {
+                // If no file is uploaded, show an error message
+                lblMessage.Text = "Please select a file to upload.";
+            }
+        }
+    }
+}
 
 
 
