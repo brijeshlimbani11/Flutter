@@ -1,4 +1,54 @@
 string htmlString = @"
+    <Table style='Width:100%; Font-family:Times New Roman !important;'>
+        <Tr data-bookmark-enabled='true' data-bookmark-level='1' data-bookmark-text='LOG FORMS' width='100%' ALIGN='LEFT' style='BACKGROUND-COLOR: #FFB895; page-break-before:always;'>
+            <Td style='vertical-align:middle; text-align: center; font-family:Times New Roman; font-size:12px; font-weight:bold;'>&nbsp;LOG FORMS</Td>
+        </Tr>
+        <Tr ALIGN='LEFT'>
+            <Td style='vertical-align:top;'>
+                <Table width='100%' cellspacing='0' style='font-family:Times New Roman !important; font-size:12px; border-collapse: collapse !Important;'>
+                    <Tr data-bookmark-enabled='true' data-bookmark-level='2' data-bookmark-text='FINAL STATUS FORM' width='100%' color:'#FFFFFF;' ALIGN='LEFT' style='BACKGROUND-COLOR: #008ecd; page-break-inside:avoid;'>
+                        <Td style='vertical-align:middle;color:#FFFFFF; width: 80%;'>&nbsp;FINAL STATUS FORM</Td>
+                    </Tr>
+                </Table>
+                <Tr>
+                    <Td>
+                        <Table width='100%' cellspacing='0' style='font-family:Times New Roman !Important; font-size:12px; border-collapse: collapse !Important;'>
+                            <Tr ALIGN='LEFT' style='page-break-inside:avoid;'>
+                                <Td width='60%' style='font-family:Times New Roman !Important; font-size:12px; vertical-align:middle; border: solid 1px gray !important;' ALIGN='LEFT'>&nbsp;
+                                    <span id='Lnk0046600002385548R111203' style='word-wrap:break-word;white-space:;font-family:Times New Roman !Important;font-size:12px !Important;'>Subject Study Completion Status:</span>
+                                </Td>
+                                <Td width='40%' style='vertical-align:middle; font-family:Times New Roman !Important; font-size:12px; border: solid 1px gray !important;' ALIGN='LEFT'>
+                                    <table id='rdo2385548R111222' border='0' style='font-family:Times New Roman !Important;font-size:12px !Important;'>
+                                        <tr>
+                                            <td>
+                                                <input id='rdo2385548R111222_0' type='radio' name='rdo2385548R111222' value='COMPLETED' />
+                                                <label for='rdo2385548R111222_0'>Completed</label>
+                                            </td>
+                                            <td>
+                                                <input id='rdo2385548R111222_1' type='radio' name='rdo2385548R111222' value='SCREEN FAILURE' checked='checked' />
+                                                <label for='rdo2385548R111222_1'>Screen Failure</label>
+                                            </td>
+                                            <td>
+                                                <input id='rdo2385548R111222_2' type='radio' name='rdo2385548R111222' value='PREMATURE DISCONTINUATION' />
+                                                <label for='rdo2385548R111222_2'>Premature Discontinuation</label>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </Td>
+                            </Tr>
+                        </Table>
+                    </Td>
+                </Tr>
+                <!-- Add the rest of your HTML content here -->
+            </Td>
+        </Tr>
+    </Table>";
+
+
+
+
+
+string htmlString = @"
                 <Table style='Width:100%; Font-family:Times New Roman !important;'>
                     
                 </Table>
