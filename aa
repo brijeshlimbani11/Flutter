@@ -1,3 +1,53 @@
+using System;
+using System.Threading;
+using System.Drawing;
+using System.Web.UI;
+
+namespace YourNamespace
+{
+    public partial class GeneratePdf : Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void btnGeneratePdf_Click(object sender, EventArgs e)
+        {
+            // Your HTML string
+            string htmlString = @"
+                <Table style='Width:100%; Font-family:Times New Roman !important;'>
+                    <!-- Your HTML table content here -->
+                </Table>
+            ";
+
+            // Execute PDF generation code in a new thread with STA apartment state
+            Thread thread = new Thread(() =>
+            {
+                // Create a new PDF document
+                Spire.Pdf.PdfDocument pdfDocument = new Spire.Pdf.PdfDocument();
+
+                // Load HTML string into PDF document
+                pdfDocument.LoadFromHTML(htmlString, true, true, true);
+
+                // Add bookmarks, header, footer, and table of contents
+                // (Your existing PDF generation code goes here)
+
+                // Save the PDF document
+                pdfDocument.SaveToFile(Server.MapPath("~/GeneratedPdf.pdf"));
+
+                // Close the PDF document
+                pdfDocument.Close();
+            });
+            thread.SetApartmentState(ApartmentState.STA);
+            thread.Start();
+            thread.Join();
+        }
+    }
+}
+
+
+
 
 An exception of type 'System.Threading.ThreadStateException' occurred in System.Windows.Forms.dll but was not handled in user code
 Additional information: ActiveX control '8856f961-340a-11d0-a96b-00c04fd705a2' cannot be instantiated because the current thread is not in a single-threaded apartment.
