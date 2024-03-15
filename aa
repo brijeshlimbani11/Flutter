@@ -1,3 +1,114 @@
+using Spire.Pdf;
+using Spire.Pdf.Graphics;
+using Spire.Pdf.Bookmarks;
+using System;
+using System.Drawing;
+using System.IO;
+using System.Threading;
+using System.Web.UI;
+
+namespace YourNamespace
+{
+    public partial class GeneratePdf : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void btnGeneratePdf_Click(object sender, EventArgs e)
+        {
+            // Check if a file is uploaded
+            if (FileUpload1.HasFile)
+            {
+                try
+                {
+                    // Read the uploaded HTML file content
+                    string htmlString;
+                    using (StreamReader reader = new StreamReader(FileUpload1.PostedFile.InputStream))
+                    {
+                        htmlString = reader.ReadToEnd();
+                    }
+
+                    // Execute PDF generation code in a new STA thread
+                    Thread thread = new Thread(() =>
+                    {
+                        try
+                        {
+                            // Create a new PDF document
+                            PdfDocument pdfDocument = new PdfDocument();
+
+                            // Add the image to the PDF document
+                            PdfPageBase page = pdfDocument.Pages.Add();
+                            using (MemoryStream imageStream = new MemoryStream())
+                            {
+                                using (Bitmap bitmap = new Bitmap(800, 600))
+                                {
+                                    using (Graphics graphics = Graphics.FromImage(bitmap))
+                                    {
+                                        using (System.Windows.Forms.WebBrowser browser = new System.Windows.Forms.WebBrowser())
+                                        {
+                                            browser.Navigate("about:blank");
+                                            browser.Document.Write(htmlString);
+
+                                            while (browser.ReadyState != System.Windows.Forms.WebBrowserReadyState.Complete)
+                                            {
+                                                System.Windows.Forms.Application.DoEvents();
+                                            }
+
+                                            browser.DrawToBitmap(bitmap, new Rectangle(0, 0, bitmap.Width, bitmap.Height));
+                                        }
+                                    }
+
+                                    Image image = Image.FromStream(imageStream);
+                                    page.Canvas.DrawImage(image, new PointF(0, 0));
+                                }
+                            }
+
+                            // Add bookmarks, table of contents, header, footer, etc. (as needed)
+                            // (Your existing PDF generation code goes here)
+
+                            // Save the PDF document
+                            pdfDocument.SaveToFile(Server.MapPath("~/GeneratedPdf.pdf"));
+
+                            // Close the PDF document
+                            pdfDocument.Close();
+
+                            // Provide feedback to the user
+                            lblMessage.Text = "PDF generated successfully!";
+                        }
+                        catch (Exception ex)
+                        {
+                            // Handle any exceptions
+                            lblMessage.Text = "An error occurred: " + ex.Message;
+                        }
+                    });
+
+                    // Set the apartment state to STA before starting the thread
+                    thread.SetApartmentState(ApartmentState.STA);
+                    thread.Start();
+                }
+                catch (Exception ex)
+                {
+                    // Handle any exceptions
+                    lblMessage.Text = "An error occurred: " + ex.Message;
+                }
+            }
+            else
+            {
+                // If no file is uploaded, show an error message
+                lblMessage.Text = "Please select a file to upload.";
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
 An error occurred: ActiveX control '8856f961-340a-11d0-a96b-00c04fd705a2' cannot be instantiated because the current thread is not in a single-threaded apartment.
 
 using Spire.Pdf;
