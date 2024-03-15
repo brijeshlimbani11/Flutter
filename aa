@@ -1,4 +1,11 @@
- pdfDocument.LoadFromHTML(htmlString, false, true, true, -1, htmlLayoutFormat);
+string htmlString = @"
+                <Table style='Width:100%; Font-family:Times New Roman !important;'>
+                    
+                </Table>
+            ";
+
+
+pdfDocument.LoadFromHTML(htmlString, false, true, true, -1, htmlLayoutFormat);
 
 using Spire.Pdf;
 using Spire.Pdf.Actions;
