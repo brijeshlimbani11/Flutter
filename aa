@@ -1,3 +1,120 @@
+using Spire.Pdf;
+using Spire.Pdf.Graphics;
+using Spire.Pdf.Bookmarks;
+using System;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
+using System.Web.UI;
+
+namespace YourNamespace
+{
+    public partial class GeneratePdf : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void btnGeneratePdf_Click(object sender, EventArgs e)
+        {
+            // Check if a file is uploaded
+            if (FileUpload1.HasFile)
+            {
+                try
+                {
+                    // Read the uploaded HTML file content
+                    string htmlString;
+                    using (StreamReader reader = new StreamReader(FileUpload1.PostedFile.InputStream))
+                    {
+                        htmlString = reader.ReadToEnd();
+                    }
+
+                    // Convert HTML to Image
+                    using (MemoryStream imageStream = new MemoryStream())
+                    {
+                        // Render HTML content to an image
+                        using (Bitmap bitmap = new Bitmap(800, 600))
+                        {
+                            using (Graphics graphics = Graphics.FromImage(bitmap))
+                            {
+                                // Create a WebBrowser control to render HTML
+                                using (System.Windows.Forms.WebBrowser browser = new System.Windows.Forms.WebBrowser())
+                                {
+                                    // Navigate to a blank page to avoid security issues
+                                    browser.Navigate("about:blank");
+                                    browser.Document.Write(htmlString);
+
+                                    // Wait until the page is fully loaded
+                                    while (browser.ReadyState != System.Windows.Forms.WebBrowserReadyState.Complete)
+                                    {
+                                        System.Windows.Forms.Application.DoEvents();
+                                    }
+
+                                    // Capture the rendered content as an image
+                                    browser.DrawToBitmap(bitmap, new Rectangle(0, 0, bitmap.Width, bitmap.Height));
+                                }
+                            }
+
+                            // Create a new PDF document
+                            PdfDocument pdfDocument = new PdfDocument();
+
+                            // Add the image to the PDF document
+                            PdfPageBase page = pdfDocument.Pages.Add();
+                            Image image = Image.FromStream(imageStream);
+                            page.Canvas.DrawImage(image, new PointF(0, 0));
+
+                            // Add bookmarks
+                            PdfBookmarkCollection bookmarks = pdfDocument.Bookmarks;
+                            PdfBookmark bookmark = bookmarks.Add("Generated PDF");
+
+                            // Add table of contents
+                            PdfPageBase tocPage = pdfDocument.Pages.Add();
+                            PdfTrueTypeFont tocFont = new PdfTrueTypeFont(new Font("Arial", 12, FontStyle.Regular));
+                            tocPage.Canvas.DrawString("Table of Contents", tocFont, PdfBrushes.Black, new PointF(10, 10));
+                            bookmark.Destination = new PdfDestination(tocPage);
+
+                            // Add header
+                            PdfPageTemplateElement header = new PdfPageTemplateElement(new SizeF(pdfDocument.PageSettings.Size.Width, 50));
+                            PdfTrueTypeFont headerFont = new PdfTrueTypeFont(new Font("Arial", 10));
+                            header.Graphics.DrawString("Header Text", headerFont, PdfBrushes.Black, new PointF(10, 10));
+                            pdfDocument.Template.Top = header;
+
+                            // Add footer
+                            PdfPageTemplateElement footer = new PdfPageTemplateElement(new SizeF(pdfDocument.PageSettings.Size.Width, 50));
+                            PdfTrueTypeFont footerFont = new PdfTrueTypeFont(new Font("Arial", 10));
+                            footer.Graphics.DrawString("Footer Text", footerFont, PdfBrushes.Black, new PointF(10, 10));
+                            pdfDocument.Template.Bottom = footer;
+
+                            // Save the PDF document
+                            pdfDocument.SaveToFile(Server.MapPath("~/GeneratedPdf.pdf"));
+
+                            // Close the PDF document
+                            pdfDocument.Close();
+
+                            // Provide feedback to the user
+                            lblMessage.Text = "PDF generated successfully!";
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Handle any exceptions
+                    lblMessage.Text = "An error occurred: " + ex.Message;
+                }
+            }
+            else
+            {
+                // If no file is uploaded, show an error message
+                lblMessage.Text = "Please select a file to upload.";
+            }
+        }
+    }
+}
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
