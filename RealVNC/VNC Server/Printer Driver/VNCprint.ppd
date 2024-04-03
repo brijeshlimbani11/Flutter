@@ -1,0 +1,359 @@
+*PPD-Adobe: "4.3"
+*% Postscript-Printer-Description 
+*% for VNC Printer using Ghostscript 8.50
+*% Version 1.0
+*% DateCode: 20050216
+
+*% == Driver informationen ====================================================
+
+*FileVersion: "1.0"
+*FormatVersion: "4.3"
+*LanguageEncoding: ISOLatin1
+*LanguageVersion: English
+*PCFileName: "VNCPrint.PPD"
+*Manufacturer: "sector7g"
+
+*%*Product: "(AFPL Ghostscript)"
+*%*PSVersion: "(3010) 850"
+*Product: "(GPL Ghostscript)"
+*PSVersion: "(3010) 815"
+*%*Product: "(GNU Ghostscript)"
+*%*PSVersion: "(3010) 707"
+
+*ModelName: "VNCPrinter v1.6.0"
+*ShortNickName: "VNCPrinter"
+*NickName: "VNCPrinter v1.6.0"
+
+*% == Basic capabilities ======================================================
+
+*LanguageLevel: "3"
+*ColorDevice: True
+*DefaultColorSpace: CMYK
+*FileSystem: True
+*TTRasterizer: Type42
+*FreeVM: "10000000"
+*PrintPSErrors: False
+*ContoneOnly: True
+*AccurateScreensSupport: True
+*ADTrueGray: True
+*ADHasEuro: True
+
+*% == Resolution ==============================================================
+
+*OpenUI *Resolution: PickOne
+*DefaultResolution: 600dpi
+*OrderDependency: 10 AnySetup *Resolution
+*Resolution 72dpi: "<< /HWResolution [72 72] >> setpagedevice"
+*Resolution 96dpi: "<< /HWResolution [96 96] >> setpagedevice"
+*Resolution 144dpi: "<< /HWResolution [144 144] >> setpagedevice"
+*Resolution 150dpi: "<< /HWResolution [150 150] >> setpagedevice"
+*Resolution 300dpi: "<< /HWResolution [300 300] >> setpagedevice"
+*Resolution 600dpi: "<< /HWResolution [600 600] >> setpagedevice"
+*Resolution 720dpi: "<< /HWResolution [720 720] >> setpagedevice"
+*Resolution 1200dpi: "<< /HWResolution [1200 1200] >> setpagedevice"
+*Resolution 2400dpi: "<< /HWResolution [2400 2400] >> setpagedevice"
+*Resolution 3600dpi: "<< /HWResolution [3600 3600] >> setpagedevice"
+*Resolution 4000dpi: "<< /HWResolution [4000 4000] >> setpagedevice"
+*CloseUI: *Resolution
+
+*ResScreenFreq 72dpi: "60.0"
+*ResScreenFreq 96dpi: "60.0"
+*ResScreenFreq 144dpi: "60.0"
+*ResScreenFreq 150dpi: "60.0"
+*ResScreenFreq 300dpi: "60.0"
+*ResScreenFreq 600dpi: "71.0"
+*ResScreenFreq 720dpi: "72.0"
+*ResScreenFreq 1200dpi: "100.0"
+*ResScreenFreq 2400dpi: "175.0"
+*ResScreenFreq 3600dpi: "200.0"
+*ResScreenFreq 4000dpi: "200.0"
+
+*ResScreenAngle 72dpi: "45.0"
+*ResScreenAngle 96dpi: "45.0"
+*ResScreenAngle 144dpi: "45.0"
+*ResScreenAngle 150dpi: "45.0"
+*ResScreenAngle 300dpi: "45.0"
+*ResScreenAngle 600dpi: "45.0"
+*ResScreenAngle 1200dpi: "45.0"
+*ResScreenAngle 2400dpi: "45.0"
+*ResScreenAngle 3600dpi: "45.0"
+*ResScreenAngle 4000dpi: "45.0"
+
+*% == Color separation information ============================================
+
+*DefaultColorSep: ProcessBlack.71lpi.600dpi/71 lpi / 600 dpi
+
+*% == Color separation information for 60 lpi / 72 dpi  =======================
+
+*ColorSepScreenAngle ProcessBlack.60lpi.72dpi/60 lpi / 72 dpi: "45"
+*ColorSepScreenAngle CustomColor.60lpi.72dpi/60 lpi / 72 dpi: "45"
+*ColorSepScreenAngle ProcessCyan.60lpi.72dpi/60 lpi / 72 dpi: "15"
+*ColorSepScreenAngle ProcessMagenta.60lpi.72dpi/60 lpi / 72 dpi: "75"
+*ColorSepScreenAngle ProcessYellow.60lpi.72dpi/60 lpi / 72 dpi: "0"
+*ColorSepScreenFreq ProcessBlack.60lpi.72dpi/60 lpi / 72 dpi: "60"
+*ColorSepScreenFreq CustomColor.60lpi.72dpi/60 lpi / 72 dpi: "60"
+*ColorSepScreenFreq ProcessCyan.60lpi.72dpi/60 lpi / 72 dpi: "60"
+*ColorSepScreenFreq ProcessMagenta.60lpi.72dpi/60 lpi / 72 dpi: "60"
+*ColorSepScreenFreq ProcessYellow.60lpi.72dpi/60 lpi / 72 dpi: "60"
+
+*% == Color separation information for 60 lpi / 96 dpi  =======================
+
+*ColorSepScreenAngle ProcessBlack.60lpi.96dpi/60 lpi / 96 dpi: "45"
+*ColorSepScreenAngle CustomColor.60lpi.96dpi/60 lpi / 96 dpi: "45"
+*ColorSepScreenAngle ProcessCyan.60lpi.96dpi/60 lpi / 96 dpi: "15"
+*ColorSepScreenAngle ProcessMagenta.60lpi.96dpi/60 lpi / 96 dpi: "75"
+*ColorSepScreenAngle ProcessYellow.60lpi.96dpi/60 lpi / 96 dpi: "0"
+*ColorSepScreenFreq ProcessBlack.60lpi.96dpi/60 lpi / 96 dpi: "60"
+*ColorSepScreenFreq CustomColor.60lpi.96dpi/60 lpi / 96 dpi: "60"
+*ColorSepScreenFreq ProcessCyan.60lpi.96dpi/60 lpi / 96 dpi: "60"
+*ColorSepScreenFreq ProcessMagenta.60lpi.96dpi/60 lpi / 96 dpi: "60"
+*ColorSepScreenFreq ProcessYellow.60lpi.96dpi/60 lpi / 96 dpi: "60"
+
+*% == Color separation information for 60 lpi / 144 dpi  ======================
+
+*ColorSepScreenAngle ProcessBlack.60lpi.144dpi/60 lpi / 144 dpi: "45"
+*ColorSepScreenAngle CustomColor.60lpi.144dpi/60 lpi / 144 dpi: "45"
+*ColorSepScreenAngle ProcessCyan.60lpi.144dpi/60 lpi / 144 dpi: "15"
+*ColorSepScreenAngle ProcessMagenta.60lpi.144dpi/60 lpi / 144 dpi: "75"
+*ColorSepScreenAngle ProcessYellow.60lpi.144dpi/60 lpi / 144 dpi: "0"
+*ColorSepScreenFreq ProcessBlack.60lpi.144dpi/60 lpi / 144 dpi: "60"
+*ColorSepScreenFreq CustomColor.60lpi.144dpi/60 lpi / 144 dpi: "60"
+*ColorSepScreenFreq ProcessCyan.60lpi.144dpi/60 lpi / 144 dpi: "60"
+*ColorSepScreenFreq ProcessMagenta.60lpi.144dpi/60 lpi / 144 dpi: "60"
+*ColorSepScreenFreq ProcessYellow.60lpi.144dpi/60 lpi / 144 dpi: "60"
+
+*% == Color separation information for 60 lpi / 150 dpi  ======================
+
+*ColorSepScreenAngle ProcessBlack.60lpi.150dpi/60 lpi / 150 dpi: "45"
+*ColorSepScreenAngle CustomColor.60lpi.150dpi/60 lpi / 150 dpi: "45"
+*ColorSepScreenAngle ProcessCyan.60lpi.150dpi/60 lpi / 150 dpi: "15"
+*ColorSepScreenAngle ProcessMagenta.60lpi.150dpi/60 lpi / 150 dpi: "75"
+*ColorSepScreenAngle ProcessYellow.60lpi.150dpi/60 lpi / 150 dpi: "0"
+*ColorSepScreenFreq ProcessBlack.60lpi.150dpi/60 lpi / 150 dpi: "60"
+*ColorSepScreenFreq CustomColor.60lpi.150dpi/60 lpi / 150 dpi: "60"
+*ColorSepScreenFreq ProcessCyan.60lpi.150dpi/60 lpi / 150 dpi: "60"
+*ColorSepScreenFreq ProcessMagenta.60lpi.150dpi/60 lpi / 150 dpi: "60"
+*ColorSepScreenFreq ProcessYellow.60lpi.150dpi/60 lpi / 150 dpi: "60"
+
+*% == Color separation information for 60 lpi / 300 dpi  ======================
+
+*ColorSepScreenAngle ProcessBlack.60lpi.300dpi/60 lpi / 300 dpi: "45"
+*ColorSepScreenAngle CustomColor.60lpi.300dpi/60 lpi / 300 dpi: "45"
+*ColorSepScreenAngle ProcessCyan.60lpi.300dpi/60 lpi / 300 dpi: "15"
+*ColorSepScreenAngle ProcessMagenta.60lpi.300dpi/60 lpi / 300 dpi: "75"
+*ColorSepScreenAngle ProcessYellow.60lpi.300dpi/60 lpi / 300 dpi: "0"
+*ColorSepScreenFreq ProcessBlack.60lpi.300dpi/60 lpi / 300 dpi: "60"
+*ColorSepScreenFreq CustomColor.60lpi.300dpi/60 lpi / 300 dpi: "60"
+*ColorSepScreenFreq ProcessCyan.60lpi.300dpi/60 lpi / 300 dpi: "60"
+*ColorSepScreenFreq ProcessMagenta.60lpi.300dpi/60 lpi / 300 dpi: "60"
+*ColorSepScreenFreq ProcessYellow.60lpi.300dpi/60 lpi / 300 dpi: "60"
+
+*% == Color separation information for 71 lpi / 600 dpi  ======================
+
+*ColorSepScreenAngle ProcessBlack.71lpi.600dpi/71 lpi / 600 dpi: "45.0"
+*ColorSepScreenAngle CustomColor.71lpi.600dpi/71 lpi / 600 dpi: "45.0"
+*ColorSepScreenAngle ProcessCyan.71lpi.600dpi/71 lpi / 600 dpi: "71.5651"
+*ColorSepScreenAngle ProcessMagenta.71lpi.600dpi/71 lpi / 600 dpi: "18.4349"
+*ColorSepScreenAngle ProcessYellow.71lpi.600dpi/71 lpi / 600 dpi: "0.0"
+*ColorSepScreenFreq ProcessBlack.71lpi.600dpi/71 lpi / 600 dpi: "70.7107"
+*ColorSepScreenFreq CustomColor.71lpi.600dpi/71 lpi / 600 dpi: "70.7107"
+*ColorSepScreenFreq ProcessCyan.71lpi.600dpi/71 lpi / 600 dpi: "63.2456"
+*ColorSepScreenFreq ProcessMagenta.71lpi.600dpi/71 lpi / 600 dpi: "63.2456"
+*ColorSepScreenFreq ProcessYellow.71lpi.600dpi/71 lpi / 600 dpi: "66.6667"
+
+*% == Color separation information for 72 lpi / 720 dpi  ======================
+
+*ColorSepScreenAngle ProcessBlack.72lpi.720dpi/72 lpi / 720 dpi: "45.0"
+*ColorSepScreenAngle CustomColor.72lpi.720dpi/72 lpi / 720 dpi: "45.0"
+*ColorSepScreenAngle ProcessCyan.72lpi.720dpi/72 lpi / 720 dpi: "71.5651"
+*ColorSepScreenAngle ProcessMagenta.72lpi.720dpi/72 lpi / 720 dpi: "18.4349"
+*ColorSepScreenAngle ProcessYellow.72lpi.720dpi/72 lpi / 720 dpi: "0.0"
+*ColorSepScreenFreq ProcessBlack.72lpi.720dpi/72 lpi / 720 dpi: "72.033"
+*ColorSepScreenFreq CustomColor.72lpi.720dpi/72 lpi / 720 dpi: "72.033"
+*ColorSepScreenFreq ProcessCyan.72lpi.720dpi/72 lpi / 720 dpi: "47.4342"
+*ColorSepScreenFreq ProcessMagenta.72lpi.720dpi/72 lpi / 720 dpi: "47.4342"
+*ColorSepScreenFreq ProcessYellow.72lpi.720dpi/72 lpi / 720 dpi: "50.0"
+
+*% == Color separation information for 100 lpi / 1200 dpi =====================
+
+*ColorSepScreenAngle ProcessBlack.100lpi.1200dpi/100 lpi / 1200 dpi: "45.0"
+*ColorSepScreenAngle CustomColor.100lpi.1200dpi/100 lpi / 1200 dpi: "45.0"
+*ColorSepScreenAngle ProcessCyan.100lpi.1200dpi/100 lpi / 1200 dpi: "15.0"
+*ColorSepScreenAngle ProcessMagenta.100lpi.1200dpi/100 lpi / 1200 dpi: "75.0"
+*ColorSepScreenAngle ProcessYellow.100lpi.1200dpi/100 lpi / 1200 dpi: "0.0"
+*ColorSepScreenFreq ProcessBlack.100lpi.1200dpi/100 lpi / 1200 dpi: "100.0"
+*ColorSepScreenFreq CustomColor.100lpi.1200dpi/100 lpi / 1200 dpi: "100.0"
+*ColorSepScreenFreq ProcessCyan.100lpi.1200dpi/100 lpi / 1200 dpi: "100.0"
+*ColorSepScreenFreq ProcessMagenta.100lpi.1200dpi/100 lpi / 1200 dpi: "100.0"
+*ColorSepScreenFreq ProcessYellow.100lpi.1200dpi/100 lpi / 1200 dpi: "100.0"
+
+*% == Color separation information for 175 lpi / 2400 dpi =====================
+
+*ColorSepScreenAngle ProcessBlack.175lpi.2400dpi/175 lpi / 2400 dpi: "45.0"
+*ColorSepScreenAngle CustomColor.175lpi.2400dpi/175 lpi / 2400 dpi: "45.0"
+*ColorSepScreenAngle ProcessCyan.175lpi.2400dpi/175 lpi / 2400 dpi: "15.0"
+*ColorSepScreenAngle ProcessMagenta.175lpi.2400dpi/175 lpi / 2400 dpi: "75.0"
+*ColorSepScreenAngle ProcessYellow.175lpi.2400dpi/175 lpi / 2400 dpi: "0.0"
+*ColorSepScreenFreq ProcessBlack.175lpi.2400dpi/175 lpi / 2400 dpi: "175.0"
+*ColorSepScreenFreq CustomColor.175lpi.2400dpi/175 lpi / 2400 dpi: "175.0"
+*ColorSepScreenFreq ProcessCyan.175lpi.2400dpi/175 lpi / 2400 dpi: "175.0"
+*ColorSepScreenFreq ProcessMagenta.175lpi.2400dpi/175 lpi / 2400 dpi: "175.0"
+*ColorSepScreenFreq ProcessYellow.175lpi.2400dpi/175 lpi / 2400 dpi: "175.0"
+
+*% == Color separation information for 200 lpi / 3600 dpi =====================
+
+*ColorSepScreenAngle ProcessBlack.200lpi.3600dpi/200 lpi / 3600 dpi: "45.0"
+*ColorSepScreenAngle CustomColor.200lpi.3600dpi/200 lpi / 3600 dpi: "45.0"
+*ColorSepScreenAngle ProcessCyan.200lpi.3600dpi/200 lpi / 3600 dpi: "15.0"
+*ColorSepScreenAngle ProcessMagenta.200lpi.3600dpi/200 lpi / 3600 dpi: "75.0"
+*ColorSepScreenAngle ProcessYellow.200lpi.3600dpi/200 lpi / 3600 dpi: "0.0"
+*ColorSepScreenFreq ProcessBlack.200lpi.3600dpi/200 lpi / 3600 dpi: "200.0"
+*ColorSepScreenFreq CustomColor.200lpi.3600dpi/200 lpi / 3600 dpi: "200.0"
+*ColorSepScreenFreq ProcessCyan.200lpi.3600dpi/200 lpi / 3600 dpi: "200.0"
+*ColorSepScreenFreq ProcessMagenta.200lpi.3600dpi/200 lpi / 3600 dpi: "200.0"
+*ColorSepScreenFreq ProcessYellow.200lpi.3600dpi/200 lpi / 3600 dpi: "200.0"
+
+*% == Color separation information for 200 lpi / 4000 dpi =====================
+
+*ColorSepScreenAngle ProcessBlack.200lpi.4000dpi/200 lpi / 4000 dpi: "45.0"
+*ColorSepScreenAngle CustomColor.200lpi.4000dpi/200 lpi / 4000 dpi: "45.0"
+*ColorSepScreenAngle ProcessCyan.200lpi.4000dpi/200 lpi / 4000 dpi: "15.0"
+*ColorSepScreenAngle ProcessMagenta.200lpi.4000dpi/200 lpi / 4000 dpi: "75.0"
+*ColorSepScreenAngle ProcessYellow.200lpi.4000dpi/200 lpi / 4000 dpi: "0.0"
+*ColorSepScreenFreq ProcessBlack.200lpi.4000dpi/200 lpi / 4000 dpi: "200.0"
+*ColorSepScreenFreq CustomColor.200lpi.4000dpi/200 lpi / 4000 dpi: "200.0"
+*ColorSepScreenFreq ProcessCyan.200lpi.4000dpi/200 lpi / 4000 dpi: "200.0"
+*ColorSepScreenFreq ProcessMagenta.200lpi.4000dpi/200 lpi / 4000 dpi: "200.0"
+*ColorSepScreenFreq ProcessYellow.200lpi.4000dpi/200 lpi / 4000 dpi: "200.0"
+
+*DefaultGuaranteedMaxSeparations: 8
+*GuaranteedMaxSeparations 8: ""
+
+*% == Paper handling ==========================================================
+
+*HWMargins: 0 0 0 0
+*ParamCustomPageSize Width: 1 points 1 14400
+*ParamCustomPageSize Height: 2 points 1 14400
+*ParamCustomPageSize WidthOffset/Width Margin: 3 points 0 14400
+*ParamCustomPageSize HeightOffset/Height Margin: 4 points 0 14400
+*ParamCustomPageSize Orientation: 5 int 0 3
+*NonUIOrderDependency: 20 AnySetup *CustomPageSize
+*CustomPageSize True: "
+  5 -2 roll exch 5 2 roll
+  3 -2 roll exch 3 2 roll
+  [ {}
+    {90 rotate 0 currentpagedevice /PageSize get 0 get neg translate}
+    {180 rotate currentpagedevice /PageSize get
+     dup 0 get neg exch 1 get neg translate}
+    {270 rotate currentpagedevice /PageSize get 1 get neg 0 translate}
+  ] exch get
+  4 dict dup begin 6 1 roll
+  /Install exch def
+  2 array astore /PageOffset exch def
+  2 array astore /PageSize exch def
+  /ImagingBBox null def
+  end setpagedevice"
+*End
+*MaxMediaWidth: "14400"
+*MaxMediaHeight: "14400"
+
+*LandscapeOrientation: Any
+
+*OpenUI *PageSize: PickOne
+*DefaultPageSize: Letter
+*OrderDependency: 20 AnySetup *PageSize
+*PageSize Tabloid: "<< /PageSize [792 1224] /ImagingBBox null >> setpagedevice"
+*PageSize Ledger: "<< /PageSize [1224 792] /ImagingBBox null >> setpagedevice"
+*PageSize Legal: "<< /PageSize [612 1008] /ImagingBBox null >> setpagedevice"
+*PageSize Letter: "<< /PageSize [612 792] /ImagingBBox null >> setpagedevice"
+*PageSize LetterSmall/Letter Small: "<< /PageSize [612 792] /ImagingBBox [30 31 582 761] >> setpagedevice"
+*PageSize A3: "<< /PageSize [842 1191] /ImagingBBox null >> setpagedevice"
+*PageSize A4: "<< /PageSize [595 842] /ImagingBBox null >> setpagedevice"
+*PageSize A4Small/A4 Small: "<< /PageSize [595 842] /ImagingBBox [28 30 566 811] >> setpagedevice"
+*PageSize A5: "<< /PageSize [420 595] /ImagingBBox null >> setpagedevice"
+*PageSize ISOB4/B4 (ISO): "<< /PageSize [709 1001] /ImagingBBox null >> setpagedevice"
+*PageSize B4/B4 (JIS): "<< /PageSize [729 1032] /ImagingBBox null >> setpagedevice"
+*PageSize B5/B5 (JIS): "<< /PageSize [516 729] /ImagingBBox null >> setpagedevice"
+*PageSize EnvC4/Envelope C4: "<< /PageSize [649 918] /ImagingBBox null >> setpagedevice"
+*PageSize EnvC5/Envelope C5: "<< /PageSize [459 649] /ImagingBBox null >> setpagedevice"
+*PageSize EnvC6/Envelope C6: "<< /PageSize [323 459] /ImagingBBox null >> setpagedevice"
+*PageSize EnvDL/Envelope DL: "<< /PageSize [312 624] /ImagingBBox null >> setpagedevice"
+*CloseUI: *PageSize
+
+*OpenUI *PageRegion: PickOne
+*DefaultPageRegion: Letter
+*OrderDependency: 30 AnySetup *PageRegion
+*PageRegion Tabloid: "<< /PageSize [792 1224] /ImagingBBox null >> setpagedevice"
+*PageRegion Ledger: "<< /PageSize [1224 792] /ImagingBBox null >> setpagedevice"
+*PageRegion Legal: "<< /PageSize [612 1008] /ImagingBBox null >> setpagedevice"
+*PageRegion Letter: "<< /PageSize [612 792] /ImagingBBox null >> setpagedevice"
+*PageRegion LetterSmall/Letter Small: "<< /PageSize [612 792] /ImagingBBox [30 31 582 761] >> setpagedevice"
+*PageRegion A3: "<< /PageSize [842 1191] /ImagingBBox null >> setpagedevice"
+*PageRegion A4: "<< /PageSize [595 842] /ImagingBBox null >> setpagedevice"
+*PageRegion A4Small/A4 Small: "<< /PageSize [595 842] /ImagingBBox [28 30 566 811] >> setpagedevice"
+*PageRegion A5: "<< /PageSize [420 595] /ImagingBBox null >> setpagedevice"
+*PageRegion ISOB4/B4 (ISO): "<< /PageSize [709 1001] /ImagingBBox null >> setpagedevice"
+*PageRegion B4/B4 (JIS): "<< /PageSize [729 1032] /ImagingBBox null >> setpagedevice"
+*PageRegion B5/B5 (JIS): "<< /PageSize [516 729] /ImagingBBox null >> setpagedevice"
+*PageRegion EnvC4/Envelope C4: "<< /PageSize [649 918] /ImagingBBox null >> setpagedevice"
+*PageRegion EnvC5/Envelope C5: "<< /PageSize [459 649] /ImagingBBox null >> setpagedevice"
+*PageRegion EnvC6/Envelope C6: "<< /PageSize [323 459] /ImagingBBox null >> setpagedevice"
+*PageRegion EnvDL/Envelope DL: "<< /PageSize [312 624] /ImagingBBox null >> setpagedevice"
+*CloseUI: *PageRegion
+
+*DefaultImageableArea: Letter
+*ImageableArea Tabloid: "0 0 792 1224"
+*ImageableArea Ledger: "0 0 1224 792"
+*ImageableArea Legal: "0 0 612 1008"
+*ImageableArea Letter: "0 0 612 792"
+*ImageableArea LetterSmall/Letter Small: "30 31 582 761"
+*ImageableArea A3: "0 0 842 1191"
+*ImageableArea A4: "0 0 595 842"
+*ImageableArea A4Small/A4 Small: "28 30 566 811"
+*ImageableArea A5: "0 0 420 595"
+*ImageableArea ISOB4/B4 (ISO): "0 0 709 1001"
+*ImageableArea B4/B4 (JIS): "0 0 729 1032"
+*ImageableArea B5/B5 (JIS): "0 0 516 729"
+*ImageableArea EnvC4/Envelope C4: "0 0 649 918"
+*ImageableArea EnvC5/Envelope C5: "0 0 459 649"
+*ImageableArea EnvC6/Envelope C6: "0 0 323 459"
+*ImageableArea EnvDL/Envelope DL: "0 0 312 624"
+
+*DefaultPaperDimension: Letter
+*PaperDimension Tabloid: "792 1224"
+*PaperDimension Ledger: "1224 792"
+*PaperDimension Legal: "612 1008"
+*PaperDimension Letter: "612 792"
+*PaperDimension LetterSmall/Letter Small: "612 792"
+*PaperDimension A3: "842 1191"
+*PaperDimension A4: "595 842"
+*PaperDimension A4Small/A4 Small: "595 842"
+*PaperDimension A5: "420 595"
+*PaperDimension ISOB4/B4 (ISO): "709 1001"
+*PaperDimension B4/B4 (JIS): "729 1032"
+*PaperDimension B5/B5 (JIS): "516 729"
+*PaperDimension EnvC4/Envelope C4: "649 918"
+*PaperDimension EnvC5/Envelope C5: "459 649"
+*PaperDimension EnvC6/Envelope C6: "323 459"
+*PaperDimension EnvDL/Envelope DL: "312 624"
+
+*% == Fonts (14 Base) =========================================================
+
+*DefaultFont: Courier
+*Font Courier-Bold: Standard "(001.005)" Standard ROM
+*Font Courier-BoldOblique: Standard "(001.005)" Standard ROM
+*Font Courier-Oblique: Standard "(001.005)" Standard ROM
+*Font Courier: Standard "(001.005)" Standard ROM
+*Font Helvetica-Bold: Standard "(001.005)" Standard ROM
+*Font Helvetica-BoldOblique: Standard "(001.005)" Standard ROM
+*Font Helvetica-Oblique: Standard "(001.005)" Standard ROM
+*Font Helvetica: Standard "(001.005)" Standard ROM
+*Font Symbol: Special "(001.005)" Special ROM
+*Font Times-Bold: Standard "(001.005)" Standard ROM
+*Font Times-BoldItalic: Standard "(001.005)" Standard ROM
+*Font Times-Italic: Standard "(001.005)" Standard ROM
+*Font Times-Roman: Standard "(001.005)" Standard ROM
+*Font ZapfDingbats: Special "(001.005)" Special ROM
+
+*% End of VNCPrinter PPD file
+
